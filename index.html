@@ -3,202 +3,241 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0a0b" />
-  <meta name="description" content="A+ Esthetic Frankfurt – ästhetische Medizin, Botox, Hyaluron, Skinbooster, PRP, Laser, RF-Microneedling, Infusionen und mehr." />
-  <title>A+ Esthetic Frankfurt — The Treatment Universe</title>
+  <meta name="theme-color" content="#f4f0e9" />
+  <meta name="description" content="A+ Esthetic Frankfurt – ästhetische Medizin mit individueller Beratung: Botox, Hyaluron, Haut, Laser, Körper und Vitalität." />
+  <title>A+ Esthetic Frankfurt</title>
   <link rel="preconnect" href="https://images.pexels.com" crossorigin>
-  <link rel="preload" as="image" href="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1800" fetchpriority="high">
+  <link rel="preload" as="image" href="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1600" fetchpriority="high">
   <style>
     :root{
-      --black:#09090a;--white:#f5f1eb;--soft:#d8d2ca;--line:rgba(245,241,235,.18);
-      --glow:#d8f7ff;--peach:#ffcdb7;--mint:#d7ffca;--serif:"Iowan Old Style","Baskerville","Times New Roman",serif;
-      --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;--ease:cubic-bezier(.2,.8,.2,1)
+      --bg:#f4f0e9;--ink:#11110f;--muted:#6f6b65;--line:rgba(17,17,15,.14);
+      --gold:#b08d57;--gold2:#d8c29f;--white:#fffdfa;--dark:#12110f;
+      --serif:"Iowan Old Style","Baskerville","Times New Roman",serif;
+      --sans:Inter,"Helvetica Neue",Arial,sans-serif;
+      --ease:cubic-bezier(.22,.8,.22,1)
     }
-    *{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--black)}body{margin:0;background:var(--black);color:var(--white);font-family:var(--sans);overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit}::selection{background:var(--glow);color:var(--black)}
-    .grain{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-    .cursor{position:fixed;z-index:210;width:12px;height:12px;border-radius:50%;background:white;mix-blend-mode:difference;pointer-events:none;transform:translate(-50%,-50%);opacity:0;transition:width .25s,height .25s,opacity .2s}.cursor.on{opacity:1}.cursor.big{width:58px;height:58px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit}
+    img{display:block;max-width:100%}
+    ::selection{background:var(--ink);color:var(--white)}
 
-    .nav{position:fixed;z-index:100;top:0;left:0;right:0;height:78px;padding:0 30px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid transparent;transition:.35s;background:linear-gradient(180deg,rgba(9,9,10,.74),transparent);backdrop-filter:blur(0)}
-    .nav.scrolled{background:rgba(9,9,10,.82);border-color:rgba(255,255,255,.09);backdrop-filter:blur(18px)}
-    .logo{display:flex;align-items:baseline;gap:7px;font-weight:800;font-size:24px;letter-spacing:-.055em;width:max-content}.logo small{font-weight:500;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
-    .nav-links{display:flex;gap:28px;font-size:10px;text-transform:uppercase;letter-spacing:.18em}.nav-links a{opacity:.64;transition:.25s}.nav-links a:hover{opacity:1}
-    .nav-cta{justify-self:end;display:flex;gap:10px;align-items:center}.tiny-status{font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.62;display:flex;gap:8px;align-items:center}.tiny-status:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 5px rgba(215,255,202,.08)}
-    .book{border:1px solid rgba(255,255,255,.38);padding:11px 16px;border-radius:999px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;transition:.25s}.book:hover{background:var(--white);color:var(--black)}
+    .nav{position:fixed;inset:0 0 auto;z-index:80;height:78px;padding:0 28px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(244,240,233,.72);backdrop-filter:blur(16px);border-bottom:1px solid rgba(17,17,15,.08)}
+    .logo{font-weight:800;letter-spacing:-.05em;font-size:22px}.logo span{font-weight:500;font-size:10px;letter-spacing:.18em;margin-left:8px;vertical-align:middle}
+    .nav-links{display:flex;gap:28px;font-size:11px;text-transform:uppercase;letter-spacing:.14em}
+    .nav-links a{opacity:.7;transition:.25s}.nav-links a:hover{opacity:1}
+    .nav-actions{justify-self:end;display:flex;align-items:center;gap:10px}
+    .btn{border:1px solid var(--ink);border-radius:999px;padding:12px 17px;background:transparent;font-size:11px;text-transform:uppercase;letter-spacing:.13em;cursor:pointer;transition:.25s}
+    .btn:hover{background:var(--ink);color:var(--white)}
+    .menu{display:none;border:0;background:transparent;font-size:24px}
 
-    .hero{position:relative;min-height:100svh;overflow:hidden;background:radial-gradient(circle at 78% 22%,rgba(142,210,228,.11),transparent 25%),radial-gradient(circle at 64% 78%,rgba(255,172,141,.09),transparent 30%),var(--black)}
-    .hero-lines{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,transparent calc(25% - .5px),rgba(255,255,255,.055) 25%,transparent calc(25% + .5px)),linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.055) 50%,transparent calc(50% + .5px)),linear-gradient(90deg,transparent calc(75% - .5px),rgba(255,255,255,.055) 75%,transparent calc(75% + .5px))}
-    .hero-aurora{position:absolute;width:50vw;height:50vw;border-radius:50%;right:-19vw;top:-17vw;background:conic-gradient(from 160deg,rgba(216,247,255,.0),rgba(216,247,255,.20),rgba(255,205,183,.12),rgba(216,247,255,0));filter:blur(70px);animation:aurora 14s linear infinite;pointer-events:none}@keyframes aurora{to{transform:rotate(360deg)}}
+    .hero{min-height:100svh;padding-top:78px;display:grid;grid-template-columns:54% 46%;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+    .hero-copy{padding:8vh 5vw 5vh 6vw;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:5}
+    .kicker{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}.kicker:before{content:"";width:32px;height:1px;background:var(--gold)}
+    h1{font-family:var(--serif);font-weight:400;font-size:clamp(72px,8vw,138px);line-height:.78;letter-spacing:-.075em;margin:0;max-width:760px}
+    h1 em{font-weight:400;color:var(--gold);padding-left:.55em}
+    .hero-sub{font-size:14px;line-height:1.6;color:var(--muted);max-width:390px;margin:34px 0 28px 4px}
+    .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-fill{background:var(--ink);color:var(--white)}.btn-fill:hover{background:var(--gold);border-color:var(--gold)}
+    .hero-proof{margin-top:40px;display:flex;gap:28px;align-items:center;font-size:11px;color:var(--muted)}
+    .hero-proof b{font-size:22px;color:var(--ink);font-family:var(--serif);font-weight:400;margin-right:6px}
 
-    .hero-copy{position:absolute;left:5.3vw;top:50%;transform:translateY(-52%);z-index:20;width:49vw}.overline{display:flex;gap:12px;align-items:center;margin-bottom:20px;font-size:10px;text-transform:uppercase;letter-spacing:.22em;color:rgba(255,255,255,.64)}.overline:before{content:"01";display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.24);color:white;letter-spacing:0}
-    .hero h1{font-family:var(--serif);font-size:clamp(76px,8.9vw,156px);line-height:.75;letter-spacing:-.07em;font-weight:400;margin:0}.hero h1 span{display:block;overflow:hidden;padding-bottom:.12em}.hero h1 i{font-weight:400}.hero h1 b{font-weight:400;display:block;transform:translateY(120%);animation:reveal 1.15s var(--ease) forwards}.hero h1 span:nth-child(2) b{animation-delay:.12s;margin-left:.33em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.76)}@keyframes reveal{to{transform:none}}
-    .hero-sub{margin:24px 0 0 42%;max-width:320px;color:rgba(255,255,255,.6);font-size:13px;line-height:1.65}.hero-sub strong{color:white;font-weight:500}
+    .hero-media{position:relative;overflow:hidden;background:#d7d0c7}
+    .hero-media img{width:100%;height:100%;object-fit:cover;object-position:58% center;filter:saturate(.84) contrast(.98);transform:scale(1.02);animation:in 1.2s var(--ease) both}
+    @keyframes in{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:scale(1.02)}}
+    .hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(244,240,233,.15),transparent 28%),linear-gradient(180deg,transparent 55%,rgba(0,0,0,.18));pointer-events:none}
+    .scan-orbit{position:absolute;width:46vw;height:46vw;max-width:700px;max-height:700px;border-radius:50%;border:1px solid rgba(255,255,255,.46);left:50%;top:50%;transform:translate(-46%,-50%);z-index:3;pointer-events:none}
+    .scan-orbit:before,.scan-orbit:after{content:"";position:absolute;border-radius:50%;inset:12%;border:1px solid rgba(255,255,255,.2)}
+    .scan-orbit:after{inset:28%}
+    .media-label{position:absolute;left:24px;bottom:24px;z-index:6;color:white;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px}.media-label i{width:7px;height:7px;border-radius:50%;background:var(--gold2);box-shadow:0 0 0 6px rgba(216,194,159,.15)}
 
-    .stage{position:absolute;right:4.2vw;top:12vh;width:43vw;height:74vh;z-index:12}.portrait{position:absolute;left:50%;top:50%;width:min(31vw,510px);aspect-ratio:.78;transform:translate(-50%,-50%);overflow:hidden;border-radius:50% 50% 40% 40%;background:#c9c4bf;box-shadow:0 40px 120px rgba(0,0,0,.42)}
-    .portrait-img{position:absolute;inset:-3%;background-image:linear-gradient(180deg,rgba(9,9,10,0),rgba(9,9,10,.22)),url('https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1800');background-size:cover;background-position:62% center;transform:scale(1.03);will-change:transform;transition:transform .8s var(--ease)}.portrait:hover .portrait-img{transform:scale(1.075)}
-    .portrait:after{content:"";position:absolute;inset:14px;border-radius:inherit;border:1px solid rgba(255,255,255,.28);pointer-events:none}.portrait-tag{position:absolute;left:18px;bottom:18px;z-index:4;font-size:9px;letter-spacing:.17em;text-transform:uppercase;background:rgba(9,9,10,.48);padding:9px 11px;border-radius:999px;backdrop-filter:blur(10px)}
-    .halo{position:absolute;left:50%;top:50%;width:min(38vw,630px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,255,255,.14);animation:halo 18s linear infinite}.halo:before,.halo:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08)}.halo:before{inset:7%}.halo:after{inset:17%}@keyframes halo{to{transform:translate(-50%,-50%) rotate(360deg)}}
-    .halo-dot{position:absolute;left:50%;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--glow);box-shadow:0 0 24px rgba(216,247,255,.8)}
-    .floating-service{position:absolute;z-index:7;border:1px solid rgba(255,255,255,.22);background:rgba(9,9,10,.52);backdrop-filter:blur(13px);border-radius:999px;padding:10px 14px;font-size:10px;letter-spacing:.07em;white-space:nowrap;transition:.3s;animation:bob 5s ease-in-out infinite}.floating-service:hover{background:var(--white);color:var(--black);transform:scale(1.06)}.fs1{left:-2%;top:16%}.fs2{right:-3%;top:23%;animation-delay:-1s}.fs3{right:1%;bottom:17%;animation-delay:-2s}.fs4{left:-5%;bottom:26%;animation-delay:-3s}.fs5{left:22%;top:2%;animation-delay:-4s}@keyframes bob{50%{translate:0 -8px}}
-    .counter-badge{position:absolute;right:1%;top:50%;width:112px;height:112px;border-radius:50%;background:var(--glow);color:var(--black);display:grid;place-items:center;text-align:center;transform:rotate(8deg);box-shadow:0 15px 60px rgba(216,247,255,.16)}.counter-badge strong{font:400 42px/1 var(--serif)}.counter-badge span{font-size:8px;line-height:1.2;letter-spacing:.13em;text-transform:uppercase;display:block;margin-top:4px}
+    .needbar{position:absolute;left:6vw;right:5vw;bottom:22px;z-index:20;display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
+    .needbar button{border:1px solid rgba(255,255,255,.44);background:rgba(15,15,15,.24);backdrop-filter:blur(10px);color:white;border-radius:999px;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.25s}
+    .needbar button:hover{background:white;color:var(--ink)}
+    .needbar .intro{color:var(--ink);background:rgba(244,240,233,.86);border-color:rgba(17,17,15,.1);pointer-events:none}
 
-    .treatment-rail{position:absolute;left:30px;right:30px;bottom:25px;z-index:30;border-top:1px solid rgba(255,255,255,.18);display:grid;grid-template-columns:150px 1fr auto;align-items:center;padding-top:16px}.rail-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.48)}
-    .rail-window{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}.rail-track{display:flex;width:max-content;gap:12px;animation:marquee 34s linear infinite}.rail-item{border:1px solid rgba(255,255,255,.13);padding:9px 12px;border-radius:999px;font-size:10px;white-space:nowrap;color:rgba(255,255,255,.8)}.rail-item:nth-child(5n+1){border-color:rgba(216,247,255,.32)}.rail-item:nth-child(5n+2){border-color:rgba(255,205,183,.3)}@keyframes marquee{to{transform:translateX(-50%)}}
-    .rail-arrow{font-size:17px;margin-left:18px}
+    .finder{padding:8vw 6vw 7vw;background:var(--white);border-bottom:1px solid var(--line)}
+    .finder-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}
+    .finder h2,.popular h2,.promise h2{font:400 clamp(46px,6vw,92px)/.9 var(--serif);letter-spacing:-.055em;margin:0}
+    .finder-head p{margin:0 0 8px;color:var(--muted);font-size:12px;max-width:260px;line-height:1.6}
+    .selector{display:flex;gap:8px;overflow:auto;padding-bottom:8px;scrollbar-width:none}.selector::-webkit-scrollbar{display:none}
+    .selector button{white-space:nowrap;border:1px solid var(--line);background:transparent;border-radius:999px;padding:12px 16px;font-size:11px;text-transform:uppercase;letter-spacing:.11em;cursor:pointer;transition:.25s}
+    .selector button.active,.selector button:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+    .selection-panel{margin-top:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:34% 66%;min-height:330px}
+    .selection-visual{position:relative;overflow:hidden;min-height:330px;background:#dad4cb}
+    .selection-visual img{width:100%;height:100%;object-fit:cover;filter:saturate(.78)}
+    .selection-visual .tag{position:absolute;left:18px;top:18px;background:rgba(255,253,250,.86);backdrop-filter:blur(8px);border-radius:999px;padding:9px 12px;font-size:9px;text-transform:uppercase;letter-spacing:.14em}
+    .selection-content{padding:36px 42px;display:flex;flex-direction:column;justify-content:center}
+    .selection-content small{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold)}
+    .selection-content h3{font:400 clamp(34px,4.2vw,66px)/.95 var(--serif);letter-spacing:-.045em;margin:12px 0 22px}
+    .treat-list{display:flex;flex-wrap:wrap;gap:8px}
+    .treat-list a{border:1px solid var(--line);border-radius:999px;padding:10px 13px;font-size:11px;transition:.25s;background:rgba(244,240,233,.38)}
+    .treat-list a:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+    .selection-foot{margin-top:26px}.selection-foot a{font-size:11px;text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--ink);padding-bottom:3px}
 
-    .category-dock{position:relative;z-index:35;background:var(--white);color:var(--black);display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(0,0,0,.14);border-bottom:1px solid rgba(0,0,0,.14)}.category{min-height:150px;padding:25px 28px;border-right:1px solid rgba(0,0,0,.14);position:relative;overflow:hidden;transition:.4s}.category:last-child{border-right:0}.category:hover{background:#101012;color:white}.category small{font-size:9px;text-transform:uppercase;letter-spacing:.16em;opacity:.52}.category h3{font:400 27px/1 var(--serif);margin:22px 0 0;letter-spacing:-.03em}.category b{position:absolute;right:20px;bottom:17px;font:400 54px/1 var(--serif);opacity:.12}.category:hover b{opacity:.3}.category i{position:absolute;left:28px;bottom:18px;font-style:normal;font-size:10px;opacity:.45}
+    .popular{padding:7vw 6vw;background:var(--bg)}
+    .popular-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:34px}.popular-head span{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .card{position:relative;min-height:420px;overflow:hidden;background:#d8d2ca;border-radius:2px;isolation:isolate}
+    .card img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:saturate(.82)}
+    .card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.68));z-index:1}
+    .card:hover img{transform:scale(1.045)}
+    .card-copy{position:absolute;inset:auto 20px 20px;z-index:2;color:white}
+    .card-copy small{font-size:9px;text-transform:uppercase;letter-spacing:.15em;opacity:.72}
+    .card-copy h3{font:400 30px/1 var(--serif);margin:7px 0 0;letter-spacing:-.03em}
 
-    .intro{background:var(--white);color:var(--black);padding:9vw 6vw 7vw;display:grid;grid-template-columns:.7fr 2.3fr;gap:6vw}.section-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px;height:max-content;position:sticky;top:110px}.section-label:before{content:"";width:32px;height:1px;background:currentColor}.intro h2{font:400 clamp(54px,7.5vw,124px)/.9 var(--serif);letter-spacing:-.06em;margin:0}.intro h2 em{font-weight:400;color:transparent;-webkit-text-stroke:1px rgba(0,0,0,.7)}.intro-note{margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px solid rgba(0,0,0,.18);padding-top:24px}.intro-note p{margin:0;max-width:420px;font-size:13px;line-height:1.7;color:rgba(0,0,0,.56)}.intro-note strong{font:italic 400 34px/1 var(--serif);align-self:end}
+    .all{padding:0 6vw 7vw;background:var(--bg)}
+    .all-toggle{width:100%;border:1px solid var(--line);background:transparent;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:.13em}
+    .all-toggle span:last-child{font-size:20px;transition:.3s}
+    .all-toggle.open span:last-child{transform:rotate(45deg)}
+    .all-panel{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-top:0;max-height:0;overflow:hidden;opacity:0;transition:max-height .7s var(--ease),opacity .35s}
+    .all-panel.open{max-height:900px;opacity:1}
+    .group{padding:24px;border-right:1px solid var(--line)}.group:last-child{border-right:0}.group h4{font:400 25px/1 var(--serif);margin:0 0 18px}.group a{display:block;font-size:11px;line-height:1.5;padding:6px 0;color:var(--muted)}.group a:hover{color:var(--ink)}
 
-    .universe{background:var(--black);padding:7vw 30px 10vw}.universe-head{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;padding-bottom:28px;border-bottom:1px solid var(--line)}.universe h2{font:400 clamp(52px,6vw,96px)/.9 var(--serif);letter-spacing:-.055em;margin:0}.universe-head p{font-size:11px;line-height:1.6;letter-spacing:.02em;color:rgba(255,255,255,.55);max-width:330px;margin:0}
-    .service-group{display:grid;grid-template-columns:210px 1fr;border-bottom:1px solid var(--line)}.group-title{padding:31px 20px 30px 0;border-right:1px solid var(--line)}.group-title small{display:block;font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:10px}.group-title h3{font:400 28px/1 var(--serif);margin:0}.group-services{display:grid;grid-template-columns:repeat(4,1fr)}
-    .service{position:relative;min-height:145px;border-right:1px solid var(--line);padding:25px 20px;overflow:hidden;isolation:isolate;transition:.4s}.service:nth-child(4n){border-right:0}.service:before{content:"";position:absolute;inset:0;background:var(--white);transform:translateY(101%);transition:transform .4s var(--ease);z-index:-1}.service:hover:before{transform:none}.service:hover{color:var(--black)}.service small{display:flex;justify-content:space-between;font-size:8px;letter-spacing:.13em;text-transform:uppercase;opacity:.46}.service h4{font:400 24px/1.05 var(--serif);letter-spacing:-.025em;margin:26px 0 0}.service p{font-size:10px;line-height:1.45;opacity:.5;margin:9px 0 0}.service .go{position:absolute;right:18px;bottom:15px;font-size:18px;opacity:.28}.service:hover .go{opacity:1;transform:translate(2px,-2px)}
-    .service.feature{background:linear-gradient(135deg,rgba(216,247,255,.08),rgba(255,255,255,.015))}.service.warm{background:linear-gradient(135deg,rgba(255,205,183,.08),rgba(255,255,255,.015))}
+    .promise{background:var(--dark);color:var(--white);padding:8vw 6vw;display:grid;grid-template-columns:1.3fr .7fr;gap:8vw;align-items:end}
+    .promise h2 em{color:var(--gold2);font-weight:400}.promise-side{border-top:1px solid rgba(255,255,255,.2);padding-top:18px}.promise-side p{font-size:13px;line-height:1.7;color:rgba(255,255,255,.65);margin:0 0 22px}.promise .btn{border-color:rgba(255,255,255,.7);color:white}.promise .btn:hover{background:white;color:var(--ink)}
 
-    .finder{background:var(--glow);color:var(--black);padding:7vw 6vw;display:grid;grid-template-columns:1.2fr 1fr;gap:8vw;align-items:start}.finder h2{font:400 clamp(58px,7vw,108px)/.86 var(--serif);letter-spacing:-.06em;margin:0}.finder h2 i{font-weight:400}.finder-copy{padding-top:10px}.finder-copy>p{font-size:13px;line-height:1.7;max-width:470px;margin:0 0 30px}.goal-list{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(0,0,0,.22)}.goal{padding:18px 0;border-bottom:1px solid rgba(0,0,0,.22);font-size:12px;display:flex;gap:10px;align-items:center}.goal:nth-child(odd){border-right:1px solid rgba(0,0,0,.22);padding-right:15px}.goal:nth-child(even){padding-left:15px}.goal:before{content:"+";font-size:18px;font-family:var(--serif)}
+    footer{padding:28px 6vw;background:var(--dark);color:rgba(255,255,255,.55);border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:20px;font-size:10px;text-transform:uppercase;letter-spacing:.13em}
 
-    .proof{background:var(--white);color:var(--black);padding:7vw 6vw}.proof-top{display:grid;grid-template-columns:1fr 1.3fr;gap:7vw;align-items:start}.proof h2{font:400 clamp(50px,6vw,94px)/.9 var(--serif);letter-spacing:-.055em;margin:0}.proof-copy{border-top:1px solid rgba(0,0,0,.18);padding-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:30px}.proof-copy p{font-size:12px;line-height:1.7;margin:0;color:rgba(0,0,0,.57)}.proof-stat{font:400 44px/1 var(--serif)}.proof-stat small{display:block;font:9px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;margin-top:8px;color:rgba(0,0,0,.5)}
-
-    .final{min-height:74vh;position:relative;display:grid;place-items:center;text-align:center;padding:70px 20px;overflow:hidden;background:radial-gradient(circle at 50% 50%,rgba(216,247,255,.09),transparent 38%),var(--black)}.final:before{content:"A+";position:absolute;font-weight:800;font-size:min(48vw,680px);letter-spacing:-.12em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.075);pointer-events:none}.final-inner{position:relative;z-index:2}.final small{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5)}.final h2{font:400 clamp(68px,9vw,150px)/.75 var(--serif);letter-spacing:-.07em;margin:25px 0 38px}.final h2 em{font-weight:400;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.7)}.final .big-book{display:inline-flex;align-items:center;gap:15px;background:var(--white);color:var(--black);padding:16px 22px;border-radius:999px;font-size:10px;text-transform:uppercase;letter-spacing:.15em;transition:.3s}.final .big-book:hover{transform:scale(1.04)}.final .big-book:after{content:"↗";font-size:18px}
-    footer{padding:28px 30px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.42)}
-
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}.reveal.show{opacity:1;transform:none}
-    @media(max-width:1100px){.hero-copy{left:5vw;width:52vw}.stage{right:1vw;width:46vw}.group-services{grid-template-columns:repeat(3,1fr)}.service:nth-child(4n){border-right:1px solid var(--line)}.service:nth-child(3n){border-right:0}}
-    @media(max-width:760px){
-      .cursor{display:none}.nav{height:66px;padding:0 17px;grid-template-columns:1fr auto}.nav-links,.tiny-status{display:none}.logo{font-size:21px}.book{padding:9px 12px;font-size:9px}
-      .hero{min-height:920px}.hero-lines{background-image:linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.055) 50%,transparent calc(50% + .5px))}.hero-copy{position:relative;left:auto;top:auto;transform:none;width:auto;padding:116px 19px 0}.overline{margin-bottom:16px}.hero h1{font-size:17.2vw;line-height:.77}.hero h1 span:nth-child(2) b{margin-left:.18em}.hero-sub{margin:18px 0 0 27%;max-width:260px;font-size:12px}.stage{position:relative;right:auto;top:auto;width:100%;height:480px;margin-top:15px}.portrait{width:72vw;max-width:340px}.halo{width:88vw;max-width:420px}.floating-service{font-size:8px;padding:8px 10px}.fs1{left:3%;top:16%}.fs2{right:2%;top:23%}.fs3{right:4%;bottom:17%}.fs4{left:3%;bottom:22%}.fs5{left:25%;top:4%}.counter-badge{width:82px;height:82px;right:7%;top:54%}.counter-badge strong{font-size:30px}
-      .treatment-rail{left:17px;right:17px;bottom:19px;grid-template-columns:1fr}.rail-label,.rail-arrow{display:none}.rail-track{animation-duration:26s}
-      .category-dock{grid-template-columns:1fr 1fr}.category{min-height:125px;padding:20px;border-bottom:1px solid rgba(0,0,0,.14)}.category:nth-child(2n){border-right:0}.category:last-child{grid-column:1/-1}.category h3{font-size:24px;margin-top:18px}.category b{font-size:46px}.category i{left:20px}
-      .intro{padding:75px 18px;grid-template-columns:1fr;gap:38px}.section-label{position:static}.intro h2{font-size:16vw}.intro-note{margin-top:35px;grid-template-columns:1fr;gap:28px}.intro-note strong{font-size:30px}
-      .universe{padding:65px 17px 80px}.universe-head{grid-template-columns:1fr;align-items:start}.universe h2{font-size:15vw}.universe-head p{font-size:10px}.service-group{grid-template-columns:1fr}.group-title{border-right:0;border-bottom:1px solid var(--line);padding:25px 0 17px}.group-title h3{font-size:25px}.group-services{grid-template-columns:1fr 1fr}.service{min-height:130px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:19px 15px}.service:nth-child(3n),.service:nth-child(4n){border-right:1px solid var(--line)}.service:nth-child(2n){border-right:0}.service h4{font-size:21px;margin-top:22px}.service p{font-size:9px}
-      .finder{padding:70px 18px;grid-template-columns:1fr;gap:40px}.finder h2{font-size:17vw}.goal-list{grid-template-columns:1fr}.goal:nth-child(odd){border-right:0}.goal:nth-child(even){padding-left:0}
-      .proof{padding:70px 18px}.proof-top{grid-template-columns:1fr;gap:45px}.proof h2{font-size:15vw}.proof-copy{grid-template-columns:1fr}.final{min-height:620px}.final h2{font-size:18vw}footer{padding:25px 18px;flex-direction:column}
+    .mobile-nav{display:none}
+    @media(max-width:980px){
+      .nav{grid-template-columns:1fr auto}.nav-links{display:none}.nav-actions .btn{display:none}.menu{display:block}
+      .hero{grid-template-columns:1fr;min-height:auto}.hero-copy{padding:10vh 6vw 5vh;min-height:66svh}.hero-media{height:58svh}
+      h1{font-size:clamp(62px,15vw,110px)}.hero-sub{max-width:330px}.needbar{left:18px;right:18px;bottom:18px}.needbar .intro{display:none}
+      .selection-panel{grid-template-columns:1fr}.selection-visual{height:280px}.selection-content{padding:28px 22px}
+      .cards{grid-template-columns:1fr 1fr}.card{min-height:360px}
+      .all-panel{grid-template-columns:1fr 1fr}.group{border-bottom:1px solid var(--line)}
+      .promise{grid-template-columns:1fr;gap:44px}
     }
-    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+    @media(max-width:620px){
+      .nav{height:68px;padding:0 18px}.logo{font-size:20px}.logo span{display:none}
+      .hero{padding-top:68px}.hero-copy{padding:8vh 18px 4vh;min-height:56svh}.kicker{margin-bottom:18px}h1{font-size:17vw;line-height:.82}.hero-sub{font-size:13px;margin-top:24px}.hero-proof{margin-top:28px;gap:16px;flex-wrap:wrap}.hero-proof b{font-size:18px}
+      .hero-media{height:55svh}.scan-orbit{width:82vw;height:82vw}.media-label{left:18px;bottom:72px}
+      .needbar{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.needbar::-webkit-scrollbar{display:none}.needbar button{white-space:nowrap}
+      .finder,.popular{padding:18vw 18px 14vw}.finder-head,.popular-head{align-items:flex-start;flex-direction:column}.finder-head p{display:none}.finder h2,.popular h2,.promise h2{font-size:15vw}
+      .selection-panel{min-height:0}.selection-visual{height:240px}.selection-content h3{font-size:11vw}.treat-list{gap:6px}.treat-list a{font-size:10px;padding:9px 11px}
+      .cards{grid-template-columns:1fr;gap:8px}.card{min-height:410px}
+      .all{padding:0 18px 16vw}.all-panel{grid-template-columns:1fr}.group{border-right:0}.all-panel.open{max-height:1800px}
+      .promise{padding:18vw 18px}.promise h2{line-height:.95}
+      footer{padding:24px 18px;flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-<div class="grain"></div><div class="cursor" id="cursor"></div>
-<nav class="nav" id="nav">
-  <a class="logo" href="#top">A+ <small>Esthetic</small></a>
-  <div class="nav-links"><a href="#treatments">Behandlungen</a><a href="#finder">Beratung</a><a href="https://a-esthetic.de/" target="_blank" rel="noopener">Praxis</a></div>
-  <div class="nav-cta"><span class="tiny-status">Frankfurt · Termine verfügbar</span><a class="book magnetic" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a></div>
-</nav>
-
-<main id="top">
-<section class="hero">
-  <div class="hero-lines"></div><div class="hero-aurora"></div>
-  <div class="hero-copy">
-    <div class="overline">Ästhetische Medizin · Frankfurt</div>
-    <h1><span><b>More than</b></span><span><b><i>one</i> treatment.</b></span></h1>
-    <p class="hero-sub"><strong>Ein Ort. Viele Möglichkeiten.</strong><br>Von präziser Mimikbehandlung über Haut, Kontur und Haare bis zu Vitalität und Körper.</p>
-  </div>
-
-  <div class="stage" id="stage">
-    <div class="halo"><span class="halo-dot"></span></div>
-    <div class="portrait magnetic"><div class="portrait-img" id="portraitImg"></div><span class="portrait-tag">A+ Signature · Natural first</span></div>
-    <a class="floating-service fs1 magnetic" href="#botox">Masseter Botox</a>
-    <a class="floating-service fs2 magnetic" href="#hyaluron">Lippen · Hyaluron</a>
-    <a class="floating-service fs3 magnetic" href="#skin">RF-Microneedling</a>
-    <a class="floating-service fs4 magnetic" href="#laser">Alexandrit Laser</a>
-    <a class="floating-service fs5 magnetic" href="#vitality">NAD+ · Infusion</a>
-    <div class="counter-badge"><div><strong>25+</strong><span>Behandlungs-<br>optionen</span></div></div>
-  </div>
-
-  <div class="treatment-rail">
-    <span class="rail-label">Explore the universe</span>
-    <div class="rail-window"><div class="rail-track">
-      <span class="rail-item">Botox</span><span class="rail-item">Masseter</span><span class="rail-item">Lip Flip</span><span class="rail-item">Browlift</span><span class="rail-item">Gummy Smile</span><span class="rail-item">Traptox</span><span class="rail-item">Nefertiti Lift</span><span class="rail-item">Hyaluron</span><span class="rail-item">Lippen</span><span class="rail-item">Jawline</span><span class="rail-item">Wangen</span><span class="rail-item">Skinbooster</span><span class="rail-item">PRP</span><span class="rail-item">Potenza RF</span><span class="rail-item">Haarentfernung</span><span class="rail-item">Infusion</span><span class="rail-item">Fett-weg-Spritze</span>
-      <span class="rail-item">Botox</span><span class="rail-item">Masseter</span><span class="rail-item">Lip Flip</span><span class="rail-item">Browlift</span><span class="rail-item">Gummy Smile</span><span class="rail-item">Traptox</span><span class="rail-item">Nefertiti Lift</span><span class="rail-item">Hyaluron</span><span class="rail-item">Lippen</span><span class="rail-item">Jawline</span><span class="rail-item">Wangen</span><span class="rail-item">Skinbooster</span><span class="rail-item">PRP</span><span class="rail-item">Potenza RF</span><span class="rail-item">Haarentfernung</span><span class="rail-item">Infusion</span><span class="rail-item">Fett-weg-Spritze</span>
-    </div></div><span class="rail-arrow">↓</span>
-  </div>
-</section>
-
-<section class="category-dock" aria-label="Behandlungskategorien">
-  <a class="category" href="#botox"><small>01 · Expression</small><h3>Botox & Mimik</h3><i>11 Optionen</i><b>B</b></a>
-  <a class="category" href="#hyaluron"><small>02 · Contour</small><h3>Hyaluron & Form</h3><i>4+ Optionen</i><b>H</b></a>
-  <a class="category" href="#skin"><small>03 · Regenerate</small><h3>Skin & Regeneration</h3><i>3+ Technologien</i><b>S</b></a>
-  <a class="category" href="#laser"><small>04 · Smooth</small><h3>Laser & Haare</h3><i>Alexandrit + Nd:YAG</i><b>L</b></a>
-  <a class="category" href="#vitality"><small>05 · Recharge</small><h3>Body & Vitality</h3><i>Infusion + Lipolyse</i><b>V</b></a>
-</section>
-
-<section class="intro">
-  <div class="section-label reveal">A+ Philosophy</div>
-  <div class="reveal"><h2>Nicht „mehr machen“.<br><em>Das Richtige</em> machen.</h2><div class="intro-note"><p>Ästhetik ist kein Einheitsmenü. Gesicht, Haut, Haare, Körper und Wohlbefinden brauchen unterschiedliche Lösungen. Deshalb beginnt A+ nicht mit einem Produkt, sondern mit dem Ziel.</p><strong>Precision over excess.</strong></div></div>
-</section>
-
-<section class="universe" id="treatments">
-  <div class="universe-head reveal"><h2>The A+ Treatment<br>Universe.</h2><p>Ein Überblick über die wichtigsten Behandlungsfelder und ausgewählte Optionen. Für Details, Eignung und medizinische Aufklärung erfolgt eine persönliche ärztliche Beratung.</p></div>
-
-  <div class="service-group reveal" id="botox">
-    <div class="group-title"><small>01 · Expression</small><h3>Botox & Mimik</h3></div>
-    <div class="group-services">
-      <a class="service feature" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Upper face</span><span>ab 119 €</span></small><h4>Stirnfalten</h4><p>Mimik gezielt entspannen.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Upper face</span><span>ab 119 €</span></small><h4>Zornesfalte</h4><p>Zwischen den Augenbrauen.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Eyes</span><span>ab 119 €</span></small><h4>Lachfalten</h4><p>Krähenfüße & Augenpartie.</p><span class="go">↗</span></a>
-      <a class="service feature" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Brows</span><span>ab 119 €</span></small><h4>Browlift</h4><p>Subtile Öffnung der Augenpartie.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Lips</span><span>ab 119 €</span></small><h4>Lip Flip</h4><p>Feiner Akzent der Oberlippe.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Smile</span><span>ab 119 €</span></small><h4>Gummy Smile</h4><p>Gezielte Mimikbehandlung.</p><span class="go">↗</span></a>
-      <a class="service warm" href="https://a-esthetic.de/botox-behandlungen/masseter-botox-frankfurt/" target="_blank"><small><span>Jaw</span><span>ab 299 €</span></small><h4>Masseter</h4><p>Kaumuskel & Kieferkontur.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Neck</span><span>ab 299 €</span></small><h4>Platysma</h4><p>Hals- und Kieferregion.</p><span class="go">↗</span></a>
-      <a class="service feature" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Shoulder</span><span>ab 339 €</span></small><h4>Traptox / Barbie Botox</h4><p>Trapezmuskel-Behandlung.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Jaw + neck</span><span>ab 349 €</span></small><h4>Nefertiti Lift</h4><p>Untergesicht & Hals.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/botox-behandlungen/" target="_blank"><small><span>Body</span><span>ab 399 €</span></small><h4>Hyperhidrose</h4><p>Behandlung starken Schwitzens.</p><span class="go">↗</span></a>
+  <header class="nav">
+    <a class="logo" href="#start">A+ ESTHETIC <span>FRANKFURT</span></a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="#behandlungen">Behandlungen</a>
+      <a href="#beliebt">Beliebt</a>
+      <a href="#philosophie">Philosophie</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a>
+      <button class="menu" aria-label="Menü öffnen">☰</button>
     </div>
-  </div>
+  </header>
 
-  <div class="service-group reveal" id="hyaluron">
-    <div class="group-title"><small>02 · Contour</small><h3>Hyaluron & Form</h3></div>
-    <div class="group-services">
-      <a class="service warm" href="https://a-esthetic.de/hyaluronsaure-behandlungen/lippenunterspritzung-frankfurt/" target="_blank"><small><span>Lips</span><span>200 €/ml</span></small><h4>Lippen</h4><p>Kontur, Proportion und Volumen.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/hyaluronsaure-behandlungen/wangenaufbau-frankfurt/" target="_blank"><small><span>Midface</span><span>220 €/ml</span></small><h4>Wangenaufbau</h4><p>Mittelgesicht individuell planen.</p><span class="go">↗</span></a>
-      <a class="service feature" href="https://a-esthetic.de/hyaluronsaure-behandlungen/jawline-kinnaufbau-frankfurt/" target="_blank"><small><span>Contour</span><span>200 €/ml</span></small><h4>Jawline & Kinn</h4><p>Profil und Unterkieferkontur.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/hyaluronsaure-behandlungen/nasolabialfalte-hyaluron-frankfurt/" target="_blank"><small><span>Lines</span><span>200 €/ml</span></small><h4>Nasolabialfalte</h4><p>Übergang Wange, Nase, Mund.</p><span class="go">↗</span></a>
-    </div>
-  </div>
+  <main id="start">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="kicker">Ästhetische Medizin in Frankfurt</div>
+        <h1>Mehr du.<br><em>Weniger</em><br>Standard.</h1>
+        <p class="hero-sub">Individuelle Behandlungen für Gesicht, Haut, Körper, Haare und Vitalität.</p>
+        <div class="hero-cta">
+          <a class="btn btn-fill" href="#behandlungen">Behandlungen entdecken</a>
+          <a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a>
+        </div>
+        <div class="hero-proof"><span><b>25+</b> Behandlungen</span><span><b>5</b> Bereiche</span><span>Frankfurt am Main</span></div>
+      </div>
+      <div class="hero-media">
+        <img src="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Ästhetische Behandlung bei A+ Esthetic" fetchpriority="high">
+        <div class="scan-orbit"></div>
+        <div class="media-label"><i></i> Natürlich · Präzise · Persönlich</div>
+        <div class="needbar">
+          <span class="intro">Was möchtest du verändern?</span>
+          <button data-target="mimik">Falten</button>
+          <button data-target="kontur">Kontur</button>
+          <button data-target="haut">Haut</button>
+          <button data-target="haare">Haare</button>
+          <button data-target="koerper">Körper & Vitalität</button>
+        </div>
+      </div>
+    </section>
 
-  <div class="service-group reveal" id="skin">
-    <div class="group-title"><small>03 · Regenerate</small><h3>Skin & Regeneration</h3></div>
-    <div class="group-services">
-      <a class="service feature" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Hydration</span><span>Skin</span></small><h4>Skinbooster</h4><p>Feuchtigkeit & Hautqualität.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Potenza</span><span>RF</span></small><h4>RF-Microneedling</h4><p>Struktur, Poren & Kollagen.</p><span class="go">↗</span></a>
-      <a class="service warm" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Autologous</span><span>PRP</span></small><h4>PRP Behandlung</h4><p>Körpereigenes Plasma zur Regeneration.</p><span class="go">↗</span></a>
-    </div>
-  </div>
+    <section class="finder" id="behandlungen">
+      <div class="finder-head">
+        <h2>Was passt<br>zu dir?</h2>
+        <p>Wähle einfach dein Ziel. Wir zeigen dir nur die passenden Möglichkeiten.</p>
+      </div>
+      <div class="selector" role="tablist" aria-label="Behandlungsbereiche">
+        <button class="active" data-key="mimik">Falten glätten</button>
+        <button data-key="kontur">Kontur definieren</button>
+        <button data-key="haut">Haut verbessern</button>
+        <button data-key="haare">Haare behandeln</button>
+        <button data-key="koerper">Körper & Vitalität</button>
+      </div>
+      <div class="selection-panel">
+        <div class="selection-visual">
+          <img id="panelImage" src="https://images.pexels.com/photos/5069432/pexels-photo-5069432.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Behandlungsbereich">
+          <span class="tag" id="panelTag">Gesicht</span>
+        </div>
+        <div class="selection-content">
+          <small id="panelSmall">Mimik & Ausdruck</small>
+          <h3 id="panelTitle">Falten glätten</h3>
+          <div class="treat-list" id="panelList"></div>
+          <div class="selection-foot"><a href="#alle">Alle Behandlungen ansehen</a></div>
+        </div>
+      </div>
+    </section>
 
-  <div class="service-group reveal" id="laser">
-    <div class="group-title"><small>04 · Smooth</small><h3>Laser & Haare</h3></div>
-    <div class="group-services">
-      <a class="service feature" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Laser</span><span>Alexandrit</span></small><h4>Dauerhafte Haarentfernung</h4><p>Für Gesicht und Körper.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Laser</span><span>Nd:YAG</span></small><h4>Mehr Hauttypen</h4><p>Zwei Lasertechnologien individuell eingesetzt.</p><span class="go">↗</span></a>
-      <a class="service warm" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Hair</span><span>PRP</span></small><h4>PRP bei Haarausfall</h4><p>Unterstützung von Kopfhaut & Haarwurzeln.</p><span class="go">↗</span></a>
-    </div>
-  </div>
+    <section class="popular" id="beliebt">
+      <div class="popular-head"><h2>Besonders<br>beliebt.</h2><span>Direkt auswählen</span></div>
+      <div class="cards">
+        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3764014/pexels-photo-3764014.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Botox Behandlung"><div class="card-copy"><small>Gesicht</small><h3>Botox</h3></div></a>
+        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3373722/pexels-photo-3373722.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Lippen und Kontur"><div class="card-copy"><small>Kontur</small><h3>Hyaluron</h3></div></a>
+        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3985329/pexels-photo-3985329.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Hautbehandlung"><div class="card-copy"><small>Haut</small><h3>Skinbooster</h3></div></a>
+        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3738349/pexels-photo-3738349.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Laser Haarentfernung"><div class="card-copy"><small>Laser</small><h3>Haarentfernung</h3></div></a>
+      </div>
+    </section>
 
-  <div class="service-group reveal" id="vitality">
-    <div class="group-title"><small>05 · Recharge</small><h3>Body & Vitality</h3></div>
-    <div class="group-services">
-      <a class="service feature" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>IV</span><span>Vitality</span></small><h4>Vitamin-Infusion</h4><p>Mikronährstoffe individuell auswählen.</p><span class="go">↗</span></a>
-      <a class="service" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>IV</span><span>NAD+</span></small><h4>NAD+ Infusion</h4><p>Teil individueller Infusionskonzepte.</p><span class="go">↗</span></a>
-      <a class="service warm" href="https://a-esthetic.de/behandlungen/" target="_blank"><small><span>Body</span><span>Contour</span></small><h4>Injektionslipolyse</h4><p>Fett-weg-Spritze für kleine lokale Depots.</p><span class="go">↗</span></a>
-    </div>
-  </div>
-</section>
+    <section class="all" id="alle">
+      <button class="all-toggle" id="allToggle"><span>Alle Behandlungen anzeigen</span><span>+</span></button>
+      <div class="all-panel" id="allPanel">
+        <div class="group"><h4>Botox</h4><a href="#">Stirnfalten</a><a href="#">Zornesfalte</a><a href="#">Lachfalten</a><a href="#">Browlift</a><a href="#">Lip Flip</a><a href="#">Gummy Smile</a><a href="#">Masseter</a><a href="#">Traptox</a><a href="#">Nefertiti Lift</a><a href="#">Hyperhidrose</a></div>
+        <div class="group"><h4>Hyaluron</h4><a href="#">Lippen</a><a href="#">Wangen</a><a href="#">Jawline</a><a href="#">Kinn</a><a href="#">Nasolabialfalte</a></div>
+        <div class="group"><h4>Haut</h4><a href="#">Skinbooster</a><a href="#">PRP</a><a href="#">RF-Microneedling</a><a href="#">Potenza</a><a href="#">Hautanalyse</a></div>
+        <div class="group"><h4>Laser & Haare</h4><a href="#">Dauerhafte Haarentfernung</a><a href="#">Alexandrit-Laser</a><a href="#">Nd:YAG-Laser</a><a href="#">PRP Haare</a></div>
+        <div class="group"><h4>Körper & Vitalität</h4><a href="#">Fett-weg-Spritze</a><a href="#">Vitamininfusion</a><a href="#">NAD+ Infusion</a><a href="#">Individuelle Beratung</a></div>
+      </div>
+    </section>
 
-<section class="finder" id="finder">
-  <div class="reveal"><h2>Don’t choose a<br><i>treatment.</i><br>Choose a goal.</h2></div>
-  <div class="finder-copy reveal"><p>Noch unsicher, was zu Ihnen passt? Genau dafür ist die Beratung da. Wir denken nicht in Trends, sondern in Ausgangssituation, Anatomie, Hautbild und persönlichem Ziel.</p><div class="goal-list"><div class="goal">Mimik entspannen</div><div class="goal">Konturen definieren</div><div class="goal">Hautbild verbessern</div><div class="goal">Haare reduzieren</div><div class="goal">Haarwachstum unterstützen</div><div class="goal">Vitalität unterstützen</div><div class="goal">Lokale Kontur verbessern</div><div class="goal">Einfach beraten lassen</div></div></div>
-</section>
+    <section class="promise" id="philosophie">
+      <h2>Nicht mehr.<br><em>Nur passender.</em></h2>
+      <div class="promise-side"><p>Bei A+ Esthetic steht nicht eine Behandlung im Mittelpunkt, sondern das Ergebnis, das zu deinem Gesicht, deinem Körper und deinem Alltag passt.</p><a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Beratung buchen</a></div>
+    </section>
+  </main>
 
-<section class="proof"><div class="proof-top reveal"><h2>Medical precision.<br>Without the<br>clinic cliché.</h2><div class="proof-copy"><div><div class="proof-stat">A+</div><p>Qualifizierte Ärztinnen und Ärzte, individuelle Planung und transparente Aufklärung statt Standardpakete.</p></div><div><div class="proof-stat">Frankfurt<small>Stiftstraße 14 · 60313</small></div><p>Zentral gelegen, mit direkter Online-Terminbuchung und einem breiten Spektrum moderner ästhetischer Behandlungen.</p></div></div></div></section>
+  <footer><span>© A+ Esthetic Frankfurt</span><span>Impressum · Datenschutz</span></footer>
 
-<section class="final"><div class="final-inner reveal"><small>Ready when you are</small><h2>Natürlich.<br><em>Nur besser.</em></h2><a class="big-book magnetic" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin bei A+ buchen</a></div></section>
-</main>
-<footer><span>© 2026 A+ Esthetic</span><span>Stiftstraße 14 · 60313 Frankfurt am Main</span><span>Instagram · WhatsApp · Doctolib</span></footer>
-
-<script>
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20),{passive:true});
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-const cursor=document.getElementById('cursor');if(matchMedia('(pointer:fine)').matches){addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';cursor.classList.add('on')});document.querySelectorAll('a,.magnetic').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('big'));el.addEventListener('mouseleave',()=>cursor.classList.remove('big'))});const stage=document.getElementById('stage'),img=document.getElementById('portraitImg');stage.addEventListener('mousemove',e=>{const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;img.style.transform=`scale(1.04) translate(${x*10}px,${y*8}px)`});stage.addEventListener('mouseleave',()=>img.style.transform='scale(1.03)')}
-</script>
+  <script>
+    const data={
+      mimik:{tag:'Gesicht',small:'Mimik & Ausdruck',title:'Falten glätten',img:'https://images.pexels.com/photos/5069432/pexels-photo-5069432.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Stirnfalten','Zornesfalte','Lachfalten','Browlift','Lip Flip','Gummy Smile','Masseter','Nefertiti Lift']},
+      kontur:{tag:'Gesicht',small:'Form & Proportion',title:'Kontur definieren',img:'https://images.pexels.com/photos/3764014/pexels-photo-3764014.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Lippen','Wangen','Jawline','Kinn','Nasolabialfalte']},
+      haut:{tag:'Haut',small:'Qualität & Regeneration',title:'Haut verbessern',img:'https://images.pexels.com/photos/3985329/pexels-photo-3985329.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Skinbooster','PRP','RF-Microneedling','Potenza','Hautanalyse']},
+      haare:{tag:'Laser & Haare',small:'Glätte & Wachstum',title:'Haare behandeln',img:'https://images.pexels.com/photos/3738349/pexels-photo-3738349.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Dauerhafte Haarentfernung','Alexandrit-Laser','Nd:YAG-Laser','PRP Haare']},
+      koerper:{tag:'Körper & Vitalität',small:'Form & Energie',title:'Körper & Vitalität',img:'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Fett-weg-Spritze','Vitamininfusion','NAD+ Infusion','Individuelle Beratung']}
+    };
+    const selector=[...document.querySelectorAll('.selector button')];
+    const list=document.getElementById('panelList'),title=document.getElementById('panelTitle'),small=document.getElementById('panelSmall'),tag=document.getElementById('panelTag'),image=document.getElementById('panelImage');
+    function render(key){const d=data[key];if(!d)return;selector.forEach(b=>b.classList.toggle('active',b.dataset.key===key));title.textContent=d.title;small.textContent=d.small;tag.textContent=d.tag;image.src=d.img;list.innerHTML=d.items.map(x=>`<a href="#alle">${x}</a>`).join('')}
+    selector.forEach(b=>b.addEventListener('click',()=>render(b.dataset.key)));
+    document.querySelectorAll('.needbar button[data-target]').forEach(b=>b.addEventListener('click',()=>{render(b.dataset.target);document.getElementById('behandlungen').scrollIntoView({behavior:'smooth'})}));
+    render('mimik');
+    const toggle=document.getElementById('allToggle'),panel=document.getElementById('allPanel');
+    toggle.addEventListener('click',()=>{toggle.classList.toggle('open');panel.classList.toggle('open');toggle.firstElementChild.textContent=panel.classList.contains('open')?'Behandlungen ausblenden':'Alle Behandlungen anzeigen'});
+  </script>
 </body>
 </html>
