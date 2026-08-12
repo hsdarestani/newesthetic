@@ -36,10 +36,11 @@ jobs:
           rail_css = '.hero-rail{position:absolute;z-index:5;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(8,1fr);background:rgba(71,52,36,.48);backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.26);box-shadow:none;color:#fff}.hero-rail a{padding:18px 8px;text-align:center;border-right:1px solid rgba(255,255,255,.18);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#fff}.hero-rail a:last-child{border-right:0}.hero-rail a:hover{background:rgba(255,255,255,.10)}'
           s = re.sub(r'\.hero-rail\{.*?\.hero-rail a:hover\{[^}]*\}', rail_css, s, count=1, flags=re.S)
 
-          # keep SEO text/links; only make hero CTA match the promised composition
-          s = s.replace('<a class="btn primary" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Termin buchen</a><a class="btn" href="#behandlungen">Behandlungen im Überblick</a>', '<a class="btn primary" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Termin vereinbaren</a>')
+          # Add final visual overrides without removing SEO links/content from the HTML.
+          final_css = '.header .brand small{color:rgba(255,255,255,.76)}.hero-copy .eyebrow{color:rgba(255,255,255,.78)}.hero .btn.primary{background:transparent;border-color:rgba(255,255,255,.82);color:#fff}.hero .actions .btn:nth-child(2){display:none}'
+          if final_css not in s:
+              s = s.replace('</style>', final_css + '</style>', 1)
 
-          # mobile composition: image first, copy over lower part, no white split block
           s = s.replace('.hero-shade{background:linear-gradient(180deg,rgba(249,244,237,.7) 0%,rgba(249,244,237,.32) 34%,rgba(249,244,237,.96) 65%,rgba(249,244,237,1) 100%)}', '.hero-shade{background:linear-gradient(180deg,rgba(35,24,16,.02) 0%,rgba(35,24,16,.05) 40%,rgba(35,24,16,.48) 70%,rgba(35,24,16,.68) 100%)}')
           s = s.replace('.hero-copy{width:auto;margin:0;padding:450px 18px 170px;justify-content:flex-end}', '.hero-copy{width:auto;margin:0;padding:430px 18px 170px;justify-content:flex-end;color:#fff}')
 
@@ -50,5 +51,5 @@ jobs:
           git config user.name "A+ Esthetic Design Bot"
           git config user.email "actions@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "Match promised sculptural hero composition"
+          git diff --cached --quiet || git commit -m "Polish sculptural hero to approved direction"
           git push
