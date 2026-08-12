@@ -1,243 +1,51 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f4f0e9" />
-  <meta name="description" content="A+ Esthetic Frankfurt – ästhetische Medizin mit individueller Beratung: Botox, Hyaluron, Haut, Laser, Körper und Vitalität." />
-  <title>A+ Esthetic Frankfurt</title>
-  <link rel="preconnect" href="https://images.pexels.com" crossorigin>
-  <link rel="preload" as="image" href="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1600" fetchpriority="high">
-  <style>
-    :root{
-      --bg:#f4f0e9;--ink:#11110f;--muted:#6f6b65;--line:rgba(17,17,15,.14);
-      --gold:#b08d57;--gold2:#d8c29f;--white:#fffdfa;--dark:#12110f;
-      --serif:"Iowan Old Style","Baskerville","Times New Roman",serif;
-      --sans:Inter,"Helvetica Neue",Arial,sans-serif;
-      --ease:cubic-bezier(.22,.8,.22,1)
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--bg)}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
-    button{font:inherit;color:inherit}
-    img{display:block;max-width:100%}
-    ::selection{background:var(--ink);color:var(--white)}
-
-    .nav{position:fixed;inset:0 0 auto;z-index:80;height:78px;padding:0 28px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(244,240,233,.72);backdrop-filter:blur(16px);border-bottom:1px solid rgba(17,17,15,.08)}
-    .logo{font-weight:800;letter-spacing:-.05em;font-size:22px}.logo span{font-weight:500;font-size:10px;letter-spacing:.18em;margin-left:8px;vertical-align:middle}
-    .nav-links{display:flex;gap:28px;font-size:11px;text-transform:uppercase;letter-spacing:.14em}
-    .nav-links a{opacity:.7;transition:.25s}.nav-links a:hover{opacity:1}
-    .nav-actions{justify-self:end;display:flex;align-items:center;gap:10px}
-    .btn{border:1px solid var(--ink);border-radius:999px;padding:12px 17px;background:transparent;font-size:11px;text-transform:uppercase;letter-spacing:.13em;cursor:pointer;transition:.25s}
-    .btn:hover{background:var(--ink);color:var(--white)}
-    .menu{display:none;border:0;background:transparent;font-size:24px}
-
-    .hero{min-height:100svh;padding-top:78px;display:grid;grid-template-columns:54% 46%;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-    .hero-copy{padding:8vh 5vw 5vh 6vw;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:5}
-    .kicker{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}.kicker:before{content:"";width:32px;height:1px;background:var(--gold)}
-    h1{font-family:var(--serif);font-weight:400;font-size:clamp(72px,8vw,138px);line-height:.78;letter-spacing:-.075em;margin:0;max-width:760px}
-    h1 em{font-weight:400;color:var(--gold);padding-left:.55em}
-    .hero-sub{font-size:14px;line-height:1.6;color:var(--muted);max-width:390px;margin:34px 0 28px 4px}
-    .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
-    .btn-fill{background:var(--ink);color:var(--white)}.btn-fill:hover{background:var(--gold);border-color:var(--gold)}
-    .hero-proof{margin-top:40px;display:flex;gap:28px;align-items:center;font-size:11px;color:var(--muted)}
-    .hero-proof b{font-size:22px;color:var(--ink);font-family:var(--serif);font-weight:400;margin-right:6px}
-
-    .hero-media{position:relative;overflow:hidden;background:#d7d0c7}
-    .hero-media img{width:100%;height:100%;object-fit:cover;object-position:58% center;filter:saturate(.84) contrast(.98);transform:scale(1.02);animation:in 1.2s var(--ease) both}
-    @keyframes in{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:scale(1.02)}}
-    .hero-media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(244,240,233,.15),transparent 28%),linear-gradient(180deg,transparent 55%,rgba(0,0,0,.18));pointer-events:none}
-    .scan-orbit{position:absolute;width:46vw;height:46vw;max-width:700px;max-height:700px;border-radius:50%;border:1px solid rgba(255,255,255,.46);left:50%;top:50%;transform:translate(-46%,-50%);z-index:3;pointer-events:none}
-    .scan-orbit:before,.scan-orbit:after{content:"";position:absolute;border-radius:50%;inset:12%;border:1px solid rgba(255,255,255,.2)}
-    .scan-orbit:after{inset:28%}
-    .media-label{position:absolute;left:24px;bottom:24px;z-index:6;color:white;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px}.media-label i{width:7px;height:7px;border-radius:50%;background:var(--gold2);box-shadow:0 0 0 6px rgba(216,194,159,.15)}
-
-    .needbar{position:absolute;left:6vw;right:5vw;bottom:22px;z-index:20;display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
-    .needbar button{border:1px solid rgba(255,255,255,.44);background:rgba(15,15,15,.24);backdrop-filter:blur(10px);color:white;border-radius:999px;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.25s}
-    .needbar button:hover{background:white;color:var(--ink)}
-    .needbar .intro{color:var(--ink);background:rgba(244,240,233,.86);border-color:rgba(17,17,15,.1);pointer-events:none}
-
-    .finder{padding:8vw 6vw 7vw;background:var(--white);border-bottom:1px solid var(--line)}
-    .finder-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}
-    .finder h2,.popular h2,.promise h2{font:400 clamp(46px,6vw,92px)/.9 var(--serif);letter-spacing:-.055em;margin:0}
-    .finder-head p{margin:0 0 8px;color:var(--muted);font-size:12px;max-width:260px;line-height:1.6}
-    .selector{display:flex;gap:8px;overflow:auto;padding-bottom:8px;scrollbar-width:none}.selector::-webkit-scrollbar{display:none}
-    .selector button{white-space:nowrap;border:1px solid var(--line);background:transparent;border-radius:999px;padding:12px 16px;font-size:11px;text-transform:uppercase;letter-spacing:.11em;cursor:pointer;transition:.25s}
-    .selector button.active,.selector button:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-    .selection-panel{margin-top:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:34% 66%;min-height:330px}
-    .selection-visual{position:relative;overflow:hidden;min-height:330px;background:#dad4cb}
-    .selection-visual img{width:100%;height:100%;object-fit:cover;filter:saturate(.78)}
-    .selection-visual .tag{position:absolute;left:18px;top:18px;background:rgba(255,253,250,.86);backdrop-filter:blur(8px);border-radius:999px;padding:9px 12px;font-size:9px;text-transform:uppercase;letter-spacing:.14em}
-    .selection-content{padding:36px 42px;display:flex;flex-direction:column;justify-content:center}
-    .selection-content small{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold)}
-    .selection-content h3{font:400 clamp(34px,4.2vw,66px)/.95 var(--serif);letter-spacing:-.045em;margin:12px 0 22px}
-    .treat-list{display:flex;flex-wrap:wrap;gap:8px}
-    .treat-list a{border:1px solid var(--line);border-radius:999px;padding:10px 13px;font-size:11px;transition:.25s;background:rgba(244,240,233,.38)}
-    .treat-list a:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-    .selection-foot{margin-top:26px}.selection-foot a{font-size:11px;text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--ink);padding-bottom:3px}
-
-    .popular{padding:7vw 6vw;background:var(--bg)}
-    .popular-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:34px}.popular-head span{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    .card{position:relative;min-height:420px;overflow:hidden;background:#d8d2ca;border-radius:2px;isolation:isolate}
-    .card img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:saturate(.82)}
-    .card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.68));z-index:1}
-    .card:hover img{transform:scale(1.045)}
-    .card-copy{position:absolute;inset:auto 20px 20px;z-index:2;color:white}
-    .card-copy small{font-size:9px;text-transform:uppercase;letter-spacing:.15em;opacity:.72}
-    .card-copy h3{font:400 30px/1 var(--serif);margin:7px 0 0;letter-spacing:-.03em}
-
-    .all{padding:0 6vw 7vw;background:var(--bg)}
-    .all-toggle{width:100%;border:1px solid var(--line);background:transparent;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:.13em}
-    .all-toggle span:last-child{font-size:20px;transition:.3s}
-    .all-toggle.open span:last-child{transform:rotate(45deg)}
-    .all-panel{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-top:0;max-height:0;overflow:hidden;opacity:0;transition:max-height .7s var(--ease),opacity .35s}
-    .all-panel.open{max-height:900px;opacity:1}
-    .group{padding:24px;border-right:1px solid var(--line)}.group:last-child{border-right:0}.group h4{font:400 25px/1 var(--serif);margin:0 0 18px}.group a{display:block;font-size:11px;line-height:1.5;padding:6px 0;color:var(--muted)}.group a:hover{color:var(--ink)}
-
-    .promise{background:var(--dark);color:var(--white);padding:8vw 6vw;display:grid;grid-template-columns:1.3fr .7fr;gap:8vw;align-items:end}
-    .promise h2 em{color:var(--gold2);font-weight:400}.promise-side{border-top:1px solid rgba(255,255,255,.2);padding-top:18px}.promise-side p{font-size:13px;line-height:1.7;color:rgba(255,255,255,.65);margin:0 0 22px}.promise .btn{border-color:rgba(255,255,255,.7);color:white}.promise .btn:hover{background:white;color:var(--ink)}
-
-    footer{padding:28px 6vw;background:var(--dark);color:rgba(255,255,255,.55);border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:20px;font-size:10px;text-transform:uppercase;letter-spacing:.13em}
-
-    .mobile-nav{display:none}
-    @media(max-width:980px){
-      .nav{grid-template-columns:1fr auto}.nav-links{display:none}.nav-actions .btn{display:none}.menu{display:block}
-      .hero{grid-template-columns:1fr;min-height:auto}.hero-copy{padding:10vh 6vw 5vh;min-height:66svh}.hero-media{height:58svh}
-      h1{font-size:clamp(62px,15vw,110px)}.hero-sub{max-width:330px}.needbar{left:18px;right:18px;bottom:18px}.needbar .intro{display:none}
-      .selection-panel{grid-template-columns:1fr}.selection-visual{height:280px}.selection-content{padding:28px 22px}
-      .cards{grid-template-columns:1fr 1fr}.card{min-height:360px}
-      .all-panel{grid-template-columns:1fr 1fr}.group{border-bottom:1px solid var(--line)}
-      .promise{grid-template-columns:1fr;gap:44px}
-    }
-    @media(max-width:620px){
-      .nav{height:68px;padding:0 18px}.logo{font-size:20px}.logo span{display:none}
-      .hero{padding-top:68px}.hero-copy{padding:8vh 18px 4vh;min-height:56svh}.kicker{margin-bottom:18px}h1{font-size:17vw;line-height:.82}.hero-sub{font-size:13px;margin-top:24px}.hero-proof{margin-top:28px;gap:16px;flex-wrap:wrap}.hero-proof b{font-size:18px}
-      .hero-media{height:55svh}.scan-orbit{width:82vw;height:82vw}.media-label{left:18px;bottom:72px}
-      .needbar{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.needbar::-webkit-scrollbar{display:none}.needbar button{white-space:nowrap}
-      .finder,.popular{padding:18vw 18px 14vw}.finder-head,.popular-head{align-items:flex-start;flex-direction:column}.finder-head p{display:none}.finder h2,.popular h2,.promise h2{font-size:15vw}
-      .selection-panel{min-height:0}.selection-visual{height:240px}.selection-content h3{font-size:11vw}.treat-list{gap:6px}.treat-list a{font-size:10px;padding:9px 11px}
-      .cards{grid-template-columns:1fr;gap:8px}.card{min-height:410px}
-      .all{padding:0 18px 16vw}.all-panel{grid-template-columns:1fr}.group{border-right:0}.all-panel.open{max-height:1800px}
-      .promise{padding:18vw 18px}.promise h2{line-height:.95}
-      footer{padding:24px 18px;flex-direction:column}
-    }
-    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#eee5d8" />
+<meta name="description" content="A+ Esthetic Frankfurt – ästhetische Medizin mit klarer Beratung, natürlicher Harmonie und modernen Behandlungen." />
+<title>A+ Esthetic Frankfurt — Form. Harmonie. Perfektion.</title>
+<style>
+:root{--bg:#eee5d8;--paper:#fffaf3;--ink:#181512;--muted:#6f665f;--line:rgba(24,21,18,.11);--gold:#b58d5f;--shadow:0 20px 50px rgba(48,36,22,.09);--serif:"Iowan Old Style","Baskerville","Times New Roman",serif;--sans:Inter,"Helvetica Neue",Arial,sans-serif;--ease:cubic-bezier(.22,.8,.22,1)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top left,rgba(255,255,255,.5),transparent 30%),var(--bg);font-family:var(--sans);color:var(--ink)}a{text-decoration:none;color:inherit}img{display:block;max-width:100%}
+.container{width:min(1180px,calc(100% - 24px));margin:auto}.section{padding:28px 0}.reveal{opacity:0;transform:translateY(20px);transition:.7s var(--ease)}.reveal.show{opacity:1;transform:none}
+.navwrap{position:sticky;top:0;z-index:10;padding:14px 0;background:linear-gradient(to bottom,rgba(238,229,216,.88),rgba(238,229,216,.6),transparent);backdrop-filter:blur(12px)}
+.nav{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:14px 18px;border-radius:999px;background:rgba(255,250,243,.74);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 30px rgba(0,0,0,.04)}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.05em}.brand small{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:8px}.links{display:flex;justify-content:center;gap:22px;font-size:12px;text-transform:uppercase;letter-spacing:.14em}.links a{opacity:.74}.cta,.ghost,.light{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:999px;font-size:12px;text-transform:uppercase;letter-spacing:.14em}.cta{background:var(--ink);color:#fff}.ghost{border:1px solid var(--line)}.light{background:#fff;color:var(--ink)}
+.hero{padding:12px 0 24px}.heroBox{position:relative;overflow:hidden;border-radius:36px;padding:clamp(22px,4vw,42px);background:linear-gradient(140deg,rgba(255,250,243,.96),rgba(243,234,221,.92));border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow)}
+.heroGrid{display:grid;grid-template-columns:1.02fr .98fr;gap:28px;align-items:center;min-height:calc(100svh - 130px)}.eyebrow{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(24,21,18,.08);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#e1c6a5);box-shadow:0 0 0 7px rgba(181,141,95,.12)}
+.hero h1{margin:18px 0 0;font:400 clamp(56px,8vw,104px)/.9 var(--serif);letter-spacing:-.06em}.hero p{max-width:520px;margin:18px 0 0;color:var(--muted);font-size:17px;line-height:1.75}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.pill{padding:11px 13px;border-radius:999px;background:rgba(255,255,255,.66);border:1px solid rgba(24,21,18,.07);color:var(--muted);font-size:12px}
+.visual{position:relative;min-height:620px;display:grid;place-items:center}.blob,.blob2,.blob3{position:absolute;border-radius:46% 54% 58% 42%/38% 34% 66% 62%;filter:drop-shadow(0 22px 34px rgba(42,28,12,.09))}.blob{width:430px;height:430px;top:20px;right:30px;background:linear-gradient(145deg,#f7efe3,#dcc4a1)}.blob2{width:220px;height:220px;left:0;bottom:70px;background:linear-gradient(145deg,#fffaf3,#ead7bd)}.blob3{width:150px;height:150px;right:16px;bottom:10px;background:linear-gradient(145deg,#d9bc94,#f6ebe0)}
+.arch{position:relative;z-index:1;width:min(100%,520px);padding:16px;border-radius:30px;background:rgba(255,250,243,.66);border:1px solid rgba(255,255,255,.8);box-shadow:0 24px 44px rgba(42,28,12,.08)}.frame{position:relative;overflow:hidden;border-radius:220px 220px 24px 24px;aspect-ratio:4/5;background:linear-gradient(180deg,#efe7db,#dfc9aa)}.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;mix-blend-mode:multiply;opacity:.8}.ring,.ring2{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.75)}.ring{inset:13%}.ring2{inset:26%;border-style:dashed;opacity:.7}.note{position:absolute;right:0;bottom:28px;z-index:2;max-width:250px;padding:18px;border-radius:24px;background:rgba(255,250,243,.84);border:1px solid rgba(24,21,18,.08);box-shadow:0 18px 30px rgba(24,21,18,.07)}.note strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:8px}.note b{display:block;font:400 28px/1 var(--serif);letter-spacing:-.04em}.note span{display:block;margin-top:10px;color:var(--muted);font-size:13px;line-height:1.6}
+.chips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:18px}.chip{padding:16px;border-radius:22px;background:rgba(255,255,255,.66);border:1px solid rgba(24,21,18,.08);cursor:pointer;transition:.2s}.chip:hover,.chip.active{background:var(--ink);color:#fff;transform:translateY(-2px)}.chip small{display:block;font-size:11px;opacity:.75;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px}.chip strong{display:block;font-size:18px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:20px}.head h2{margin:0;font:400 clamp(38px,5vw,62px)/.95 var(--serif);letter-spacing:-.05em}.head p{margin:0;max-width:420px;color:var(--muted);line-height:1.7}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step,.panel,.aside,.focus,.trust,.ctaBand{border-radius:30px;background:var(--paper);border:1px solid rgba(24,21,18,.08);box-shadow:0 16px 30px rgba(24,21,18,.05)}.step{padding:24px}.step em{display:block;font-style:normal;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}.step h3{margin:0 0 10px;font-size:22px}.step p{margin:0;color:var(--muted);line-height:1.7}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.panel{padding:24px}.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}.tab{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer}.tab.active,.tab:hover{background:var(--ink);color:#fff;border-color:var(--ink)}.cat{display:flex;justify-content:space-between;gap:16px;align-items:end;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line)}.cat h3{margin:0;font:400 38px/1 var(--serif);letter-spacing:-.04em}.cat p{max-width:420px;margin:0;color:var(--muted);line-height:1.7}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{padding:18px;border-radius:22px;background:linear-gradient(180deg,#fffdf9,#f7f0e6);border:1px solid rgba(24,21,18,.06)}.card h4{margin:0 0 8px;font-size:21px}.card p{margin:0 0 14px;color:var(--muted);line-height:1.65;font-size:14px}.meta{display:flex;justify-content:space-between;gap:10px;font-size:12px;text-transform:uppercase;letter-spacing:.13em}.meta span:first-child{color:var(--gold)}
+.aside{padding:22px;position:sticky;top:94px;height:max-content}.aside h3,.trust h3{margin:0;font:400 36px/1 var(--serif);letter-spacing:-.04em}.aside p,.trust p{color:var(--muted);line-height:1.75}.finders{display:grid;gap:10px;margin-top:16px}.finders button{padding:14px 16px;border-radius:18px;border:1px solid var(--line);background:#fff;text-align:left;cursor:pointer}.finders button.active,.finders button:hover{background:var(--ink);color:#fff;border-color:var(--ink)}.aside .actions{display:grid;gap:10px;margin-top:18px}.mini{font-size:13px;color:var(--muted);margin-top:12px}
+.focuses{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.focus{position:relative;overflow:hidden;min-height:320px;padding:24px;background:linear-gradient(135deg,#d7c1a2,#9a7b56);color:#fff}.focus:nth-child(2){background:linear-gradient(135deg,#f0e6d7,#c4a37c);color:var(--ink)}.focus:nth-child(3){background:linear-gradient(135deg,#e7d7bf,#b08c66)}.focus small{font-size:11px;text-transform:uppercase;letter-spacing:.14em;opacity:.8}.focus h3{margin:16px 0 10px;font:400 40px/.95 var(--serif);letter-spacing:-.05em}.focus p{max-width:270px;line-height:1.7;margin:0}.orb{position:absolute;right:-30px;bottom:-30px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.17)}
+.trustWrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}.trust{padding:24px}.benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.benefit{padding:15px;border-radius:18px;background:#fff;border:1px solid var(--line)}.benefit strong{display:block;margin-bottom:6px;font-size:15px}.benefit span{display:block;color:var(--muted);font-size:14px;line-height:1.6}.quote{margin-top:18px;padding:18px;border-radius:18px;background:linear-gradient(180deg,#fff,#f9f2e8);border:1px solid var(--line)}.quote strong{display:block;margin-top:10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.ctaBand{padding:30px;background:linear-gradient(135deg,#15120f,#34291f);color:#fff}.ctaBand h2{margin:0;font:400 clamp(40px,5vw,68px)/.92 var(--serif);letter-spacing:-.05em}.ctaBand p{max-width:560px;color:rgba(255,255,255,.72);line-height:1.8;margin:16px 0 0}.ctaBand .actions{margin-top:24px}
+.footer{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:18px;padding:24px 0 42px;color:var(--muted)}.footer h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--ink)}.footer p{margin:0;line-height:1.8}
+@media (max-width:1024px){.links{display:none}.heroGrid,.grid,.trustWrap{grid-template-columns:1fr}.chips,.steps,.focuses{grid-template-columns:repeat(2,1fr)}.aside{position:static}}
+@media (max-width:720px){.heroBox{padding:18px;border-radius:28px}.heroGrid{min-height:auto}.visual{min-height:500px}.note{position:relative;right:auto;bottom:auto;margin-top:14px;max-width:none}.chips,.steps,.cards,.focuses,.benefits,.footer{grid-template-columns:1fr}.head,.cat{display:block}.head p,.cat p{margin-top:10px}}
+</style>
 </head>
 <body>
-  <header class="nav">
-    <a class="logo" href="#start">A+ ESTHETIC <span>FRANKFURT</span></a>
-    <nav class="nav-links" aria-label="Hauptnavigation">
-      <a href="#behandlungen">Behandlungen</a>
-      <a href="#beliebt">Beliebt</a>
-      <a href="#philosophie">Philosophie</a>
-    </nav>
-    <div class="nav-actions">
-      <a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a>
-      <button class="menu" aria-label="Menü öffnen">☰</button>
-    </div>
-  </header>
-
-  <main id="start">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">Ästhetische Medizin in Frankfurt</div>
-        <h1>Mehr du.<br><em>Weniger</em><br>Standard.</h1>
-        <p class="hero-sub">Individuelle Behandlungen für Gesicht, Haut, Körper, Haare und Vitalität.</p>
-        <div class="hero-cta">
-          <a class="btn btn-fill" href="#behandlungen">Behandlungen entdecken</a>
-          <a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a>
-        </div>
-        <div class="hero-proof"><span><b>25+</b> Behandlungen</span><span><b>5</b> Bereiche</span><span>Frankfurt am Main</span></div>
-      </div>
-      <div class="hero-media">
-        <img src="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Ästhetische Behandlung bei A+ Esthetic" fetchpriority="high">
-        <div class="scan-orbit"></div>
-        <div class="media-label"><i></i> Natürlich · Präzise · Persönlich</div>
-        <div class="needbar">
-          <span class="intro">Was möchtest du verändern?</span>
-          <button data-target="mimik">Falten</button>
-          <button data-target="kontur">Kontur</button>
-          <button data-target="haut">Haut</button>
-          <button data-target="haare">Haare</button>
-          <button data-target="koerper">Körper & Vitalität</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="finder" id="behandlungen">
-      <div class="finder-head">
-        <h2>Was passt<br>zu dir?</h2>
-        <p>Wähle einfach dein Ziel. Wir zeigen dir nur die passenden Möglichkeiten.</p>
-      </div>
-      <div class="selector" role="tablist" aria-label="Behandlungsbereiche">
-        <button class="active" data-key="mimik">Falten glätten</button>
-        <button data-key="kontur">Kontur definieren</button>
-        <button data-key="haut">Haut verbessern</button>
-        <button data-key="haare">Haare behandeln</button>
-        <button data-key="koerper">Körper & Vitalität</button>
-      </div>
-      <div class="selection-panel">
-        <div class="selection-visual">
-          <img id="panelImage" src="https://images.pexels.com/photos/5069432/pexels-photo-5069432.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Behandlungsbereich">
-          <span class="tag" id="panelTag">Gesicht</span>
-        </div>
-        <div class="selection-content">
-          <small id="panelSmall">Mimik & Ausdruck</small>
-          <h3 id="panelTitle">Falten glätten</h3>
-          <div class="treat-list" id="panelList"></div>
-          <div class="selection-foot"><a href="#alle">Alle Behandlungen ansehen</a></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="popular" id="beliebt">
-      <div class="popular-head"><h2>Besonders<br>beliebt.</h2><span>Direkt auswählen</span></div>
-      <div class="cards">
-        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3764014/pexels-photo-3764014.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Botox Behandlung"><div class="card-copy"><small>Gesicht</small><h3>Botox</h3></div></a>
-        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3373722/pexels-photo-3373722.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Lippen und Kontur"><div class="card-copy"><small>Kontur</small><h3>Hyaluron</h3></div></a>
-        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3985329/pexels-photo-3985329.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Hautbehandlung"><div class="card-copy"><small>Haut</small><h3>Skinbooster</h3></div></a>
-        <a class="card" href="#alle"><img loading="lazy" src="https://images.pexels.com/photos/3738349/pexels-photo-3738349.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Laser Haarentfernung"><div class="card-copy"><small>Laser</small><h3>Haarentfernung</h3></div></a>
-      </div>
-    </section>
-
-    <section class="all" id="alle">
-      <button class="all-toggle" id="allToggle"><span>Alle Behandlungen anzeigen</span><span>+</span></button>
-      <div class="all-panel" id="allPanel">
-        <div class="group"><h4>Botox</h4><a href="#">Stirnfalten</a><a href="#">Zornesfalte</a><a href="#">Lachfalten</a><a href="#">Browlift</a><a href="#">Lip Flip</a><a href="#">Gummy Smile</a><a href="#">Masseter</a><a href="#">Traptox</a><a href="#">Nefertiti Lift</a><a href="#">Hyperhidrose</a></div>
-        <div class="group"><h4>Hyaluron</h4><a href="#">Lippen</a><a href="#">Wangen</a><a href="#">Jawline</a><a href="#">Kinn</a><a href="#">Nasolabialfalte</a></div>
-        <div class="group"><h4>Haut</h4><a href="#">Skinbooster</a><a href="#">PRP</a><a href="#">RF-Microneedling</a><a href="#">Potenza</a><a href="#">Hautanalyse</a></div>
-        <div class="group"><h4>Laser & Haare</h4><a href="#">Dauerhafte Haarentfernung</a><a href="#">Alexandrit-Laser</a><a href="#">Nd:YAG-Laser</a><a href="#">PRP Haare</a></div>
-        <div class="group"><h4>Körper & Vitalität</h4><a href="#">Fett-weg-Spritze</a><a href="#">Vitamininfusion</a><a href="#">NAD+ Infusion</a><a href="#">Individuelle Beratung</a></div>
-      </div>
-    </section>
-
-    <section class="promise" id="philosophie">
-      <h2>Nicht mehr.<br><em>Nur passender.</em></h2>
-      <div class="promise-side"><p>Bei A+ Esthetic steht nicht eine Behandlung im Mittelpunkt, sondern das Ergebnis, das zu deinem Gesicht, deinem Körper und deinem Alltag passt.</p><a class="btn" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Beratung buchen</a></div>
-    </section>
-  </main>
-
-  <footer><span>© A+ Esthetic Frankfurt</span><span>Impressum · Datenschutz</span></footer>
-
-  <script>
-    const data={
-      mimik:{tag:'Gesicht',small:'Mimik & Ausdruck',title:'Falten glätten',img:'https://images.pexels.com/photos/5069432/pexels-photo-5069432.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Stirnfalten','Zornesfalte','Lachfalten','Browlift','Lip Flip','Gummy Smile','Masseter','Nefertiti Lift']},
-      kontur:{tag:'Gesicht',small:'Form & Proportion',title:'Kontur definieren',img:'https://images.pexels.com/photos/3764014/pexels-photo-3764014.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Lippen','Wangen','Jawline','Kinn','Nasolabialfalte']},
-      haut:{tag:'Haut',small:'Qualität & Regeneration',title:'Haut verbessern',img:'https://images.pexels.com/photos/3985329/pexels-photo-3985329.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Skinbooster','PRP','RF-Microneedling','Potenza','Hautanalyse']},
-      haare:{tag:'Laser & Haare',small:'Glätte & Wachstum',title:'Haare behandeln',img:'https://images.pexels.com/photos/3738349/pexels-photo-3738349.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Dauerhafte Haarentfernung','Alexandrit-Laser','Nd:YAG-Laser','PRP Haare']},
-      koerper:{tag:'Körper & Vitalität',small:'Form & Energie',title:'Körper & Vitalität',img:'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=900',items:['Fett-weg-Spritze','Vitamininfusion','NAD+ Infusion','Individuelle Beratung']}
-    };
-    const selector=[...document.querySelectorAll('.selector button')];
-    const list=document.getElementById('panelList'),title=document.getElementById('panelTitle'),small=document.getElementById('panelSmall'),tag=document.getElementById('panelTag'),image=document.getElementById('panelImage');
-    function render(key){const d=data[key];if(!d)return;selector.forEach(b=>b.classList.toggle('active',b.dataset.key===key));title.textContent=d.title;small.textContent=d.small;tag.textContent=d.tag;image.src=d.img;list.innerHTML=d.items.map(x=>`<a href="#alle">${x}</a>`).join('')}
-    selector.forEach(b=>b.addEventListener('click',()=>render(b.dataset.key)));
-    document.querySelectorAll('.needbar button[data-target]').forEach(b=>b.addEventListener('click',()=>{render(b.dataset.target);document.getElementById('behandlungen').scrollIntoView({behavior:'smooth'})}));
-    render('mimik');
-    const toggle=document.getElementById('allToggle'),panel=document.getElementById('allPanel');
-    toggle.addEventListener('click',()=>{toggle.classList.toggle('open');panel.classList.toggle('open');toggle.firstElementChild.textContent=panel.classList.contains('open')?'Behandlungen ausblenden':'Alle Behandlungen anzeigen'});
-  </script>
+<div class="navwrap"><div class="container"><nav class="nav"><a class="brand" href="#top">A+ Esthetic <small>Frankfurt</small></a><div class="links"><a href="#behandlungen">Behandlungen</a><a href="#ablauf">Ablauf</a><a href="#qualitaet">Qualität</a><a href="#kontakt">Kontakt</a></div><a class="cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Termin buchen</a></nav></div></div>
+<main id="top">
+<section class="hero"><div class="container"><div class="heroBox"><div class="heroGrid"><div class="reveal"><span class="eyebrow">Skulpturale Ästhetik</span><h1>Form.<br>Harmonie.<br>Perfektion.</h1><p>Ästhetische Medizin in Frankfurt – klar, hochwertig und auf natürliche Ergebnisse ausgerichtet.</p><div class="actions"><a class="cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Jetzt Termin sichern</a><a class="ghost" href="#behandlungen">Behandlungen ansehen</a></div><div class="pills"><span class="pill">Ärztlich begleitet</span><span class="pill">Natürliche Resultate</span><span class="pill">Persönliche Beratung</span></div></div><div class="visual reveal"><div class="blob"></div><div class="blob2"></div><div class="blob3"></div><div class="arch"><div class="frame"><img src="https://images.pexels.com/photos/6144300/pexels-photo-6144300.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Ästhetisches Portrait"><div class="ring"></div><div class="ring2"></div></div></div><div class="note"><strong>Signature Look</strong><b>Skulpturale Eleganz</b><span>Warme Steintöne, ruhige Flächen und klare Typografie.</span></div></div></div><div class="chips reveal"><button class="chip active" data-key="botox"><small>Mimik</small><strong>Botox</strong></button><button class="chip" data-key="hyaluron"><small>Kontur</small><strong>Hyaluron</strong></button><button class="chip" data-key="skin"><small>Haut</small><strong>Skin & RF</strong></button><button class="chip" data-key="laser"><small>Glätte</small><strong>Laser</strong></button><button class="chip" data-key="vitality"><small>Balance</small><strong>Vitalität</strong></button></div></div></div></section>
+<section class="section" id="ablauf"><div class="container"><div class="head reveal"><h2>Ein klarer Weg<br>zur passenden Behandlung.</h2><p>Von Ihrem Wunsch zur passenden Behandlung – einfach, verständlich und ohne Überforderung.</p></div><div class="steps"><div class="step reveal"><em>01</em><h3>Wunsch</h3><p>Mimik, Kontur, Haut, Haare oder Vitalität.</p></div><div class="step reveal"><em>02</em><h3>Auswahl</h3><p>Nur relevante Behandlungen werden sichtbar.</p></div><div class="step reveal"><em>03</em><h3>Beratung</h3><p>Individuelle ärztliche Einschätzung und transparente Aufklärung.</p></div><div class="step reveal"><em>04</em><h3>Termin</h3><p>Direkt über Doctolib oder WhatsApp.</p></div></div></div></section>
+<section class="section" id="behandlungen"><div class="container"><div class="grid"><div class="panel reveal"><div class="head"><h2>Behandlungen</h2><p>Übersichtlich gruppiert, damit Sie schnell finden, was zu Ihrem Ziel passt.</p></div><div class="tabs" id="tabs"></div><div class="cat"><h3 id="catTitle">Botox</h3><p id="catText">Gezielte Behandlung mimischer Areale für ein frisches, entspanntes Erscheinungsbild.</p></div><div class="cards" id="cards"></div></div><aside class="aside reveal"><h3>Was passt zu Ihnen?</h3><p>Wählen Sie Ihr Ziel – wir zeigen Ihnen passende Möglichkeiten.</p><div class="finders"><button class="active" data-pick="botox">Ich möchte mimische Falten behandeln</button><button data-pick="hyaluron">Ich wünsche mir mehr Kontur oder Volumen</button><button data-pick="skin">Ich möchte meine Hautqualität verbessern</button><button data-pick="laser">Ich suche dauerhafte Haarentfernung</button><button data-pick="vitality">Ich möchte Vitalität oder Body-Treatments</button></div><div class="actions"><a class="cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Beratung buchen</a><a class="ghost" href="https://wa.me/491729907936" target="_blank" rel="noreferrer">Frage per WhatsApp</a></div><div class="mini">Stiftstraße 14, 60313 Frankfurt am Main</div></aside></div></div></section>
+<section class="section"><div class="container"><div class="head reveal"><h2>Fokusthemen</h2><p>Drei besonders gefragte Bereiche im direkten Überblick.</p></div><div class="focuses"><article class="focus reveal"><small>Präzise Mimik</small><h3>Botox</h3><p>Stirn, Zornesfalte, Masseter, Lip Flip und weitere Anwendungen.</p><div class="orb"></div></article><article class="focus reveal"><small>Natürliche Kontur</small><h3>Hyaluron</h3><p>Lippen, Jawline, Kinn, Wangen und harmonische Ausgleichsbehandlungen.</p><div class="orb"></div></article><article class="focus reveal"><small>Glattere Haut</small><h3>RF‑Microneedling</h3><p>Für Hautstruktur, Poren, feine Linien und ein ebenmäßigeres Hautbild.</p><div class="orb"></div></article></div></div></section>
+<section class="section" id="qualitaet"><div class="container"><div class="trustWrap"><div class="trust reveal"><h3>Qualität, die Ruhe ausstrahlt.</h3><p>Vertrauen entsteht durch klare Beratung, hochwertige Präparate und einen professionellen Ablauf.</p><div class="benefits"><div class="benefit"><strong>Ärztliche Expertise</strong><span>Fachkundige Durchführung und individuelle Einschätzung.</span></div><div class="benefit"><strong>Natürliche Ergebnisse</strong><span>Harmonische Optimierung statt Überbehandlung.</span></div><div class="benefit"><strong>Transparente Beratung</strong><span>Klare Kommunikation vor jeder Entscheidung.</span></div><div class="benefit"><strong>Persönliche Betreuung</strong><span>Vor, während und nach der Behandlung.</span></div></div></div><div class="trust reveal"><h3>Ihre Entscheidung zählt.</h3><p>Sie sind noch unsicher? In einem unverbindlichen Beratungstermin können Fragen in Ruhe besprochen und passende Möglichkeiten erklärt werden.</p><div class="quote"><p>Natürlich. Präzise. Persönlich.</p><strong>A+ Esthetic Frankfurt</strong></div></div></div></div></section>
+<section class="section" id="kontakt"><div class="container"><div class="ctaBand reveal"><h2>Bereit für den nächsten Schritt?</h2><p>Vereinbaren Sie Ihren Termin oder schreiben Sie uns direkt.</p><div class="actions"><a class="light" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Termin über Doctolib</a><a class="ghost" style="color:#fff;border-color:rgba(255,255,255,.24)" href="https://wa.me/491729907936" target="_blank" rel="noreferrer">WhatsApp Kontakt</a></div></div></div></section>
+</main>
+<footer><div class="container footer"><div><h4>A+ Esthetic Frankfurt</h4><p>Ästhetische Medizin mit Fokus auf Harmonie, Präzision und natürliche Ergebnisse.</p></div><div><h4>Kontakt</h4><p>Stiftstraße 14<br>60313 Frankfurt am Main<br>Tel: 069-71417012<br>Info@a-esthetic.de</p></div><div><h4>Schnellzugriff</h4><p><a href="#behandlungen">Behandlungen</a><br><a href="#qualitaet">Qualität</a><br><a href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noreferrer">Termin buchen</a></p></div></div></footer>
+<script>
+const data={botox:{title:'Botox',text:'Gezielte Behandlung mimischer Areale für ein frisches, entspanntes Erscheinungsbild.',items:[['Stirn & Zornesfalte','Für einen glatteren und ruhigeren Ausdruck.','Mimik'],['Lachfalten & Browlift','Feine Optimierung rund um die Augenpartie.','Augenpartie'],['Masseter & Platysma','Für Kieferbereich und definiertere Konturen.','Kontur'],['Lip Flip & Gummy Smile','Präzise Behandlung kleiner Details.','Details']]},hyaluron:{title:'Hyaluron',text:'Volumen, Definition und Balance – mit Blick auf natürliche Gesichtsharmonie.',items:[['Lippen','Sanfter Aufbau, Kontur und harmonisches Volumen.','Volumen'],['Jawline & Kinn','Mehr Definition für ein klares Profil.','Kontur'],['Wangen','Subtile Frische und harmonische Proportionen.','Balance'],['Nasolabial & Marionette','Ausgleich markanter Falten.','Falten']]},skin:{title:'Skin & RF',text:'Behandlungen für Hautqualität, Struktur, Glow und Regeneration.',items:[['Skinbooster','Feuchtigkeit und ein frischeres Hautbild.','Glow'],['RF‑Microneedling','Für Poren, feine Linien und Hautstruktur.','Struktur'],['PRP','Regenerative Impulse für Kopfhaut oder Haut.','Regeneration'],['Hautqualität','Für ein glatteres und ebenmäßigeres Hautbild.','Haut']]},laser:{title:'Laser',text:'Langfristige Haarreduktion mit modernen Lasersystemen für Gesicht und Körper.',items:[['Dauerhafte Haarentfernung','Gezielte Reduktion unerwünschter Haare.','Glätte'],['Gesicht','Behandlung sensibler Gesichtsareale.','Gesicht'],['Körper','Arme, Beine, Achseln, Rücken oder Bikinizone.','Körper'],['Alexandrit & Nd:YAG','Technologie für unterschiedliche Haut- und Haartypen.','Technologie']]},vitality:{title:'Vitalität & Body',text:'Für Energie, Regeneration und gezielte Körperbehandlungen.',items:[['Infusionen','Für Energie, Regeneration und Wohlbefinden.','Vitalität'],['Injektionslipolyse','Gezielte Behandlung kleiner lokaler Fettdepots.','Body'],['Individuelle Beratung','Passende Optionen je nach persönlichem Ziel.','Beratung'],['Ganzheitlicher Ansatz','Auch für Wünsche außerhalb klassischer Gesichtsbehandlungen.','Balance']]}};
+const tabs=document.getElementById('tabs'),cards=document.getElementById('cards'),catTitle=document.getElementById('catTitle'),catText=document.getElementById('catText');const pickers=[...document.querySelectorAll('[data-pick]')],chips=[...document.querySelectorAll('[data-key]')];function render(key){const d=data[key];catTitle.textContent=d.title;catText.textContent=d.text;cards.innerHTML=d.items.map(i=>`<article class="card"><h4>${i[0]}</h4><p>${i[1]}</p><div class="meta"><span>${i[2]}</span><span>Mehr dazu</span></div></article>`).join('');tabs.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===key));pickers.forEach(b=>b.classList.toggle('active',b.dataset.pick===key));chips.forEach(b=>b.classList.toggle('active',b.dataset.key===key));}
+Object.keys(data).forEach((k,i)=>{const b=document.createElement('button');b.className='tab'+(i===0?' active':'');b.dataset.tab=k;b.textContent=data[k].title;b.onclick=()=>render(k);tabs.appendChild(b)});pickers.forEach(b=>b.onclick=()=>render(b.dataset.pick));chips.forEach(b=>b.onclick=()=>{render(b.dataset.key);document.getElementById('behandlungen').scrollIntoView({behavior:'smooth'})});render('botox');const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('show')),{threshold:.15});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
