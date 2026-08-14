@@ -1,0 +1,66 @@
+name: Compact treatments patch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/compact-treatments-patch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch treatment gallery
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          new_css = r'''/* TREATMENTS */
+          .treatments{position:relative;overflow:hidden;padding:72px 0 78px;background:#15110e;color:#fff}.treatments:before{content:"";position:absolute;inset:-30% auto auto -8%;width:640px;height:640px;border:1px solid rgba(225,189,120,.13);border-radius:50%;pointer-events:none}.treatments:after{content:"";position:absolute;right:-180px;bottom:-330px;width:720px;height:720px;border:1px solid rgba(225,189,120,.09);border-radius:50%;pointer-events:none}.treatments .wrap{position:relative;z-index:1}.treatments-head{display:grid;grid-template-columns:5fr 7fr;gap:38px;align-items:end;margin-bottom:26px}.treatments-head h2{font:400 clamp(44px,4.6vw,68px)/.92 var(--serif);text-transform:uppercase;margin:10px 0 0;letter-spacing:-.035em}.treatments-head p{max-width:560px;justify-self:end;margin:0;color:rgba(255,255,255,.55);line-height:1.75;font-size:12px}.treatment-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.treatment{--orb:#c79a5b;isolation:isolate;position:relative;overflow:hidden;min-height:218px;padding:20px 20px 18px;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.12);background-color:#f4ede2;color:#17120e;cursor:pointer;transition:transform .35s var(--ease),border-color .35s var(--ease),box-shadow .35s var(--ease);background-image:radial-gradient(circle at 84% 23%,color-mix(in srgb,var(--orb) 34%,transparent) 0 10%,transparent 10.7%),radial-gradient(circle at 84% 23%,transparent 0 21%,color-mix(in srgb,var(--orb) 48%,transparent) 21.4% 22%,transparent 22.4%),linear-gradient(135deg,transparent 0 60%,rgba(255,255,255,.28) 60.2% 60.6%,transparent 61%)}.treatment:nth-child(2){--orb:#a6763e;background-color:#e9dac6}.treatment:nth-child(3){--orb:#c5a474;background-color:#faf5ee}.treatment:nth-child(4){--orb:#d4aa69;background-color:#241b15;color:#fff}.treatment:nth-child(5){--orb:#ad8457;background-color:#d8c5aa}.treatment:nth-child(6){--orb:#d9b36e;background-color:#1b1511;color:#fff}.treatment:nth-child(7){--orb:#b98c55;background-color:#f0e6d7}.treatment:nth-child(8){--orb:#efcc8b;background:linear-gradient(135deg,#7d5c39 0%,#2a1f17 72%);color:#fff}.treatment:before{content:"";position:absolute;right:-35px;top:-52px;width:170px;height:170px;border:1px solid color-mix(in srgb,var(--orb) 52%,transparent);border-radius:50%;box-shadow:inset 0 0 0 18px rgba(255,255,255,.025);transition:transform .55s var(--ease),opacity .35s}.treatment:after{content:"";position:absolute;right:31px;top:33px;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.9),color-mix(in srgb,var(--orb) 74%,#5d4329));box-shadow:0 13px 28px rgba(31,22,14,.18);transition:transform .5s var(--ease),box-shadow .35s}.treatment:nth-child(4):after,.treatment:nth-child(6):after,.treatment:nth-child(8):after{box-shadow:0 0 34px color-mix(in srgb,var(--orb) 28%,transparent)}.treatment>*{position:relative;z-index:2}.treatment .n{font:600 9px/1 var(--sans);letter-spacing:.17em;color:var(--gold);padding-top:1px}.treatment:nth-child(4) .n,.treatment:nth-child(6) .n,.treatment:nth-child(8) .n{color:var(--gold2)}.treatment h3{font:400 clamp(23px,1.75vw,30px)/1.02 var(--serif);letter-spacing:-.025em;margin:50px 58px 9px 0;transition:color .3s var(--ease),transform .3s var(--ease)}.treatment p{font-size:11px;line-height:1.58;color:#6e6257;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:92%}.treatment:nth-child(4) p,.treatment:nth-child(6) p,.treatment:nth-child(8) p{color:rgba(255,255,255,.58)}.treatment a{position:relative;z-index:5;display:flex;align-items:center;gap:8px;width:max-content;margin-top:auto;padding-top:13px;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:inherit;opacity:.74;transition:opacity .3s,gap .3s}.treatment a:after{content:"↗";font-size:11px;color:var(--gold);pointer-events:none}.treatment:hover{transform:translateY(-4px);border-color:rgba(225,189,120,.5);box-shadow:0 20px 44px rgba(0,0,0,.2)}.treatment:hover:before{transform:scale(1.08) rotate(7deg)}.treatment:hover:after{transform:translate(-7px,8px) scale(1.08);box-shadow:0 16px 36px rgba(31,22,14,.28)}.treatment:hover h3{color:var(--gold);transform:translateX(3px)}.treatment:hover a{opacity:1;gap:12px}.treatment:focus-within{outline:1px solid var(--gold2);outline-offset:2px}
+
+          /* CONSULT */'''
+
+          s = re.sub(r'/\* TREATMENTS \*/.*?/\* CONSULT \*/', new_css, s, flags=re.S)
+          s = s.replace(
+              'Alle bestehenden Behandlungswege bleiben direkt erreichbar. Die Inhalte bleiben vollständig im HTML und crawlbar – die neue Gestaltung ordnet sie nur klarer.',
+              'Acht Behandlungswelten, klar kuratiert: von mimischer Faltenbehandlung und Skin Quality bis zu Regeneration, Kontur und moderner Laser-Haarentfernung.'
+          )
+
+          compact_media = r'''
+          /* compact treatment gallery overrides */
+          @media(max-width:1000px){.treatments{padding:64px 0 70px}.treatments-head{grid-template-columns:1fr;margin-bottom:22px}.treatments-head p{justify-self:start}.treatment-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.treatment,.treatment:nth-child(n){grid-column:auto!important;min-height:210px}.treatment:nth-child(1),.treatment:nth-child(8){grid-column:auto!important;min-height:210px}.treatment:nth-child(1) h3,.treatment:nth-child(8) h3{font-size:clamp(23px,3vw,30px)}}
+          @media(max-width:650px){.treatments{padding:58px 0 62px}.treatments-head h2{font-size:42px}.treatment-grid{display:flex;overflow-x:auto;gap:10px;margin-right:-14px;padding-right:14px;scroll-snap-type:x mandatory;scrollbar-width:none}.treatment-grid::-webkit-scrollbar{display:none}.treatment,.treatment:nth-child(n),.treatment:nth-child(1),.treatment:nth-child(8){flex:0 0 82vw;min-height:218px;scroll-snap-align:start;padding:20px}.treatment h3,.treatment:nth-child(1) h3,.treatment:nth-child(8) h3{font-size:27px;margin-top:50px}}
+          '''
+          if 'compact treatment gallery overrides' not in s:
+              s = s.replace('</style>', compact_media + '\n</style>', 1)
+
+          old_script = "<script>const io=new IntersectionObserver"
+          new_script = "<script>document.querySelectorAll('.treatment').forEach(card=>{const link=card.querySelector('a[href]');if(!link)return;card.addEventListener('click',e=>{if(e.target.closest('a'))return;location.href=link.href});card.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('a')){e.preventDefault();location.href=link.href}});card.tabIndex=0;});const io=new IntersectionObserver"
+          if old_script in s:
+              s = s.replace(old_script, new_script, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit patch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Make treatment gallery compact and fully clickable"
+            git push
+          fi
