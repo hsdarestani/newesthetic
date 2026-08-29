@@ -108,14 +108,26 @@ jobs:
               raise SystemExit('Missing required exact production strings: ' + repr(missing))
           PY
 
+      - name: Mark audit complete
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('SEO-CONTENT-AUDIT.md')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('- `/skinbooster/gesicht-frankfurt/` — MISSING SOURCE', '- `/skinbooster/gesicht-frankfurt/` — PASS — rebuilt from exact live production main content with live SEO title/meta and schema preserved')
+          s = s.replace('## Exact-source blockers remaining: 1\n\n1. `/skinbooster/gesicht-frankfurt/`\n\nThis route is a real production route, but the exact full child-page source has not yet been supplied/audited. It must remain unbuilt until exact source copy is available. This is deliberate to protect content parity and SEO.\n\n', '## Exact-source blockers remaining: 0\n\nAll previously missing child-page sources have now been supplied/audited and rebuilt on staging.\n\n')
+          s = s.replace('1. Obtain exact production source for `/skinbooster/gesicht-frankfurt/` and build it in the same new design without paraphrasing.\n2. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.\n3. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.\n4. Run a complete internal-link and HTTP-status crawl on staging.\n5. Preserve required 301 redirects, including `/laserbehandlungen/` → `/laser-behandlungen/`.\n6. Only after 100% parity, transfer the approved new design and exact text corpus to WordPress.', '1. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.\n2. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.\n3. Run a complete internal-link and HTTP-status crawl on staging.\n4. Preserve required 301 redirects, including `/laserbehandlungen/` → `/laser-behandlungen/`.\n5. Only after 100% parity, transfer the approved new design and exact text corpus to WordPress.')
+          p.write_text(s, encoding='utf-8')
+          PY
+
       - name: Commit generated page
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/sbg-treatment.css skinbooster/gesicht-frankfurt/index.html
+          git add assets/sbg-treatment.css skinbooster/gesicht-frankfurt/index.html SEO-CONTENT-AUDIT.md
           if git diff --cached --quiet; then
             echo 'No generated changes.'
           else
-            git commit -m 'Build Skinbooster Gesicht page from exact production copy'
+            git commit -m 'Finalize Skinbooster Gesicht exact-copy page'
             git push
           fi
