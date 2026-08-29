@@ -93,11 +93,9 @@ All currently implemented production Botox child routes have been checked/rebuil
 - `/rf-microneedling/aknenarben-frankfurt/` — PASS* — all retrievable production sections/FAQ were restored; the live crawler exposed the heading `Warnzeichen sofort medizinisch abklären` without its following paragraph, so no text was invented beneath it.
 - `/rf-microneedling/poren-hautstruktur-frankfurt/` — PASS
 - `/rf-microneedling/feine-linien-falten-frankfurt/` — PASS
-- `/rf-microneedling/hautstraffung-frankfurt/` — MISSING SOURCE
-- `/rf-microneedling/op-narben-frankfurt/` — MISSING SOURCE
+- `/rf-microneedling/hautstraffung-frankfurt/` — PASS — rebuilt from exact live production main content with live SEO title/meta and schema preserved
+- `/rf-microneedling/op-narben-frankfurt/` — PASS — rebuilt from exact live production main content with live SEO title/meta and schema preserved
 - `/rf-microneedling/pigmentflecken-hautton-frankfurt/` — MISSING SOURCE
-
-The parent production page confirms the three missing RF routes, but the full child-page copy currently returns a source/cache miss. No placeholder copy has been created.
 
 ## PRP child pages
 
@@ -120,15 +118,13 @@ All five implemented Laser child routes were rebuilt from the retrievable live p
 
 Where production does not expose a confirmed numeric zone price (for example Rücken or Beine), staging intentionally preserves the production wording instead of inventing a price.
 
-## Exact-source blockers remaining: 5
+## Exact-source blockers remaining: 3
 
-1. `/rf-microneedling/hautstraffung-frankfurt/`
-2. `/rf-microneedling/op-narben-frankfurt/`
-3. `/rf-microneedling/pigmentflecken-hautton-frankfurt/`
-4. `/prp-behandlung/gesicht-frankfurt/`
-5. `/skinbooster/gesicht-frankfurt/`
+1. `/rf-microneedling/pigmentflecken-hautton-frankfurt/`
+2. `/prp-behandlung/gesicht-frankfurt/`
+3. `/skinbooster/gesicht-frankfurt/`
 
-These routes are real production routes, but the exact full child-page source is currently not retrievable through the available live-page fetch/search path. They must remain unbuilt until exact source copy is available. This is deliberate to protect content parity and SEO.
+These routes are real production routes, but the exact full child-page source has not yet been supplied/audited. They must remain unbuilt until exact source copy is available. This is deliberate to protect content parity and SEO.
 
 ## Redirects / legacy URLs
 
@@ -138,7 +134,7 @@ Before launch, export existing WordPress redirects / legacy indexed URLs and pre
 
 ## Remaining staging work before WordPress cutover
 
-1. Obtain exact production source for the 5 `MISSING SOURCE` routes and build them in the same new design without paraphrasing.
+1. Obtain exact production source for the 3 `MISSING SOURCE` routes and build them in the same new design without paraphrasing.
 2. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.
 3. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.
 4. Run a complete internal-link and HTTP-status crawl on staging.
