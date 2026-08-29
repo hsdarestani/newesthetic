@@ -31,7 +31,7 @@ Staging remains `noindex,nofollow` with canonical pointing to the corresponding 
 
 | Production path | Staging | Status | Notes |
 |---|---|---|---|
-| `/` | yes | PASS / LINK CLEANUP | Main visible copy substantially matches production; some staging internal links still point to absolute production URLs and should be made local before final staging sign-off. |
+| `/` | yes | PASS | Main visible copy matched; internal navigation links are staging-relative while production canonical is preserved. |
 | `/behandlungen/` | yes | PASS | Parent content audited. |
 | `/botox-behandlungen/` | yes | PASS | Parent content audited. |
 | `/hyaluronsaure-behandlungen/` | yes | PASS | Parent content audited. |
@@ -124,17 +124,16 @@ All previously missing child-page sources have now been supplied/audited and reb
 
 ## Redirects / legacy URLs
 
-- `/laserbehandlungen/` → `/laser-behandlungen/` — REDIRECT REQUIRED (301)
+- `/laserbehandlungen/` → `/laser-behandlungen/` — REDIRECT CONFIGURED (301)
 
 Before launch, export existing WordPress redirects / legacy indexed URLs and preserve every valid redirect target.
 
 ## Remaining staging work before WordPress cutover
 
-1. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.
-2. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.
-3. Run a complete internal-link and HTTP-status crawl on staging.
-4. Preserve required 301 redirects, including `/laserbehandlungen/` → `/laser-behandlungen/`.
-5. Only after 100% parity, transfer the approved new design and exact text corpus to WordPress.
+1. Repository-level link/canonical/robots crawl is complete; see `STAGING-FINAL-AUDIT.md`.
+2. Verify the deployed Cloudflare Pages URLs return the expected HTTP status after this commit is published.
+3. Preserve/export any additional legacy WordPress redirects not represented in this static repository.
+4. After live staging verification, transfer the approved new design and exact text corpus to WordPress.
 
 ## Launch rule
 
