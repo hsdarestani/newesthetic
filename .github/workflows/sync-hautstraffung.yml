@@ -1,0 +1,96 @@
+name: Sync exact Hautstraffung landing
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-hautstraffung.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch live production source
+        run: |
+          curl -A 'Mozilla/5.0' -L --fail --retry 3 --connect-timeout 20 \
+            'https://a-esthetic.de/rf-microneedling/hautstraffung-frankfurt/' \
+            -o /tmp/source.html
+
+      - name: Build new-design page without changing production copy
+        run: |
+          python - <<'PY'
+          import re, html as h
+          from pathlib import Path
+
+          source = Path('/tmp/source.html').read_text(encoding='utf-8', errors='replace')
+          url = 'https://a-esthetic.de/rf-microneedling/hautstraffung-frankfurt/'
+
+          def one(pattern, default='', flags=re.I|re.S):
+              m = re.search(pattern, source, flags)
+              return m.group(1).strip() if m else default
+
+          title = one(r'<title[^>]*>(.*?)</title>', 'RF-Microneedling Hautstraffung Frankfurt | Potenza')
+          title = re.sub(r'<[^>]+>', '', title)
+          desc = one(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', '')
+          if not desc:
+              desc = one(r'<meta[^>]+content=["\'](.*?)["\'][^>]+name=["\']description["\']', '')
+
+          m = re.search(r'(<main\s+class=["\'][^"\']*rftight-page[^"\']*["\'][^>]*>.*?</main>)', source, re.I|re.S)
+          if not m:
+              raise SystemExit('Could not find exact rftight-page main content in production HTML')
+          main = m.group(1)
+
+          schemas = []
+          for sm in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>.*?</script>', source, re.I|re.S):
+              block = sm.group(0)
+              if 'hautstraffung-frankfurt' in block or 'FAQPage' in block:
+                  schemas.append(block)
+
+          # Reuse the approved luxury treatment design while preserving the exact production markup/copy.
+          base_css = Path('assets/armlipo-treatment.css').read_text(encoding='utf-8')
+          css = base_css.replace('armlipo', 'rftight').replace("/assets/lipolyse.png", "/assets/rf-microneedling.png")
+          css += '''\n.rftight-areas{background:var(--cream)}\n.rftight-area-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}\n.rftight-area{padding:28px;background:var(--cream)}\n.rftight-area span{display:block;margin-bottom:20px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}\n.rftight-area h3{margin:0 0 12px;color:var(--ink);font:400 25px/1.1 var(--serif)}\n.rftight-area p{margin:0;color:var(--muted);font-size:11px;line-height:1.72}\n.rftight-distinction{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}\n.rftight-distinction-card{padding:29px;background:var(--cream)}\n.rftight-distinction-card span{display:block;margin-bottom:20px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}\n.rftight-distinction-card h3{margin:0 0 12px;color:var(--ink);font:400 25px/1.1 var(--serif)}\n.rftight-distinction-card p{margin:0;color:var(--muted);font-size:11px;line-height:1.72}\n.rftight-device{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}\n.rftight-device-main,.rftight-device-side{padding:34px}\n.rftight-device-main{background:var(--cream)}\n.rftight-device-side{background:#15110e;color:#fff}\n.rftight-device h3{margin:0 0 14px;font:400 28px/1.1 var(--serif)}\n.rftight-device-main h3{color:var(--ink)}\n.rftight-device-side h3{color:#fff}\n.rftight-device p{margin:0;font-size:12px;line-height:1.78}\n.rftight-device-main p{color:var(--muted)}\n.rftight-device-side p{color:rgba(255,255,255,.65)}\n.rftight-device p+p{margin-top:14px}\n.rftight-price-grid{grid-template-columns:repeat(4,1fr)}\n@media(max-width:1000px){.rftight-area-grid,.rftight-price-grid{grid-template-columns:1fr 1fr}.rftight-device{grid-template-columns:1fr}}\n@media(max-width:700px){.rftight-area-grid,.rftight-distinction,.rftight-price-grid{grid-template-columns:1fr}}\n'''
+          Path('assets/rftight-treatment.css').write_text(css, encoding='utf-8')
+
+          header = '''<header class="site-header"><a class="site-brand" href="/">A+ Esthetic<small>Frankfurt</small></a><nav class="site-nav"><a href="/behandlungen/">Behandlungen</a><a href="/rf-microneedling/">RF-Microneedling</a><a href="#faq">FAQ</a></nav><a class="site-cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a></header>'''
+          footer = '''<footer class="site-footer"><div class="site-footer-grid"><div><h3>A+ Esthetic</h3><p>Stiftstrasse 14<br>60313 Frankfurt am Main<br>2. OG</p></div><div><h3>Behandlungen</h3><p><a href="/rf-microneedling/">RF-Microneedling</a><br><a href="/behandlungen/">Alle Behandlungen</a></p></div><div><h3>Kontakt</h3><p>069-71417012<br>+49 172 9907936<br>Info@a-esthetic.de</p></div><div><h3>Rechtliches</h3><p><a href="/impressum/">Impressum</a><br><a href="/datenschutzerklaerung/">Datenschutz</a></p></div></div></footer>'''
+
+          out = f'''<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{h.escape(title)}</title>{f'<meta name="description" content="{h.escape(desc, quote=True)}">' if desc else ''}<meta name="robots" content="noindex,nofollow"><link rel="canonical" href="{url}"><meta name="theme-color" content="#17120e"><link rel="stylesheet" href="/assets/rftight-treatment.css">{''.join(schemas)}</head><body>{header}{main}{footer}</body></html>'''
+
+          dest = Path('rf-microneedling/hautstraffung-frankfurt/index.html')
+          dest.parent.mkdir(parents=True, exist_ok=True)
+          dest.write_text(out, encoding='utf-8')
+
+          required = [
+              'RF-Microneedling zur Hautstraffung in Frankfurt',
+              'Potenza',
+              'Ersetzt RF-Microneedling ein Facelift?',
+              'Warnzeichen sofort medizinisch abklären',
+              'ab 450 €',
+              'ab 700 €',
+              'ab 1800 €',
+              'Fragen zu RF-Microneedling'
+          ]
+          missing = [x for x in required if x not in out]
+          if missing:
+              raise SystemExit('Missing required exact production strings: ' + repr(missing))
+          PY
+
+      - name: Commit generated page
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/rftight-treatment.css rf-microneedling/hautstraffung-frankfurt/index.html
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+          else
+            git commit -m 'Build Hautstraffung page from exact production copy'
+            git push
+          fi
