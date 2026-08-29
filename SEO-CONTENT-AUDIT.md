@@ -2,27 +2,28 @@
 
 Audit scope: `https://a-esthetic.de/` vs `https://newesthetic.pages.dev/`
 
-## Rule for final WordPress migration
+## Final migration rule
 
-The new design must be implemented as WordPress templates/components around the EXISTING production content. Do not replace existing WordPress page content with rewritten staging copy.
+The target is a completely new visual design with the current production content preserved sentence-for-sentence.
 
-Preserve:
-- existing production URL slugs
-- existing WordPress page/post content
-- existing SEO-plugin title/meta data
-- H1/H2/H3 hierarchy and FAQ content
-- current prices and medical/legal wording
-- internal-link destinations
-- existing schema where applicable
-- production index/follow state
+For every page preserve exactly:
+- production permalink / slug
+- visible production copy
+- H1/H2/H3 text and hierarchy
+- FAQ questions and answers
+- prices and medical/legal wording
+- relevant internal-link destinations
+- SEO-plugin title/meta data at production cutover
+- structured data / FAQ schema where applicable
+
+The staging design may change markup, layout, wrappers, components, CSS and imagery, but it must not paraphrase, shorten or expand production copy.
 
 Staging remains `noindex,nofollow` with canonical pointing to the corresponding production URL.
 
 ## Status legend
 
-- PASS — high-confidence production-content parity for the current staging purpose
-- PARITY FIX — staging exists but visible copy is not sentence-for-sentence production copy
-- VERIFY — staging exists; exact sentence-level parity still needs verification before migration
+- PASS — production copy has been matched at high confidence
+- VERIFY — staging exists; exact sentence-level parity still needs verification
 - MISSING — real production page exists but no staging child page exists
 - REDIRECT — legacy URL must be preserved with 301
 
@@ -30,7 +31,7 @@ Staging remains `noindex,nofollow` with canonical pointing to the corresponding 
 
 | Production path | Staging | Status | Notes |
 |---|---|---|---|
-| `/` | yes | PASS / LINK CLEANUP | Main visible copy substantially matches production. Staging still contains several absolute `a-esthetic.de` internal links. |
+| `/` | yes | PASS / LINK CLEANUP | Main visible copy substantially matches production; some staging internal links still point to absolute production URLs. |
 | `/behandlungen/` | yes | PASS | Parent content audited. |
 | `/botox-behandlungen/` | yes | PASS | Parent content audited. |
 | `/hyaluronsaure-behandlungen/` | yes | PASS | Parent content audited. |
@@ -42,7 +43,7 @@ Staging remains `noindex,nofollow` with canonical pointing to the corresponding 
 | `/skinbooster/` | yes | PASS | Parent content audited. |
 | `/kontakt/` | yes | PASS | Production contact data used. |
 | `/impressum/` | yes | PASS | Current legal data used. |
-| `/datenschutzerklaerung/` | yes | PASS | Current production privacy content used. |
+| `/datenschutzerklaerung/` | yes | PASS | Current privacy content used. |
 
 ## Botox child pages
 
@@ -51,25 +52,23 @@ Staging remains `noindex,nofollow` with canonical pointing to the corresponding 
 | `/botox-behandlungen/botox-stirnfalten-zornesfalte-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
 | `/botox-behandlungen/botox-lachfalten-kraehenfuesse-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
 | `/botox-behandlungen/browlift-botox-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
-| `/botox-behandlungen/lip-flip-frankfurt/` | PARITY FIX | Confirmed: staging hero/body wording differs from production. |
+| `/botox-behandlungen/lip-flip-frankfurt/` | PASS | Rebuilt against current production copy. |
 | `/botox-behandlungen/gummy-smile-botox-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
-| `/botox-behandlungen/masseter-botox-frankfurt/` | PARITY FIX | Confirmed: staging wording differs from production. |
+| `/botox-behandlungen/masseter-botox-frankfurt/` | PASS | Rebuilt against current production copy. |
 | `/botox-behandlungen/nefertiti-lift-botox-frankfurt/` | VERIFY | Combined Platysma / Nefertiti landing page. |
-| `/botox-behandlungen/traptox-barbie-botox-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
-| `/botox-behandlungen/hyperhidrose-botox-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
+| `/botox-behandlungen/traptox-barbie-botox-frankfurt/` | VERIFY | Needs sentence-level verification. |
+| `/botox-behandlungen/hyperhidrose-botox-frankfurt/` | VERIFY | Needs sentence-level verification. |
 
 ## Hyaluronsäure child pages
 
 | Path | Status | Notes |
 |---|---|---|
-| `/hyaluronsaure-behandlungen/lippenunterspritzung-frankfurt/` | PARITY FIX | Confirmed: production paragraph wording is longer/different; staging is condensed. Also staging footer currently points Datenschutz to `/datenschutz/` instead of `/datenschutzerklaerung/`. |
+| `/hyaluronsaure-behandlungen/lippenunterspritzung-frankfurt/` | PASS | Rebuilt against current production copy; internal Datenschutz link issue removed in rebuilt footer. |
 | `/hyaluronsaure-behandlungen/wangenaufbau-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
 | `/hyaluronsaure-behandlungen/jawline-kinnaufbau-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
 | `/hyaluronsaure-behandlungen/nasolabialfalte-hyaluron-frankfurt/` | VERIFY | Built before strict exact-copy rule. |
 
 ## Infusion child pages
-
-These were built after the strict production-copy rule and are higher-confidence parity pages.
 
 - `/infusionstherapien/vitamin-c-infusion-frankfurt/` — PASS
 - `/infusionstherapien/nad-infusion-frankfurt/` — PASS
@@ -107,7 +106,6 @@ These were built after the strict production-copy rule and are higher-confidence
 
 ## Laser child pages
 
-Existing staging pages:
 - `/laser-behandlungen/laser-haarentfernung-achseln-frankfurt/` — VERIFY
 - `/laser-behandlungen/laser-haarentfernung-ruecken-frankfurt/` — VERIFY
 - `/laser-behandlungen/laser-haarentfernung-gesicht-frankfurt/` — VERIFY
@@ -122,20 +120,20 @@ Before launch, export existing WordPress redirects / legacy indexed URLs and pre
 
 ## Safe migration sequence
 
-1. Keep current WordPress database and page content untouched.
-2. Build the new visual layer as a custom theme / templates.
-3. Render existing page content into the new templates rather than importing staging copy.
-4. Preserve each current permalink exactly.
-5. Preserve SEO plugin metadata and canonical behavior.
-6. Preserve existing structured data / FAQ data or regenerate it from the same page content.
-7. Add required legacy 301 redirects.
-8. Run pre-launch crawl for 200/301/404, canonical, robots, title, meta, H1 and internal links.
-9. Remove staging `noindex` only on production launch, not before.
-10. Compare a production crawl before/after launch and fix any URL/content regression immediately.
+1. Finish all new-design staging pages with exact production copy.
+2. Verify every current production URL has the same visible copy and heading content in staging.
+3. Preserve production SEO-plugin title/meta values at cutover.
+4. Keep every current permalink exactly the same.
+5. Preserve or recreate schema from the exact same FAQ/content.
+6. Preserve all required legacy 301 redirects.
+7. Run a pre-launch crawl for 200/301/404, canonical, robots, title, meta, H1 and internal links.
+8. Deploy the new design to WordPress without changing the approved text corpus.
+9. Keep production `index,follow`; staging remains `noindex,nofollow`.
+10. Compare production crawl before/after launch and fix any regression immediately.
 
 ## Current priority
 
-1. Do NOT manually rewrite the confirmed PARITY FIX pages for final production.
-2. Use the existing WordPress content as source of truth when implementing templates.
-3. Complete the 8 MISSING real production child routes in the design system when their source content is available, or let the final WordPress template render their existing production content directly.
-4. Verify all remaining `VERIFY` child pages before replacing any live template.
+1. Verify and fix every remaining `VERIFY` child page against live production text.
+2. Build the 8 `MISSING` child pages only from exact production source copy.
+3. Clean staging internal links without changing their semantic destinations.
+4. Only after 100% parity, package the new design for WordPress deployment.
