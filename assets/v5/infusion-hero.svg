@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="t d">
+<title id="t">Sculptural Infusionstherapie Visual</title><desc id="d">Abstrakte Infusionsflasche aus hellem Stein und Alabaster in einer warmen skulpturalen Umgebung.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7c4aa"/><stop offset=".42" stop-color="#f0e2cd"/><stop offset="1" stop-color="#b89c77"/></linearGradient>
+ <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffaf0"/><stop offset=".52" stop-color="#dfccb1"/><stop offset="1" stop-color="#bda17e"/></linearGradient>
+ <linearGradient id="alabaster" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffdf7" stop-opacity=".96"/><stop offset=".55" stop-color="#ead5b0" stop-opacity=".86"/><stop offset="1" stop-color="#b89058" stop-opacity=".72"/></linearGradient>
+ <linearGradient id="serum" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ead2a2"/><stop offset="1" stop-color="#b37d36"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#795322"/><stop offset=".35" stop-color="#e3bd74"/><stop offset=".68" stop-color="#9b6b2e"/><stop offset="1" stop-color="#f0d49e"/></linearGradient>
+ <filter id="noise"><feTurbulence baseFrequency=".55" numOctaves="3" seed="8" type="fractalNoise" result="n"/><feColorMatrix in="n" values="1 0 0 0 .65 0 1 0 0 .55 0 0 1 0 .45 0 0 0 .15 0" result="c"/><feBlend in="SourceGraphic" in2="c" mode="multiply"/></filter>
+ <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="26" stdDeviation="28" flood-color="#49331c" flood-opacity=".28"/></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="34"/></filter>
+ <radialGradient id="glow"><stop stop-color="#fff6dd" stop-opacity=".8"/><stop offset="1" stop-color="#fff6dd" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="1000" fill="url(#bg)"/>
+<ellipse cx="1210" cy="310" rx="460" ry="420" fill="url(#glow)" opacity=".55"/>
+<path d="M-140 880 L920 -90" stroke="#fff8e8" stroke-width="270" opacity=".17"/>
+<g opacity=".28" filter="url(#soft)"><ellipse cx="1090" cy="850" rx="440" ry="90" fill="#573c22"/></g>
+<!-- architectural slabs -->
+<g filter="url(#shadow)">
+ <path d="M1070 248 Q1070 148 1170 148 H1435 V845 H1070Z" fill="url(#stone)" filter="url(#noise)"/>
+ <path d="M1212 354 Q1212 285 1281 285 H1488 V845 H1212Z" fill="#d1ba99" opacity=".78" filter="url(#noise)"/>
+ <path d="M985 548 Q985 478 1055 478 H1192 V845 H985Z" fill="#f2e4cf" opacity=".94" filter="url(#noise)"/>
+</g>
+<!-- brass stand -->
+<path d="M1392 840 V120 Q1392 84 1356 84 H1210" fill="none" stroke="url(#gold)" stroke-width="13" stroke-linecap="round"/>
+<path d="M1210 84 q-34 0-34 34 q0 24 29 24" fill="none" stroke="url(#gold)" stroke-width="11" stroke-linecap="round"/>
+<circle cx="1205" cy="145" r="13" fill="url(#gold)"/>
+<!-- stone IV bag -->
+<g filter="url(#shadow)">
+ <path d="M1038 186 Q1038 152 1072 152 H1296 Q1330 152 1330 186 V472 Q1330 536 1266 536 H1102 Q1038 536 1038 472Z" fill="url(#alabaster)" stroke="#fff8e9" stroke-width="5" filter="url(#noise)"/>
+ <path d="M1068 342 H1300 V470 Q1300 504 1266 504 H1102 Q1068 504 1068 470Z" fill="url(#serum)" opacity=".72"/>
+ <path d="M1068 342 C1118 324 1167 365 1211 342 C1252 320 1272 351 1300 342" fill="none" stroke="#f4ddad" stroke-width="5" opacity=".85"/>
+ <path d="M1108 205 C1148 230 1162 191 1203 213 S1260 235 1292 204" fill="none" stroke="#b08b5c" stroke-width="9" opacity=".55"/>
+ <path d="M1108 230 C1148 255 1162 216 1203 238 S1260 260 1292 229" fill="none" stroke="#ccb087" stroke-width="6" opacity=".66"/>
+ <rect x="1150" y="126" width="68" height="36" rx="14" fill="url(#stone)" stroke="#f8ead4" stroke-width="3"/>
+ <circle cx="1184" cy="145" r="8" fill="#b48a52"/>
+</g>
+<!-- connector -->
+<g filter="url(#shadow)"><rect x="1133" y="535" width="102" height="36" rx="12" fill="url(#stone)"/><rect x="1155" y="568" width="58" height="45" rx="13" fill="#cfb393"/><rect x="1166" y="611" width="36" height="86" rx="18" fill="url(#alabaster)" stroke="#f8ead4" stroke-width="4"/></g>
+<!-- tubing -->
+<path d="M1184 696 C1185 808 1063 801 984 850 C922 889 895 925 901 960" fill="none" stroke="#ead9c2" stroke-width="18" stroke-linecap="round" opacity=".96"/>
+<path d="M1184 696 C1185 808 1063 801 984 850 C922 889 895 925 901 960" fill="none" stroke="#fff9ee" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+<!-- pedestal -->
+<g filter="url(#shadow)"><ellipse cx="1175" cy="856" rx="385" ry="78" fill="#aa8b65" opacity=".34"/><path d="M770 807 H1437 Q1462 807 1462 832 V872 Q1462 897 1437 897 H770 Q745 897 745 872 V832 Q745 807 770 807Z" fill="url(#stone)" filter="url(#noise)"/><path d="M838 753 H1382 Q1405 753 1405 776 V815 H815 V776 Q815 753 838 753Z" fill="#f3e5cf" filter="url(#noise)"/></g>
+<!-- sculptural objects -->
+<g filter="url(#shadow)"><circle cx="865" cy="745" r="76" fill="url(#stone)" filter="url(#noise)"/><path d="M934 730 C944 602 974 536 1020 522 C1068 507 1091 554 1082 637 C1074 710 1047 750 998 754 C965 756 946 748 934 730Z" fill="#d5bd9d" filter="url(#noise)"/></g>
+<path d="M780 921 C1015 868 1228 915 1510 867" fill="none" stroke="url(#gold)" stroke-width="4" opacity=".52"/>
+</svg>
