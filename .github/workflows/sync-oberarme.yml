@@ -1,0 +1,89 @@
+name: Sync exact Oberarme landing
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-oberarme.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch live production source
+        run: |
+          curl -A 'Mozilla/5.0' -L --fail --retry 3 --connect-timeout 20 \
+            'https://a-esthetic.de/injektions-lipolyse/fett-weg-spritze-oberarme-frankfurt/' \
+            -o /tmp/source.html
+      - name: Build new-design page without changing production copy
+        run: |
+          python - <<'PY'
+          import re, html as h
+          from pathlib import Path
+
+          source = Path('/tmp/source.html').read_text(encoding='utf-8', errors='replace')
+          url = 'https://a-esthetic.de/injektions-lipolyse/fett-weg-spritze-oberarme-frankfurt/'
+
+          def one(pattern, default='', flags=re.I|re.S):
+              m = re.search(pattern, source, flags)
+              return m.group(1).strip() if m else default
+
+          title = re.sub(r'<[^>]+>', '', one(r'<title[^>]*>(.*?)</title>', 'Fett-weg-Spritze Oberarme Frankfurt'))
+          desc = one(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', '')
+          if not desc:
+              desc = one(r'<meta[^>]+content=["\'](.*?)["\'][^>]+name=["\']description["\']', '')
+
+          m = re.search(r'(<main\s+class=["\'][^"\']*armlipo-page[^"\']*["\'][^>]*>.*?</main>)', source, re.I|re.S)
+          if not m:
+              raise SystemExit('Could not find exact armlipo-page main content in production HTML')
+          main = m.group(1)
+
+          schemas = []
+          for sm in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>.*?</script>', source, re.I|re.S):
+              block = sm.group(0)
+              if 'fett-weg-spritze-oberarme-frankfurt' in block or 'FAQPage' in block:
+                  schemas.append(block)
+
+          header = '''<header class="site-header"><a class="site-brand" href="/">A+ Esthetic<small>Frankfurt</small></a><nav class="site-nav"><a href="/behandlungen/">Behandlungen</a><a href="/injektions-lipolyse/">Injektionslipolyse</a><a href="#faq">FAQ</a></nav><a class="site-cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a></header>'''
+          footer = '''<footer class="site-footer"><div class="site-footer-grid"><div><h3>A+ Esthetic</h3><p>Stiftstrasse 14<br>60313 Frankfurt am Main<br>2. OG</p></div><div><h3>Behandlungen</h3><p><a href="/injektions-lipolyse/">Injektionslipolyse</a><br><a href="/behandlungen/">Alle Behandlungen</a></p></div><div><h3>Kontakt</h3><p>069-71417012<br>+49 172 9907936<br>Info@a-esthetic.de</p></div><div><h3>Rechtliches</h3><p><a href="/impressum/">Impressum</a><br><a href="/datenschutzerklaerung/">Datenschutz</a></p></div></div></footer>'''
+
+          out = f'''<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{h.escape(title)}</title>{f'<meta name="description" content="{h.escape(desc, quote=True)}">' if desc else ''}<meta name="robots" content="noindex,nofollow"><link rel="canonical" href="{url}"><meta name="theme-color" content="#17120e"><link rel="stylesheet" href="/assets/armlipo-treatment.css">{''.join(schemas)}</head><body>{header}{main}{footer}</body></html>'''
+
+          dest = Path('injektions-lipolyse/fett-weg-spritze-oberarme-frankfurt/index.html')
+          dest.parent.mkdir(parents=True, exist_ok=True)
+          dest.write_text(out, encoding='utf-8')
+
+          base_css = Path('assets/chinlipo-treatment.css').read_text(encoding='utf-8')
+          arm_css = base_css.replace('chinlipo', 'armlipo')
+          Path('assets/armlipo-treatment.css').write_text(arm_css, encoding='utf-8')
+
+          required = [
+              'Fett-weg-Spritze an den Oberarmen in Frankfurt',
+              'Michelangelo PDC Plus Complex',
+              'Warnzeichen zeitnah medizinisch abklären',
+              'Kann ein Lipödem mit der Fett-weg-Spritze behandelt werden?',
+              'ab 250 €',
+              'ab 220 €',
+              'Fragen zur Fett-weg-Spritze an den Oberarmen'
+          ]
+          missing = [x for x in required if x not in out]
+          if missing:
+              raise SystemExit('Missing required exact production strings: ' + repr(missing))
+          PY
+      - name: Commit generated page
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/armlipo-treatment.css injektions-lipolyse/fett-weg-spritze-oberarme-frankfurt/index.html
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+          else
+            git commit -m 'Build Oberarme page from exact production copy'
+            git push
+          fi
