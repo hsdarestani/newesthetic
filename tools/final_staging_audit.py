@@ -9,6 +9,15 @@ ANCHOR_HREF = re.compile(r'<a\b[^>]*?\bhref=["\']([^"\']+)["\']', re.I)
 PROD_ANCHOR = re.compile(r'<a\b[^>]*?\bhref=["\']https://a-esthetic\.de/', re.I)
 ROBOTS = re.compile(r'<meta\b(?=[^>]*\bname=["\']robots["\'])(?=[^>]*\bcontent=["\']noindex,nofollow["\'])[^>]*>', re.I)
 
+LEGACY_PATHS = {
+    '/datenschutz/': '/datenschutzerklaerung/',
+    '/hyaluronsaure-behandlungen/lippenunterspritzung/': '/hyaluronsaure-behandlungen/lippenunterspritzung-frankfurt/',
+    '/hyaluronsaure-behandlungen/wangenaufbau/': '/hyaluronsaure-behandlungen/wangenaufbau-frankfurt/',
+    '/hyaluronsaure-behandlungen/jawline-kinnaufbau/': '/hyaluronsaure-behandlungen/jawline-kinnaufbau-frankfurt/',
+    '/hyaluronsaure-behandlungen/nasolabialfalte/': '/hyaluronsaure-behandlungen/nasolabialfalte-hyaluron-frankfurt/',
+    '/infusionstherapien/curcumin-infusion-frankfurt/': '/infusionstherapien/curcumin-infusion-frankfurt-ablauf-kosten/',
+}
+
 
 def route_for(path: Path) -> str:
     if path == Path('index.html'):
@@ -32,10 +41,17 @@ def clean_internal_links() -> int:
         if '.git' in p.parts:
             continue
         s = p.read_text(encoding='utf-8', errors='replace')
-        ns, n = ANCHOR_ABS.subn(lambda m: m.group(1) + (m.group('path') or '/'), s)
-        if n:
-            p.write_text(ns, encoding='utf-8')
-            changed += n
+        s, n = ANCHOR_ABS.subn(lambda m: m.group(1) + (m.group('path') or '/'), s)
+        changed += n
+        for old, new in LEGACY_PATHS.items():
+            for quote in ('"', "'"):
+                before = f'href={quote}{old}{quote}'
+                after = f'href={quote}{new}{quote}'
+                if before in s:
+                    count = s.count(before)
+                    s = s.replace(before, after)
+                    changed += count
+        p.write_text(s, encoding='utf-8')
     return changed
 
 
@@ -153,7 +169,7 @@ if __name__ == '__main__':
     Path('_redirects').write_text('/laserbehandlungen/ /laser-behandlungen/ 301\n', encoding='utf-8')
     failures = audit()
     update_migration_audit()
-    print(f'Rewrote {rewritten} internal production anchor links.')
+    print(f'Rewrote {rewritten} internal/legacy anchor links.')
     if failures:
         print('\n'.join(failures))
         raise SystemExit(1)
