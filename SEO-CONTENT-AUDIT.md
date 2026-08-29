@@ -104,7 +104,7 @@ All currently implemented production Botox child routes have been checked/rebuil
 
 ## Skinbooster child pages
 
-- `/skinbooster/gesicht-frankfurt/` — MISSING SOURCE
+- `/skinbooster/gesicht-frankfurt/` — PASS — rebuilt from exact live production main content with live SEO title/meta and schema preserved
 
 ## Laser child pages
 
@@ -118,11 +118,9 @@ All five implemented Laser child routes were rebuilt from the retrievable live p
 
 Where production does not expose a confirmed numeric zone price (for example Rücken or Beine), staging intentionally preserves the production wording instead of inventing a price.
 
-## Exact-source blockers remaining: 1
+## Exact-source blockers remaining: 0
 
-1. `/skinbooster/gesicht-frankfurt/`
-
-This route is a real production route, but the exact full child-page source has not yet been supplied/audited. It must remain unbuilt until exact source copy is available. This is deliberate to protect content parity and SEO.
+All previously missing child-page sources have now been supplied/audited and rebuilt on staging.
 
 ## Redirects / legacy URLs
 
@@ -132,12 +130,11 @@ Before launch, export existing WordPress redirects / legacy indexed URLs and pre
 
 ## Remaining staging work before WordPress cutover
 
-1. Obtain exact production source for `/skinbooster/gesicht-frankfurt/` and build it in the same new design without paraphrasing.
-2. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.
-3. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.
-4. Run a complete internal-link and HTTP-status crawl on staging.
-5. Preserve required 301 redirects, including `/laserbehandlungen/` → `/laser-behandlungen/`.
-6. Only after 100% parity, transfer the approved new design and exact text corpus to WordPress.
+1. Clean Homepage staging-only absolute internal links so they route through staging while preserving the same semantic destinations.
+2. Re-check title, description, canonical, robots, heading hierarchy, FAQ/schema and prices for every route.
+3. Run a complete internal-link and HTTP-status crawl on staging.
+4. Preserve required 301 redirects, including `/laserbehandlungen/` → `/laser-behandlungen/`.
+5. Only after 100% parity, transfer the approved new design and exact text corpus to WordPress.
 
 ## Launch rule
 
