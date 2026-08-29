@@ -1,0 +1,97 @@
+name: Sync exact Pigmentflecken landing
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-pigmentflecken.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch live production source
+        run: |
+          curl -A 'Mozilla/5.0' -L --fail --retry 3 --connect-timeout 20 \
+            'https://a-esthetic.de/rf-microneedling/pigmentflecken-hautton-frankfurt/' \
+            -o /tmp/source.html
+
+      - name: Build new-design page without changing production copy
+        run: |
+          python - <<'PY'
+          import re, html as h
+          from pathlib import Path
+
+          source = Path('/tmp/source.html').read_text(encoding='utf-8', errors='replace')
+          url = 'https://a-esthetic.de/rf-microneedling/pigmentflecken-hautton-frankfurt/'
+
+          def one(pattern, default='', flags=re.I|re.S):
+              m = re.search(pattern, source, flags)
+              return m.group(1).strip() if m else default
+
+          title = one(r'<title[^>]*>(.*?)</title>', 'RF-Microneedling Pigmentflecken Frankfurt | Potenza')
+          title = re.sub(r'<[^>]+>', '', title)
+          desc = one(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', '')
+          if not desc:
+              desc = one(r'<meta[^>]+content=["\'](.*?)["\'][^>]+name=["\']description["\']', '')
+
+          m = re.search(r'(<main\s+class=["\'][^"\']*rfpig-page[^"\']*["\'][^>]*>.*?</main>)', source, re.I|re.S)
+          if not m:
+              raise SystemExit('Could not find exact rfpig-page main content in production HTML')
+          main = m.group(1)
+
+          schemas = []
+          for sm in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>.*?</script>', source, re.I|re.S):
+              block = sm.group(0)
+              if 'pigmentflecken-hautton-frankfurt' in block or 'FAQPage' in block:
+                  schemas.append(block)
+
+          base_css = Path('assets/rftight-treatment.css').read_text(encoding='utf-8')
+          css = base_css.replace('rftight', 'rfpig')
+          css += '''\n.rfpig-types,.rfpig-related{background:var(--cream)}\n.rfpig-type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}\n.rfpig-type,.rfpig-diagnosis-card{padding:28px;background:var(--cream)}\n.rfpig-type span,.rfpig-diagnosis-card span{display:block;margin-bottom:20px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}\n.rfpig-type h3,.rfpig-diagnosis-card h3{margin:0 0 12px;color:var(--ink);font:400 25px/1.1 var(--serif)}\n.rfpig-type p,.rfpig-diagnosis-card p{margin:0;color:var(--muted);font-size:11px;line-height:1.72}\n.rfpig-diagnosis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}\n.rfpig-device{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}\n.rfpig-device-main,.rfpig-device-side{padding:34px}\n.rfpig-device-main{background:var(--cream)}\n.rfpig-device-side{background:#15110e;color:#fff}\n.rfpig-device h3{margin:0 0 14px;font:400 28px/1.1 var(--serif)}\n.rfpig-device-main h3{color:var(--ink)}\n.rfpig-device-side h3{color:#fff}\n.rfpig-device p{margin:0;font-size:12px;line-height:1.78}\n.rfpig-device-main p{color:var(--muted)}\n.rfpig-device-side p{color:rgba(255,255,255,.65)}\n.rfpig-device p+p{margin-top:14px}\n.rfpig-price-grid{grid-template-columns:repeat(4,1fr)}\n@media(max-width:1000px){.rfpig-type-grid,.rfpig-price-grid{grid-template-columns:1fr 1fr}.rfpig-diagnosis{grid-template-columns:1fr}.rfpig-device{grid-template-columns:1fr}}\n@media(max-width:700px){.rfpig-type-grid,.rfpig-price-grid{grid-template-columns:1fr}}\n'''
+          Path('assets/rfpig-treatment.css').write_text(css, encoding='utf-8')
+
+          header = '''<header class="site-header"><a class="site-brand" href="/">A+ Esthetic<small>Frankfurt</small></a><nav class="site-nav"><a href="/behandlungen/">Behandlungen</a><a href="/rf-microneedling/">RF-Microneedling</a><a href="#faq">FAQ</a></nav><a class="site-cta" href="https://www.doctolib.de/privatpraxis/frankfurt-am-main/a-esthetic-zentrum-fuer-aesthetik" target="_blank" rel="noopener">Termin buchen</a></header>'''
+          footer = '''<footer class="site-footer"><div class="site-footer-grid"><div><h3>A+ Esthetic</h3><p>Stiftstrasse 14<br>60313 Frankfurt am Main<br>2. OG</p></div><div><h3>Behandlungen</h3><p><a href="/rf-microneedling/">RF-Microneedling</a><br><a href="/behandlungen/">Alle Behandlungen</a></p></div><div><h3>Kontakt</h3><p>069-71417012<br>+49 172 9907936<br>Info@a-esthetic.de</p></div><div><h3>Rechtliches</h3><p><a href="/impressum/">Impressum</a><br><a href="/datenschutzerklaerung/">Datenschutz</a></p></div></div></footer>'''
+
+          out = f'''<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{h.escape(title)}</title>{f'<meta name="description" content="{h.escape(desc, quote=True)}">' if desc else ''}<meta name="robots" content="noindex,nofollow"><link rel="canonical" href="{url}"><meta name="theme-color" content="#17120e"><link rel="stylesheet" href="/assets/rfpig-treatment.css">{''.join(schemas)}</head><body>{header}{main}{footer}</body></html>'''
+
+          dest = Path('rf-microneedling/pigmentflecken-hautton-frankfurt/index.html')
+          dest.parent.mkdir(parents=True, exist_ok=True)
+          dest.write_text(out, encoding='utf-8')
+
+          required = [
+              'RF-Microneedling gegen Pigmentflecken und unebenen Hautton',
+              'Melasma',
+              'Postinflammatorische Hyperpigmentierung',
+              'Sonnenschutz ist Teil des Behandlungsplans',
+              'Warnzeichen sofort medizinisch abklären',
+              'ab 300 €',
+              'ab 450 €',
+              'ab 700 €',
+              'ab 1800 €',
+              'Fragen zu RF-Microneedling bei Pigmentflecken und'
+          ]
+          missing = [x for x in required if x not in out]
+          if missing:
+              raise SystemExit('Missing required exact production strings: ' + repr(missing))
+          PY
+
+      - name: Commit generated page
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/rfpig-treatment.css rf-microneedling/pigmentflecken-hautton-frankfurt/index.html
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+          else
+            git commit -m 'Build Pigmentflecken page from exact production copy'
+            git push
+          fi
