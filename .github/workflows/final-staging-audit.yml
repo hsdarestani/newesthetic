@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/final-staging-audit.yml'
+      - 'tools/final_staging_audit.py'
   workflow_dispatch:
 
 permissions:
