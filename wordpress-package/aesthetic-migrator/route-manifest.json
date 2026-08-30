@@ -18,7 +18,7 @@
     "/hyaluronsaure-behandlungen/nasolabialfalte-hyaluron-frankfurt/",
     "/hyaluronsaure-behandlungen/wangenaufbau-frankfurt/",
     "/impressum/", "/infusionstherapien/",
-    "/infusionstherapien/curcumin-infusion-frankfurt-ablauf-kosten/",
+    "/infusionstherapien/curcumin-infusion-frankfurt/",
     "/infusionstherapien/glutathion-infusion-frankfurt/",
     "/infusionstherapien/mitoenergy-infusion-frankfurt/",
     "/infusionstherapien/nad-infusion-frankfurt/",
@@ -47,5 +47,11 @@
     "/rf-microneedling/poren-hautstruktur-frankfurt/",
     "/skinbooster/", "/skinbooster/gesicht-frankfurt/"
   ],
-  "redirects": {"/laserbehandlungen/": "/laser-behandlungen/"}
+  "source_routes": {
+    "/infusionstherapien/curcumin-infusion-frankfurt/": "/infusionstherapien/curcumin-infusion-frankfurt-ablauf-kosten/"
+  },
+  "redirects": {
+    "/laserbehandlungen/": "/laser-behandlungen/",
+    "/infusionstherapien/curcumin-infusion-frankfurt-ablauf-kosten/": "/infusionstherapien/curcumin-infusion-frankfurt/"
+  }
 }
