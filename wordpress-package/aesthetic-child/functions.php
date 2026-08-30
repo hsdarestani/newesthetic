@@ -2,12 +2,17 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.4');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.5');
 }, 100);
 
 add_filter('body_class', function ($classes) {
     if (is_singular('page') && get_post_meta(get_queried_object_id(), '_aesthetic_snapshot_html', true)) {
         $classes[] = 'aesthetic-snapshot-active';
+
+        $permalink = get_permalink(get_queried_object_id());
+        $path = trim((string) wp_parse_url($permalink, PHP_URL_PATH), '/');
+        $route = $path === '' ? 'home' : str_replace('/', '-', $path);
+        $classes[] = 'aesthetic-route-' . sanitize_html_class($route);
     }
     return $classes;
 });
