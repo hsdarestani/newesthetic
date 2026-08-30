@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: A+ Esthetic Migrator
- * Description: Dry-run, apply and rollback the approved newesthetic staging snapshots without replacing WordPress page content or SEO metadata.
- * Version: 1.0.1
+ * Description: Dry-run, selectively apply and rollback approved newesthetic staging snapshots without replacing WordPress page content or SEO metadata.
+ * Version: 1.1.0
  * Author: A+ Esthetic
  */
 
@@ -47,7 +47,7 @@ final class Aesthetic_Migrator {
         $response = wp_remote_get($url, array(
             'timeout' => 25,
             'redirection' => 3,
-            'user-agent' => 'Aesthetic-WP-Migrator/1.0.1; ' . home_url('/'),
+            'user-agent' => 'Aesthetic-WP-Migrator/1.1.0; ' . home_url('/'),
         ));
         if (is_wp_error($response)) {
             return $response;
@@ -57,10 +57,73 @@ final class Aesthetic_Migrator {
         if ($code !== 200 || !$body) {
             return new WP_Error('bad_snapshot', sprintf('Staging returned HTTP %d for %s (source %s)', $code, $route, $source_route));
         }
-        if (stripos($body, '<meta name="robots" content="noindex,nofollow">') === false && stripos($body, 'noindex,nofollow') === false) {
+        if (stripos($body, 'noindex,nofollow') === false) {
             return new WP_Error('guard_missing', 'Staging SEO guard not detected for ' . $source_route);
         }
         return $body;
+    }
+
+    private static function allowed_routes() {
+        $manifest = self::manifest();
+        return isset($manifest['routes']) && is_array($manifest['routes']) ? array_values($manifest['routes']) : array();
+    }
+
+    private static function selected_routes() {
+        $allowed = self::allowed_routes();
+        $raw = isset($_POST['routes']) && is_array($_POST['routes']) ? wp_unslash($_POST['routes']) : array();
+        $selected = array();
+        foreach ($raw as $route) {
+            $route = (string) $route;
+            if (in_array($route, $allowed, true)) {
+                $selected[] = $route;
+            }
+        }
+        return array_values(array_unique($selected));
+    }
+
+    private static function apply_route($route, &$messages) {
+        $page = self::page_for_route($route);
+        if (!$page) {
+            $messages[] = 'SKIP missing WordPress page: ' . $route;
+            return;
+        }
+
+        $snapshot = self::fetch_snapshot($route);
+        if (is_wp_error($snapshot)) {
+            $messages[] = 'ERROR ' . $route . ': ' . $snapshot->get_error_message();
+            return;
+        }
+
+        if (!metadata_exists('post', $page->ID, self::META_PREV_TEMPLATE)) {
+            update_post_meta($page->ID, self::META_PREV_TEMPLATE, (string) get_post_meta($page->ID, '_wp_page_template', true));
+        }
+        update_post_meta($page->ID, self::META_SNAPSHOT, $snapshot);
+        update_post_meta($page->ID, self::META_SOURCE_HASH, hash('sha256', $snapshot));
+        update_post_meta($page->ID, '_wp_page_template', self::TEMPLATE);
+
+        $source_route = self::source_route_for($route);
+        $suffix = $source_route !== $route ? ' (snapshot source ' . $source_route . ')' : '';
+        $messages[] = 'APPLIED ' . $route . ' → page #' . $page->ID . $suffix;
+    }
+
+    private static function rollback_route($route, &$messages) {
+        $page = self::page_for_route($route);
+        if (!$page) { return; }
+        if (!metadata_exists('post', $page->ID, self::META_SNAPSHOT)) {
+            $messages[] = 'SKIP no active snapshot: ' . $route;
+            return;
+        }
+
+        $prev = (string) get_post_meta($page->ID, self::META_PREV_TEMPLATE, true);
+        if ($prev !== '') {
+            update_post_meta($page->ID, '_wp_page_template', $prev);
+        } else {
+            delete_post_meta($page->ID, '_wp_page_template');
+        }
+        delete_post_meta($page->ID, self::META_SNAPSHOT);
+        delete_post_meta($page->ID, self::META_SOURCE_HASH);
+        delete_post_meta($page->ID, self::META_PREV_TEMPLATE);
+        $messages[] = 'ROLLED BACK ' . $route . ' → page #' . $page->ID;
     }
 
     public static function admin_menu() {
@@ -68,9 +131,8 @@ final class Aesthetic_Migrator {
     }
 
     private static function status_rows() {
-        $manifest = self::manifest();
         $rows = array();
-        foreach (($manifest['routes'] ?? array()) as $route) {
+        foreach (self::allowed_routes() as $route) {
             $page = self::page_for_route($route);
             $rows[] = array(
                 'route' => $route,
@@ -91,55 +153,41 @@ final class Aesthetic_Migrator {
         $action = sanitize_key(wp_unslash($_POST['aesthetic_migration_action']));
         $messages = array();
 
-        if ($action === 'apply') {
-            $manifest = self::manifest();
-            foreach (($manifest['routes'] ?? array()) as $route) {
-                $page = self::page_for_route($route);
-                if (!$page) {
-                    $messages[] = 'SKIP missing WordPress page: ' . $route;
-                    continue;
+        if ($action === 'apply_selected') {
+            $routes = self::selected_routes();
+            if (!$routes) {
+                $messages[] = 'NO ACTION: select at least one route.';
+            } else {
+                foreach ($routes as $route) {
+                    self::apply_route($route, $messages);
                 }
-                $snapshot = self::fetch_snapshot($route);
-                if (is_wp_error($snapshot)) {
-                    $messages[] = 'ERROR ' . $route . ': ' . $snapshot->get_error_message();
-                    continue;
-                }
-                if (!metadata_exists('post', $page->ID, self::META_PREV_TEMPLATE)) {
-                    update_post_meta($page->ID, self::META_PREV_TEMPLATE, (string) get_post_meta($page->ID, '_wp_page_template', true));
-                }
-                update_post_meta($page->ID, self::META_SNAPSHOT, $snapshot);
-                update_post_meta($page->ID, self::META_SOURCE_HASH, hash('sha256', $snapshot));
-                update_post_meta($page->ID, '_wp_page_template', self::TEMPLATE);
-                $source_route = self::source_route_for($route);
-                $suffix = $source_route !== $route ? ' (snapshot source ' . $source_route . ')' : '';
-                $messages[] = 'APPLIED ' . $route . ' → page #' . $page->ID . $suffix;
             }
-            set_transient('aesthetic_migration_messages', $messages, 120);
-            wp_safe_redirect(admin_url('tools.php?page=aesthetic-migration'));
-            exit;
+        } elseif ($action === 'rollback_selected') {
+            $routes = self::selected_routes();
+            if (!$routes) {
+                $messages[] = 'NO ACTION: select at least one route.';
+            } else {
+                foreach ($routes as $route) {
+                    self::rollback_route($route, $messages);
+                }
+            }
+        } elseif ($action === 'rollback_all') {
+            foreach (self::allowed_routes() as $route) {
+                $page = self::page_for_route($route);
+                if ($page && metadata_exists('post', $page->ID, self::META_SNAPSHOT)) {
+                    self::rollback_route($route, $messages);
+                }
+            }
+            if (!$messages) {
+                $messages[] = 'NO ACTION: no active snapshots found.';
+            }
+        } else {
+            $messages[] = 'NO ACTION: unsupported operation.';
         }
 
-        if ($action === 'rollback') {
-            $manifest = self::manifest();
-            foreach (($manifest['routes'] ?? array()) as $route) {
-                $page = self::page_for_route($route);
-                if (!$page) { continue; }
-                if (!metadata_exists('post', $page->ID, self::META_SNAPSHOT)) { continue; }
-                $prev = (string) get_post_meta($page->ID, self::META_PREV_TEMPLATE, true);
-                if ($prev !== '') {
-                    update_post_meta($page->ID, '_wp_page_template', $prev);
-                } else {
-                    delete_post_meta($page->ID, '_wp_page_template');
-                }
-                delete_post_meta($page->ID, self::META_SNAPSHOT);
-                delete_post_meta($page->ID, self::META_SOURCE_HASH);
-                delete_post_meta($page->ID, self::META_PREV_TEMPLATE);
-                $messages[] = 'ROLLED BACK ' . $route . ' → page #' . $page->ID;
-            }
-            set_transient('aesthetic_migration_messages', $messages, 120);
-            wp_safe_redirect(admin_url('tools.php?page=aesthetic-migration'));
-            exit;
-        }
+        set_transient('aesthetic_migration_messages', $messages, 180);
+        wp_safe_redirect(admin_url('tools.php?page=aesthetic-migration'));
+        exit;
     }
 
     public static function legacy_redirect() {
@@ -161,46 +209,59 @@ final class Aesthetic_Migrator {
         delete_transient('aesthetic_migration_messages');
         $found = count(array_filter($rows, function ($r) { return (bool) $r['page']; }));
         $active = count(array_filter($rows, function ($r) { return $r['snapshot']; }));
+        $is_live = (bool) preg_match('#(^|\.)a-esthetic\.de$#i', (string) wp_parse_url(home_url('/'), PHP_URL_HOST));
         ?>
         <div class="wrap">
             <h1>A+ Esthetic Migration</h1>
             <p><strong>Safe mode:</strong> this tool does not replace page content, slugs, post IDs or SEO-plugin metadata.</p>
+            <p>Site: <code><?php echo esc_html(home_url('/')); ?></code> <?php if ($is_live): ?><strong style="color:#b32d2e">LIVE PRODUCTION</strong><?php endif; ?></p>
             <p>Approved routes found in WordPress: <strong><?php echo esc_html($found); ?>/<?php echo esc_html(count($rows)); ?></strong>. Snapshot template active: <strong><?php echo esc_html($active); ?></strong>.</p>
 
             <?php if (is_array($messages) && $messages): ?>
                 <div class="notice notice-info"><p><strong>Last operation</strong></p><pre style="max-height:280px;overflow:auto;white-space:pre-wrap"><?php echo esc_html(implode("\n", $messages)); ?></pre></div>
             <?php endif; ?>
 
-            <h2>Dry run</h2>
-            <table class="widefat striped">
-                <thead><tr><th>Route</th><th>Snapshot source</th><th>WordPress page</th><th>ID</th><th>Current template</th><th>Snapshot</th></tr></thead>
-                <tbody>
-                <?php foreach ($rows as $row): ?>
-                    <tr>
-                        <td><code><?php echo esc_html($row['route']); ?></code></td>
-                        <td><code><?php echo esc_html($row['source']); ?></code><?php echo $row['source'] !== $row['route'] ? ' <small>(alias)</small>' : ''; ?></td>
-                        <td><?php echo $row['page'] ? esc_html($row['page']->post_title) : '<strong style="color:#b32d2e">MISSING</strong>'; ?></td>
-                        <td><?php echo $row['page'] ? esc_html($row['page']->ID) : '—'; ?></td>
-                        <td><code><?php echo esc_html($row['template'] ?: 'default'); ?></code></td>
-                        <td><?php echo $row['snapshot'] ? 'YES' : 'NO'; ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+            <?php if ($is_live): ?>
+                <div class="notice notice-warning"><p><strong>Production mode:</strong> apply one route first, verify the public page, then continue in small batches. Emergency rollback remains available below.</p></div>
+            <?php endif; ?>
 
-            <p style="margin-top:20px"><strong>Do not apply on production first.</strong> Apply only on a cloned WordPress staging installation after a full backup.</p>
-            <div style="display:flex;gap:12px;align-items:center">
-                <form method="post">
-                    <?php wp_nonce_field('aesthetic_migration_action'); ?>
-                    <input type="hidden" name="aesthetic_migration_action" value="apply">
-                    <?php submit_button('Apply snapshots', 'primary', 'submit', false, array('onclick' => "return confirm('Apply approved staging snapshots to these existing pages? Original post_content will remain untouched.');")); ?>
-                </form>
-                <form method="post">
-                    <?php wp_nonce_field('aesthetic_migration_action'); ?>
-                    <input type="hidden" name="aesthetic_migration_action" value="rollback">
-                    <?php submit_button('Rollback snapshots', 'secondary', 'submit', false, array('onclick' => "return confirm('Rollback snapshot templates and restore previous page templates?');")); ?>
-                </form>
-            </div>
+            <h2>Dry run / selective rollout</h2>
+            <form method="post" id="aesthetic-migration-form">
+                <?php wp_nonce_field('aesthetic_migration_action'); ?>
+                <table class="widefat striped">
+                    <thead><tr><th style="width:40px"><input type="checkbox" id="aesthetic-select-all" aria-label="Select all"></th><th>Route</th><th>Snapshot source</th><th>WordPress page</th><th>ID</th><th>Current template</th><th>Snapshot</th></tr></thead>
+                    <tbody>
+                    <?php foreach ($rows as $row): ?>
+                        <tr>
+                            <td><input class="aesthetic-route-check" type="checkbox" name="routes[]" value="<?php echo esc_attr($row['route']); ?>" <?php disabled(!$row['page']); ?>></td>
+                            <td><code><?php echo esc_html($row['route']); ?></code></td>
+                            <td><code><?php echo esc_html($row['source']); ?></code><?php echo $row['source'] !== $row['route'] ? ' <small>(alias)</small>' : ''; ?></td>
+                            <td><?php echo $row['page'] ? esc_html($row['page']->post_title) : '<strong style="color:#b32d2e">MISSING</strong>'; ?></td>
+                            <td><?php echo $row['page'] ? esc_html($row['page']->ID) : '—'; ?></td>
+                            <td><code><?php echo esc_html($row['template'] ?: 'default'); ?></code></td>
+                            <td><strong><?php echo $row['snapshot'] ? 'YES' : 'NO'; ?></strong></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <p style="margin-top:18px">On production, start with <code>/</code> only. The original WordPress page content remains stored and untouched.</p>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <button type="submit" class="button button-primary" name="aesthetic_migration_action" value="apply_selected" onclick="return confirm('Apply snapshots ONLY to the selected routes? Original post_content stays untouched.');">Apply selected</button>
+                    <button type="submit" class="button" name="aesthetic_migration_action" value="rollback_selected" onclick="return confirm('Rollback ONLY the selected routes to their previous templates?');">Rollback selected</button>
+                    <button type="submit" class="button" style="color:#b32d2e;border-color:#b32d2e" name="aesthetic_migration_action" value="rollback_all" onclick="return confirm('EMERGENCY ROLLBACK: restore previous templates for ALL active snapshots?');">Emergency rollback ALL</button>
+                </div>
+            </form>
+
+            <script>
+            (function(){
+                var all = document.getElementById('aesthetic-select-all');
+                if (!all) return;
+                all.addEventListener('change', function(){
+                    document.querySelectorAll('.aesthetic-route-check:not(:disabled)').forEach(function(cb){ cb.checked = all.checked; });
+                });
+            })();
+            </script>
         </div>
         <?php
     }
