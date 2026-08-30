@@ -2,7 +2,7 @@
 /**
  * Plugin Name: A+ Esthetic Migrator
  * Description: Dry-run, apply and rollback the approved newesthetic staging snapshots without replacing WordPress page content or SEO metadata.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: A+ Esthetic
  */
 
@@ -26,6 +26,12 @@ final class Aesthetic_Migrator {
         return is_array($data) ? $data : array('routes' => array());
     }
 
+    private static function source_route_for($route) {
+        $manifest = self::manifest();
+        $aliases = isset($manifest['source_routes']) && is_array($manifest['source_routes']) ? $manifest['source_routes'] : array();
+        return isset($aliases[$route]) ? (string) $aliases[$route] : $route;
+    }
+
     private static function page_for_route($route) {
         if ($route === '/') {
             $front = (int) get_option('page_on_front');
@@ -36,11 +42,12 @@ final class Aesthetic_Migrator {
     }
 
     private static function fetch_snapshot($route) {
-        $url = rtrim(self::SOURCE, '/') . $route;
+        $source_route = self::source_route_for($route);
+        $url = rtrim(self::SOURCE, '/') . $source_route;
         $response = wp_remote_get($url, array(
             'timeout' => 25,
             'redirection' => 3,
-            'user-agent' => 'Aesthetic-WP-Migrator/1.0; ' . home_url('/'),
+            'user-agent' => 'Aesthetic-WP-Migrator/1.0.1; ' . home_url('/'),
         ));
         if (is_wp_error($response)) {
             return $response;
@@ -48,10 +55,10 @@ final class Aesthetic_Migrator {
         $code = (int) wp_remote_retrieve_response_code($response);
         $body = wp_remote_retrieve_body($response);
         if ($code !== 200 || !$body) {
-            return new WP_Error('bad_snapshot', sprintf('Staging returned HTTP %d for %s', $code, $route));
+            return new WP_Error('bad_snapshot', sprintf('Staging returned HTTP %d for %s (source %s)', $code, $route, $source_route));
         }
         if (stripos($body, '<meta name="robots" content="noindex,nofollow">') === false && stripos($body, 'noindex,nofollow') === false) {
-            return new WP_Error('guard_missing', 'Staging SEO guard not detected for ' . $route);
+            return new WP_Error('guard_missing', 'Staging SEO guard not detected for ' . $source_route);
         }
         return $body;
     }
@@ -67,6 +74,7 @@ final class Aesthetic_Migrator {
             $page = self::page_for_route($route);
             $rows[] = array(
                 'route' => $route,
+                'source' => self::source_route_for($route),
                 'page' => $page,
                 'snapshot' => $page ? (bool) get_post_meta($page->ID, self::META_SNAPSHOT, true) : false,
                 'template' => $page ? get_post_meta($page->ID, '_wp_page_template', true) : '',
@@ -102,7 +110,9 @@ final class Aesthetic_Migrator {
                 update_post_meta($page->ID, self::META_SNAPSHOT, $snapshot);
                 update_post_meta($page->ID, self::META_SOURCE_HASH, hash('sha256', $snapshot));
                 update_post_meta($page->ID, '_wp_page_template', self::TEMPLATE);
-                $messages[] = 'APPLIED ' . $route . ' → page #' . $page->ID;
+                $source_route = self::source_route_for($route);
+                $suffix = $source_route !== $route ? ' (snapshot source ' . $source_route . ')' : '';
+                $messages[] = 'APPLIED ' . $route . ' → page #' . $page->ID . $suffix;
             }
             set_transient('aesthetic_migration_messages', $messages, 120);
             wp_safe_redirect(admin_url('tools.php?page=aesthetic-migration'));
@@ -134,9 +144,13 @@ final class Aesthetic_Migrator {
 
     public static function legacy_redirect() {
         $path = wp_parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-        if ($path === '/laserbehandlungen/' || $path === '/laserbehandlungen') {
-            wp_safe_redirect(home_url('/laser-behandlungen/'), 301);
-            exit;
+        $manifest = self::manifest();
+        $redirects = isset($manifest['redirects']) && is_array($manifest['redirects']) ? $manifest['redirects'] : array();
+        foreach ($redirects as $from => $to) {
+            if (rtrim((string) $path, '/') === rtrim((string) $from, '/')) {
+                wp_safe_redirect(home_url((string) $to), 301);
+                exit;
+            }
         }
     }
 
@@ -159,11 +173,12 @@ final class Aesthetic_Migrator {
 
             <h2>Dry run</h2>
             <table class="widefat striped">
-                <thead><tr><th>Route</th><th>WordPress page</th><th>ID</th><th>Current template</th><th>Snapshot</th></tr></thead>
+                <thead><tr><th>Route</th><th>Snapshot source</th><th>WordPress page</th><th>ID</th><th>Current template</th><th>Snapshot</th></tr></thead>
                 <tbody>
                 <?php foreach ($rows as $row): ?>
                     <tr>
                         <td><code><?php echo esc_html($row['route']); ?></code></td>
+                        <td><code><?php echo esc_html($row['source']); ?></code><?php echo $row['source'] !== $row['route'] ? ' <small>(alias)</small>' : ''; ?></td>
                         <td><?php echo $row['page'] ? esc_html($row['page']->post_title) : '<strong style="color:#b32d2e">MISSING</strong>'; ?></td>
                         <td><?php echo $row['page'] ? esc_html($row['page']->ID) : '—'; ?></td>
                         <td><code><?php echo esc_html($row['template'] ?: 'default'); ?></code></td>
