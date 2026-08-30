@@ -1,0 +1,56 @@
+name: Build WordPress migration package
+
+on:
+  push:
+    paths:
+      - 'wordpress-package/**'
+      - '.github/workflows/build-wordpress-package.yml'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate PHP
+        run: |
+          php -l wordpress-package/aesthetic-child/functions.php
+          php -l wordpress-package/aesthetic-child/aesthetic-snapshot.php
+          php -l wordpress-package/aesthetic-migrator/aesthetic-migrator.php
+
+      - name: Build installable ZIPs
+        run: |
+          set -euo pipefail
+          rm -rf build-wordpress
+          mkdir -p build-wordpress/aesthetic-child/assets/staging
+          mkdir -p build-wordpress/aesthetic-migrator
+
+          cp wordpress-package/aesthetic-child/style.css build-wordpress/aesthetic-child/
+          cp wordpress-package/aesthetic-child/functions.php build-wordpress/aesthetic-child/
+          cp wordpress-package/aesthetic-child/aesthetic-snapshot.php build-wordpress/aesthetic-child/
+          cp -R assets/. build-wordpress/aesthetic-child/assets/staging/
+
+          cp wordpress-package/aesthetic-migrator/aesthetic-migrator.php build-wordpress/aesthetic-migrator/
+          cp wordpress-package/aesthetic-migrator/route-manifest.json build-wordpress/aesthetic-migrator/
+
+          (cd build-wordpress && zip -qr ../aesthetic-child.zip aesthetic-child)
+          (cd build-wordpress && zip -qr ../aesthetic-migrator.zip aesthetic-migrator)
+
+          unzip -l aesthetic-child.zip | head -n 40
+          unzip -l aesthetic-migrator.zip
+
+      - name: Upload WordPress packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: aesthetic-wordpress-package
+          path: |
+            aesthetic-child.zip
+            aesthetic-migrator.zip
+            wordpress-package/README.md
+          if-no-files-found: error
+          retention-days: 30
