@@ -4,7 +4,7 @@ Theme URI: https://a-esthetic.de/
 Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
 Author: A+ Esthetic
 Template: woodmart
-Version: 1.0.4
+Version: 1.0.5
 Text Domain: aesthetic-child
 */
 
@@ -32,6 +32,85 @@ body.aesthetic-snapshot-active .aesthetic-snapshot-root h6{color:inherit!importa
 
 /* Keep deliberately highlighted title fragments from the approved design. */
 body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-title span{color:var(--gold2)!important}
+
+/*
+ * WordPress/WoodMart button styles otherwise turn snapshot CTAs into pale
+ * filled buttons with pale text. Snapshot buttons are outline buttons by
+ * default and inherit their section color; only deliberately filled gold CTAs
+ * are restored below.
+ */
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .btn,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root a.btn:link,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root a.btn:visited{
+    background:transparent!important;
+    background-color:transparent!important;
+    color:inherit!important;
+    -webkit-text-fill-color:currentColor!important;
+    border-color:currentColor!important;
+    opacity:1!important;
+    box-shadow:none!important;
+    text-shadow:none!important;
+    filter:none!important;
+}
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .btn:hover,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .btn:focus,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .btn:active{
+    background:var(--gold,#c0924f)!important;
+    background-color:var(--gold,#c0924f)!important;
+    border-color:var(--gold,#c0924f)!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    opacity:1!important;
+}
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions .btn:first-child,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-inner .btn,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-actions .btn{
+    background:var(--gold,#c0924f)!important;
+    background-color:var(--gold,#c0924f)!important;
+    border-color:var(--gold,#c0924f)!important;
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+}
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .btn::after{color:currentColor!important;opacity:1!important}
+
+/*
+ * Category overview galleries shipped with abstract orb placeholders. On the
+ * WordPress rollout use the approved category artwork already bundled with the
+ * project, cropped differently per tile. One source image is cached once, so
+ * this is visually richer without multiplying network requests.
+ */
+body.aesthetic-route-botox-behandlungen .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/botox.png')!important}
+body.aesthetic-route-hyaluronsaure-behandlungen .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/hyaluron.png')!important}
+body.aesthetic-route-infusionstherapien .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/infusion.png')!important}
+body.aesthetic-route-injektions-lipolyse .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/lipolyse.png')!important}
+body.aesthetic-route-laser-behandlungen .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/laser.png')!important}
+body.aesthetic-route-prp-behandlung .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/prp.png')!important}
+body.aesthetic-route-rf-microneedling .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/rf-microneedling.png')!important}
+body.aesthetic-route-skinbooster .aesthetic-snapshot-root .gallery figure{background-image:url('assets/staging/skinbooster.png')!important}
+body.aesthetic-snapshot-active[class*="aesthetic-route-"] .aesthetic-snapshot-root .gallery figure{
+    background-size:cover!important;
+    background-repeat:no-repeat!important;
+    background-position:center!important;
+}
+body.aesthetic-snapshot-active[class*="aesthetic-route-"] .aesthetic-snapshot-root .gallery figure:nth-child(2n){background-position:35% center!important}
+body.aesthetic-snapshot-active[class*="aesthetic-route-"] .aesthetic-snapshot-root .gallery figure:nth-child(3n){background-position:65% center!important}
+body.aesthetic-snapshot-active[class*="aesthetic-route-"] .aesthetic-snapshot-root .gallery figure:nth-child(4n){background-position:80% center!important}
+body.aesthetic-route-botox-behandlungen .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-botox-behandlungen .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-hyaluronsaure-behandlungen .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-hyaluronsaure-behandlungen .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-infusionstherapien .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-infusionstherapien .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-injektions-lipolyse .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-injektions-lipolyse .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-laser-behandlungen .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-laser-behandlungen .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-prp-behandlung .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-prp-behandlung .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-rf-microneedling .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-rf-microneedling .aesthetic-snapshot-root .gallery figure::after,
+body.aesthetic-route-skinbooster .aesthetic-snapshot-root .gallery figure::before,
+body.aesthetic-route-skinbooster .aesthetic-snapshot-root .gallery figure::after{display:none!important}
 
 /* Old booking/contact rails are redundant on approved snapshot pages. */
 body.aesthetic-snapshot-active .aesthetic-hide-legacy-floating{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;min-width:0!important;max-width:0!important;height:0!important;min-height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;pointer-events:none!important}
