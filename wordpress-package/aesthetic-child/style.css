@@ -4,7 +4,7 @@ Theme URI: https://a-esthetic.de/
 Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
 Author: A+ Esthetic
 Template: woodmart
-Version: 1.0.3
+Version: 1.0.4
 Text Domain: aesthetic-child
 */
 
@@ -13,7 +13,7 @@ Text Domain: aesthetic-child
 html.aesthetic-snapshot-active,body.aesthetic-snapshot-active{margin:0!important;padding:0!important;background:var(--aesthetic-paper)}
 body.aesthetic-snapshot-active .website-wrapper,
 body.aesthetic-snapshot-active .main-page-wrapper{background:transparent!important;padding:0!important;margin:0!important;max-width:none!important;width:100%!important}
-.aesthetic-snapshot-root{width:100%;min-height:100vh;overflow-x:hidden}
+.aesthetic-snapshot-root{position:relative;z-index:0;isolation:isolate;width:100%;min-height:100vh;overflow-x:hidden}
 .aesthetic-snapshot-warning{position:fixed;right:12px;bottom:12px;z-index:999999;padding:8px 11px;background:#17120e;color:#fff;font:600 10px/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;opacity:.78}
 body:not(.logged-in) .aesthetic-snapshot-warning{display:none}
 
@@ -35,3 +35,17 @@ body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-title span{color:v
 
 /* Old booking/contact rails are redundant on approved snapshot pages. */
 body.aesthetic-snapshot-active .aesthetic-hide-legacy-floating{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;min-width:0!important;max-width:0!important;height:0!important;min-height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;pointer-events:none!important}
+
+/*
+ * Cookie consent must always sit above the imported snapshot and remain fully
+ * interactive. Seers CMP can be injected late and may use an iframe or a
+ * fixed wrapper, so support both known and dynamically marked containers.
+ */
+body.aesthetic-snapshot-active .aesthetic-cookie-layer,
+body.aesthetic-snapshot-active [id*="seers" i],
+body.aesthetic-snapshot-active [class*="seers" i],
+body.aesthetic-snapshot-active iframe[src*="seers" i],
+body.aesthetic-snapshot-active iframe[src*="seersco" i]{z-index:2147483000!important;pointer-events:auto!important;touch-action:auto!important}
+body.aesthetic-snapshot-active .aesthetic-cookie-layer *,
+body.aesthetic-snapshot-active [id*="seers" i] *,
+body.aesthetic-snapshot-active [class*="seers" i] *{pointer-events:auto!important;touch-action:auto!important}
