@@ -1,12 +1,64 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
+function aesthetic_is_snapshot_page() {
+    return is_singular('page') && (bool) get_post_meta(get_queried_object_id(), '_aesthetic_snapshot_html', true);
+}
+
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.5');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.7');
 }, 100);
 
+/**
+ * Snapshot pages already ship their approved layout CSS inside the imported
+ * snapshot. WoodMart/WPBakery/WooCommerce/slider front-end bundles are not
+ * used there and add substantial render-blocking CSS/JS. Remove only those
+ * known presentation bundles; consent, chat, analytics, SEO, WP Rocket,
+ * jQuery and WordPress/admin-bar assets remain untouched.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!aesthetic_is_snapshot_page()) { return; }
+
+    $patterns = array(
+        '/themes/woodmart/',
+        '/plugins/woodmart-core/',
+        '/plugins/js_composer/',
+        '/plugins/woocommerce/',
+        '/plugins/revslider/',
+        '/plugins/slider-revolution/'
+    );
+
+    global $wp_styles, $wp_scripts;
+
+    if ($wp_styles instanceof WP_Styles) {
+        foreach ((array) $wp_styles->queue as $handle) {
+            if (empty($wp_styles->registered[$handle])) { continue; }
+            $src = (string) $wp_styles->registered[$handle]->src;
+            foreach ($patterns as $pattern) {
+                if (stripos($src, $pattern) !== false) {
+                    wp_dequeue_style($handle);
+                    break;
+                }
+            }
+        }
+    }
+
+    if ($wp_scripts instanceof WP_Scripts) {
+        foreach ((array) $wp_scripts->queue as $handle) {
+            if (empty($wp_scripts->registered[$handle])) { continue; }
+            $src = (string) $wp_scripts->registered[$handle]->src;
+            foreach ($patterns as $pattern) {
+                if (stripos($src, $pattern) !== false) {
+                    wp_dequeue_script($handle);
+                    break;
+                }
+            }
+        }
+    }
+}, 999);
+
 add_filter('body_class', function ($classes) {
-    if (is_singular('page') && get_post_meta(get_queried_object_id(), '_aesthetic_snapshot_html', true)) {
+    if (aesthetic_is_snapshot_page()) {
         $classes[] = 'aesthetic-snapshot-active';
 
         $permalink = get_permalink(get_queried_object_id());
@@ -28,6 +80,41 @@ function aesthetic_snapshot_rewrite_assets($html) {
     return $html;
 }
 
+/**
+ * Keep the first (hero) image eager/high-priority and make lower-page imagery
+ * lazy/async. The tag processor preserves trusted snapshot markup instead of
+ * rebuilding the document.
+ */
+function aesthetic_snapshot_optimize_images($html) {
+    if (!$html || !class_exists('WP_HTML_Tag_Processor')) { return $html; }
+
+    $processor = new WP_HTML_Tag_Processor($html);
+    $first_image = true;
+
+    while ($processor->next_tag('IMG')) {
+        $processor->set_attribute('decoding', 'async');
+
+        if ($first_image) {
+            $processor->set_attribute('loading', 'eager');
+            $processor->set_attribute('fetchpriority', 'high');
+            $first_image = false;
+        } else {
+            if (!$processor->get_attribute('loading')) {
+                $processor->set_attribute('loading', 'lazy');
+            }
+        }
+    }
+
+    return $processor->get_updated_html();
+}
+
+function aesthetic_snapshot_first_image_src($html) {
+    if (preg_match('#<img\b[^>]*\bsrc=["\']([^"\']+)["\']#i', (string) $html, $match)) {
+        return $match[1];
+    }
+    return '';
+}
+
 function aesthetic_snapshot_extract($html) {
     $out = array('head' => '', 'body' => '');
     if (!$html) { return $out; }
@@ -47,14 +134,12 @@ function aesthetic_snapshot_extract($html) {
 
     $out['head'] = aesthetic_snapshot_rewrite_assets($out['head']);
     $out['body'] = aesthetic_snapshot_rewrite_assets($out['body']);
+    $out['body'] = aesthetic_snapshot_optimize_images($out['body']);
     return $out;
 }
 
 add_action('template_redirect', function () {
-    if (!is_singular('page')) { return; }
-    $post_id = get_queried_object_id();
-    $snapshot = get_post_meta($post_id, '_aesthetic_snapshot_html', true);
-    if (!$snapshot) { return; }
+    if (!aesthetic_is_snapshot_page()) { return; }
 
     add_filter('wp_robots', function ($robots) {
         unset($robots['noindex']);
@@ -70,9 +155,7 @@ add_action('template_redirect', function () {
  * updating their own state after a tap/click.
  */
 add_action('wp_footer', function () {
-    if (!is_singular('page')) { return; }
-    $post_id = get_queried_object_id();
-    if (!get_post_meta($post_id, '_aesthetic_snapshot_html', true)) { return; }
+    if (!aesthetic_is_snapshot_page()) { return; }
     ?>
     <script id="aesthetic-legacy-floating-cleanup">
     (function () {
