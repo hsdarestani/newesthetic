@@ -1,0 +1,18 @@
+/*
+Theme Name: A+ Esthetic New Design
+Theme URI: https://a-esthetic.de/
+Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
+Author: A+ Esthetic
+Template: woodmart
+Version: 1.0.0
+Text Domain: aesthetic-child
+*/
+
+:root{--aesthetic-ink:#17120e;--aesthetic-paper:#f4eee5;--aesthetic-cream:#fbf7f0;--aesthetic-gold:#c0924f;--aesthetic-gold2:#e1bd78}
+
+html.aesthetic-snapshot-active,body.aesthetic-snapshot-active{margin:0!important;padding:0!important;background:var(--aesthetic-paper)}
+body.aesthetic-snapshot-active .website-wrapper,
+body.aesthetic-snapshot-active .main-page-wrapper{background:transparent!important;padding:0!important;margin:0!important;max-width:none!important;width:100%!important}
+.aesthetic-snapshot-root{width:100%;min-height:100vh;overflow-x:hidden}
+.aesthetic-snapshot-warning{position:fixed;right:12px;bottom:12px;z-index:999999;padding:8px 11px;background:#17120e;color:#fff;font:600 10px/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;opacity:.78}
+body:not(.logged-in) .aesthetic-snapshot-warning{display:none}
