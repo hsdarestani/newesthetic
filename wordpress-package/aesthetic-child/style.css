@@ -4,7 +4,7 @@ Theme URI: https://a-esthetic.de/
 Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
 Author: A+ Esthetic
 Template: woodmart
-Version: 1.0.7
+Version: 1.0.8
 Text Domain: aesthetic-child
 */
 
@@ -128,3 +128,62 @@ body.aesthetic-snapshot-active iframe[src*="seersco" i]{z-index:2147483000!impor
 body.aesthetic-snapshot-active .aesthetic-cookie-layer *,
 body.aesthetic-snapshot-active [id*="seers" i] *,
 body.aesthetic-snapshot-active [class*="seers" i] *{pointer-events:auto!important;touch-action:auto!important}
+
+/*
+ * Mobile hero quality fix for every migrated page. The approved hero artwork
+ * is landscape-oriented; stretching it across a tall portrait hero caused
+ * visible softness on high-DPI phones. Keep the image in a controlled media
+ * band and continue copy below on the dark background instead.
+ */
+@media (max-width:650px){
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero{
+    min-height:auto!important;
+    display:flex!important;
+    flex-direction:column!important;
+    background:#17120e!important;
+    overflow:hidden!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-media,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero img.hero-media,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero picture.hero-media img,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero picture img{
+    position:relative!important;
+    inset:auto!important;
+    order:0!important;
+    width:100%!important;
+    height:clamp(300px,88vw,390px)!important;
+    object-fit:cover!important;
+    object-position:center center!important;
+    image-rendering:auto!important;
+    flex:none!important;
+    max-width:none!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero::after{
+    top:0!important;
+    bottom:auto!important;
+    height:clamp(300px,88vw,390px)!important;
+    background:linear-gradient(180deg,rgba(12,9,7,.08) 0%,rgba(12,9,7,.03) 58%,rgba(12,9,7,.72) 100%)!important;
+    pointer-events:none!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-copy{
+    order:1!important;
+    min-height:0!important;
+    width:auto!important;
+    margin:0!important;
+    padding:34px 18px 110px!important;
+    justify-content:flex-start!important;
+    background:#17120e!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-title{
+    font-size:clamp(34px,10vw,46px)!important;
+    line-height:.95!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions{
+    gap:10px!important;
+    flex-wrap:wrap!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions .btn{
+    width:100%!important;
+    justify-content:center!important;
+  }
+}
