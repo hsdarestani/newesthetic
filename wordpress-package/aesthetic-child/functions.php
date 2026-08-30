@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.3');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.4');
 }, 100);
 
 add_filter('body_class', function ($classes) {
@@ -59,9 +59,10 @@ add_action('template_redirect', function () {
 });
 
 /**
- * Hide only legacy booking/contact rails injected by the old WordPress setup.
- * Approved snapshot CTAs remain untouched because anything inside
- * .aesthetic-snapshot-root is explicitly ignored.
+ * Keep legacy booking rails out of the new design without touching consent UI.
+ * The observer intentionally watches only inserted/removed nodes (not every
+ * style/class mutation), which avoids main-thread churn while cookie CMPs are
+ * updating their own state after a tap/click.
  */
 add_action('wp_footer', function () {
     if (!is_singular('page')) { return; }
@@ -70,8 +71,53 @@ add_action('wp_footer', function () {
     ?>
     <script id="aesthetic-legacy-floating-cleanup">
     (function () {
-        function isLegacyBookingTarget(el) {
+        function isCookieConsentNode(el) {
             if (!el || el.nodeType !== 1) return false;
+            var id = (el.id || '').toLowerCase();
+            var cls = (typeof el.className === 'string' ? el.className : '').toLowerCase();
+            var src = (el.getAttribute && el.getAttribute('src') || '').toLowerCase();
+            var alt = (el.getAttribute && el.getAttribute('alt') || '').toLowerCase();
+            var dataName = (el.getAttribute && el.getAttribute('data-name') || '').toLowerCase();
+            var haystack = id + ' ' + cls + ' ' + src + ' ' + alt + ' ' + dataName;
+            return haystack.indexOf('seers') !== -1 ||
+                haystack.indexOf('cookiexray') !== -1 ||
+                haystack.indexOf('cookie-consent') !== -1 ||
+                haystack.indexOf('cookie_consent') !== -1;
+        }
+
+        function insideCookieConsent(el) {
+            var node = el;
+            for (var depth = 0; node && node !== document.body && depth < 12; depth++, node = node.parentElement) {
+                if (isCookieConsentNode(node)) return true;
+            }
+            return false;
+        }
+
+        function promoteCookieConsent() {
+            var selector = [
+                '[id*="seers" i]',
+                '[class*="seers" i]',
+                'iframe[src*="seers" i]',
+                'iframe[src*="seersco" i]',
+                'img[alt*="seers cmp badge" i]',
+                '[data-name="CookieXray"]'
+            ].join(',');
+
+            document.querySelectorAll(selector).forEach(function (el) {
+                var node = el;
+                var best = el;
+                for (var depth = 0; node && node !== document.body && depth < 8; depth++, node = node.parentElement) {
+                    var style = window.getComputedStyle(node);
+                    if (style.position === 'fixed' || style.position === 'sticky' || style.position === 'absolute') {
+                        best = node;
+                    }
+                }
+                best.classList.add('aesthetic-cookie-layer');
+            });
+        }
+
+        function isLegacyBookingTarget(el) {
+            if (!el || el.nodeType !== 1 || insideCookieConsent(el)) return false;
             var href = (el.getAttribute && el.getAttribute('href') || '').toLowerCase();
             var alt = (el.getAttribute && el.getAttribute('alt') || '').toLowerCase();
             var title = (el.getAttribute && el.getAttribute('title') || '').toLowerCase();
@@ -86,7 +132,7 @@ add_action('wp_footer', function () {
         }
 
         function markHidden(node) {
-            if (!node || node === document.body || node === document.documentElement) return;
+            if (!node || node === document.body || node === document.documentElement || insideCookieConsent(node)) return;
             node.classList.add('aesthetic-hide-legacy-floating');
             node.setAttribute('aria-hidden', 'true');
         }
@@ -95,18 +141,15 @@ add_action('wp_footer', function () {
             var best = null;
             var node = start;
             for (var depth = 0; node && node !== document.body && depth < 18; depth++, node = node.parentElement) {
+                if (insideCookieConsent(node)) return null;
                 var style = window.getComputedStyle(node);
                 var rect = node.getBoundingClientRect();
                 var fixed = style.position === 'fixed' || style.position === 'sticky';
                 var rightRail = rect.width >= 60 && rect.width <= 460 && rect.height >= 70 &&
                     rect.right >= window.innerWidth - 70 && rect.left >= window.innerWidth * 0.60;
 
-                if (fixed) {
-                    return node;
-                }
-                if (rightRail) {
-                    best = node;
-                }
+                if (fixed) return node;
+                if (rightRail) best = node;
             }
             return best;
         }
@@ -127,21 +170,28 @@ add_action('wp_footer', function () {
             });
         }
 
+        var scheduled = false;
         function runCleanup() {
-            window.requestAnimationFrame(cleanLegacyFloatingWidgets);
-            window.setTimeout(cleanLegacyFloatingWidgets, 150);
-            window.setTimeout(cleanLegacyFloatingWidgets, 700);
+            if (scheduled) return;
+            scheduled = true;
+            window.requestAnimationFrame(function () {
+                scheduled = false;
+                promoteCookieConsent();
+                cleanLegacyFloatingWidgets();
+            });
         }
 
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', runCleanup);
+            document.addEventListener('DOMContentLoaded', runCleanup, { once: true });
         } else {
             runCleanup();
         }
+        window.setTimeout(runCleanup, 250);
+        window.setTimeout(runCleanup, 1200);
 
         var observer = new MutationObserver(runCleanup);
-        observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'src', 'href'] });
-        window.setTimeout(function () { observer.disconnect(); }, 20000);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        window.setTimeout(function () { observer.disconnect(); }, 8000);
     }());
     </script>
     <?php
