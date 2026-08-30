@@ -6,7 +6,7 @@ function aesthetic_is_snapshot_page() {
 }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.7');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.9');
 }, 100);
 
 /**
