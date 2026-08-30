@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.0');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.1');
 }, 100);
 
 add_filter('body_class', function ($classes) {
@@ -59,3 +59,65 @@ add_action('template_redirect', function () {
         return $robots;
     }, 999);
 });
+
+/**
+ * The old WordPress installation adds separate fixed booking/contact rails.
+ * The approved snapshot already contains its own booking CTAs, so hide only
+ * legacy floating Doctolib / WhatsApp / SimplyBook controls outside the
+ * snapshot root. Normal in-content/header/footer links stay untouched.
+ */
+add_action('wp_footer', function () {
+    if (!is_singular('page')) { return; }
+    $post_id = get_queried_object_id();
+    if (!get_post_meta($post_id, '_aesthetic_snapshot_html', true)) { return; }
+    ?>
+    <script id="aesthetic-legacy-floating-cleanup">
+    (function () {
+        function cleanLegacyFloatingWidgets() {
+            var root = document.querySelector('.aesthetic-snapshot-root');
+            if (!root) return;
+
+            var selector = [
+                'a[href*="doctolib."]',
+                'a[href*="wa.me"]',
+                'a[href*="api.whatsapp.com"]',
+                'a[href*="whatsapp.com/send"]',
+                'a[href*="simplybook"]'
+            ].join(',');
+
+            document.querySelectorAll(selector).forEach(function (link) {
+                if (root.contains(link)) return;
+
+                var node = link;
+                var floating = null;
+                for (var depth = 0; node && node !== document.body && depth < 8; depth++, node = node.parentElement) {
+                    var style = window.getComputedStyle(node);
+                    if (style.position === 'fixed' || style.position === 'sticky') {
+                        floating = node;
+                        break;
+                    }
+                }
+
+                if (floating) {
+                    floating.classList.add('aesthetic-hide-legacy-floating');
+                    floating.setAttribute('aria-hidden', 'true');
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', cleanLegacyFloatingWidgets);
+        } else {
+            cleanLegacyFloatingWidgets();
+        }
+
+        // Some booking/WhatsApp plugins inject their buttons after load.
+        var observer = new MutationObserver(function () {
+            window.requestAnimationFrame(cleanLegacyFloatingWidgets);
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        window.setTimeout(function () { observer.disconnect(); }, 12000);
+    }());
+    </script>
+    <?php
+}, 999);
