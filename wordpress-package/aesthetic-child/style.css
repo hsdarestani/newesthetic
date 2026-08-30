@@ -4,7 +4,7 @@ Theme URI: https://a-esthetic.de/
 Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
 Author: A+ Esthetic
 Template: woodmart
-Version: 1.0.8
+Version: 1.0.9
 Text Domain: aesthetic-child
 */
 
@@ -185,5 +185,118 @@ body.aesthetic-snapshot-active [class*="seers" i] *{pointer-events:auto!importan
   body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions .btn{
     width:100%!important;
     justify-content:center!important;
+  }
+}
+
+/*
+ * Mobile content guard: some source pages contain desktop min-widths and large
+ * editorial type sizes. On narrow phones those values can push long German
+ * words, CTA labels and copy outside the viewport. These rules preserve the
+ * design while making every snapshot genuinely fluid down to 320px.
+ */
+@media (max-width:650px){
+  html,body,body.aesthetic-snapshot-active,body.aesthetic-snapshot-active .aesthetic-snapshot-root{
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root *,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root *::before,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root *::after{
+    box-sizing:border-box!important;
+    min-width:0!important;
+  }
+
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-copy,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-inner,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .section,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .section-inner,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .intro,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .copy,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .content,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .cards,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .gallery,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .faq,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .contact-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-inner{
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h1,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h2,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h3,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h4,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h5,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h6,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root p,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root li,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root a,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root small,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root label{
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    -webkit-hyphens:auto!important;
+    hyphens:auto!important;
+  }
+
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero .hero-copy .hero-title,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .page-title,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .section-title{
+    width:100%!important;
+    max-width:100%!important;
+    font-size:clamp(30px,8.4vw,38px)!important;
+    line-height:.96!important;
+    letter-spacing:-.02em!important;
+  }
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h2{
+    font-size:clamp(25px,7vw,36px)!important;
+    line-height:1!important;
+  }
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root h3{
+    font-size:clamp(20px,5.7vw,28px)!important;
+    line-height:1.06!important;
+  }
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root p,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root li{
+    line-height:1.55!important;
+  }
+
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-copy,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .section-inner,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .copy,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .content,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .contact-card,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-inner{
+    max-width:100%!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-actions{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .hero-actions .btn,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root .final-actions .btn,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root a.btn{
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    text-align:center!important;
+  }
+
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root img,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root video,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root iframe,
+  html body.aesthetic-snapshot-active .aesthetic-snapshot-root svg{
+    max-width:100%!important;
   }
 }
