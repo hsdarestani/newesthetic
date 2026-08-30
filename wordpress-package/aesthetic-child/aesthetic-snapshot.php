@@ -16,14 +16,18 @@ if (!$snapshot_html) {
 }
 
 $parts = aesthetic_snapshot_extract($snapshot_html);
+$hero_src = aesthetic_snapshot_first_image_src($parts['body']);
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<?php if ($hero_src) : ?>
+<link rel="preload" as="image" href="<?php echo esc_url($hero_src); ?>" fetchpriority="high">
+<?php endif; ?>
 <?php wp_head(); ?>
 <?php echo $parts['head']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted migration snapshot, admin-only import. ?>
-<style id="aesthetic-mobile-shell-v106">
+<style id="aesthetic-mobile-shell-v107">
 /* Universal mobile navigation for every approved snapshot. */
 .aesthetic-mobile-menu-toggle,
 .aesthetic-mobile-menu{display:none}
