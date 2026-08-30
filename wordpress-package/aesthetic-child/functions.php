@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.2');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.3');
 }, 100);
 
 add_filter('body_class', function ($classes) {
