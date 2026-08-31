@@ -103,7 +103,7 @@ $hero_src = aesthetic_snapshot_first_image_src($parts['body']);
 <button class="aesthetic-mobile-menu-toggle" type="button" aria-label="Menü öffnen" aria-controls="aesthetic-mobile-menu" aria-expanded="false"><span></span></button>
 <nav class="aesthetic-mobile-menu" id="aesthetic-mobile-menu" aria-label="Mobile Hauptnavigation" aria-hidden="true">
   <div class="aesthetic-mobile-menu-inner">
-    <a class="aesthetic-mobile-menu-brand" href="/">A+ Esthetic<small>Frankfurt</small></a>
+    <a class="aesthetic-mobile-menu-brand" href="/" aria-label="A+ Esthetic Startseite"><img class="aesthetic-brand-logo" src="https://a-esthetic.de/wp-content/uploads/6.png" alt="A+ Esthetic" decoding="async"></a>
     <div class="aesthetic-mobile-menu-links">
       <a href="/behandlungen/">Behandlungen</a>
       <a href="/botox-behandlungen/">Botox</a>
