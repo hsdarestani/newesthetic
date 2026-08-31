@@ -4,7 +4,7 @@ Theme URI: https://a-esthetic.de/
 Description: Non-destructive A+ Esthetic presentation layer for the existing WoodMart WordPress installation.
 Author: A+ Esthetic
 Template: woodmart
-Version: 1.0.9
+Version: 1.0.13
 Text Domain: aesthetic-child
 */
 
@@ -299,4 +299,180 @@ body.aesthetic-snapshot-active [class*="seers" i] *{pointer-events:auto!importan
   html body.aesthetic-snapshot-active .aesthetic-snapshot-root svg{
     max-width:100%!important;
   }
+}
+
+
+/*
+ * First-paint reliability: source snapshots use scroll-triggered `.reveal`
+ * elements that start at opacity:0 and wait for IntersectionObserver to add
+ * `.is-in`. On cached/optimized WordPress pages that observer can miss the
+ * initial viewport until the user scrolls, leaving important copy invisible.
+ * Production snapshots must never depend on scroll to reveal semantic content.
+ */
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .reveal,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root .reveal.is-in,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root [data-reveal]{
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+  translate:none!important;
+  transition:none!important;
+  animation:none!important;
+  filter:none!important;
+  clip-path:none!important;
+  will-change:auto!important;
+}
+
+
+/*
+ * Mobile density pass: desktop cards intentionally use generous fixed
+ * min-heights and vertical rhythm. Once those grids collapse to one column on
+ * phones, the same values create large empty blocks. Compact only the mobile
+ * presentation while preserving borders, hierarchy and desktop spacing.
+ */
+@media (max-width:650px){
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .section{
+    padding-top:52px!important;
+    padding-bottom:52px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .cta,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .contact{
+    padding-top:52px!important;
+    padding-bottom:52px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .footer{
+    padding-top:28px!important;
+    padding-bottom:28px!important;
+  }
+
+  /* Remove desktop equal-height assumptions after grids become single-column. */
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root article,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .principle,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .treatment,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .goal,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .step,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .feature,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .price-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .review,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .philo,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .info-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .benefit,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .benefit-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .process-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .result-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .area-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .indication-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .fact-card{
+    min-height:0!important;
+    height:auto!important;
+  }
+
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .principle,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .treatment,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .goal,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .step,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .feature,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .price-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .review,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .philo,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .info-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .benefit-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .process-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .result-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .area-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .indication-card,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .fact-card{
+    padding-top:20px!important;
+    padding-bottom:20px!important;
+  }
+
+  /* Large desktop spacer margins inside cards are unnecessary on a phone. */
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .principle h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .treatment h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .goal h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .step h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .feature h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .price-card h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .review h3,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .philo h3{
+    margin-top:12px!important;
+    margin-bottom:9px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .treatment .more{
+    margin-top:12px!important;
+    padding-top:8px!important;
+  }
+
+  /* Tighten repeated vertical stacks without touching galleries or hero art. */
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .principles,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .treatment-grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .goal-grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .steps,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .feature-grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .price-grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .review-grid,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .philosophy,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .cards,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .grid{
+    margin-top:24px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .faq{
+    margin-top:24px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .faq summary{
+    padding-top:18px!important;
+    padding-bottom:18px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .faq summary::after{
+    top:16px!important;
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root .price-row{
+    padding-top:15px!important;
+    padding-bottom:15px!important;
+  }
+}
+
+
+/* Official A+ Esthetic logo in snapshot headers and the shared mobile drawer. */
+body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand,
+body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand{
+  display:inline-flex!important;align-items:center!important;width:auto!important;max-width:min(190px,46vw)!important;
+  line-height:1!important;text-decoration:none!important
+}
+body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo,
+body.aesthetic-snapshot-active .aesthetic-mobile-menu-brand .aesthetic-brand-logo{
+  display:block!important;width:auto!important;height:auto!important;max-width:100%!important;object-fit:contain!important
+}
+body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo{max-height:52px!important}
+body.aesthetic-snapshot-active .aesthetic-mobile-menu-brand{display:flex!important;align-items:center!important}
+body.aesthetic-snapshot-active .aesthetic-mobile-menu-brand .aesthetic-brand-logo{max-width:170px!important;max-height:54px!important}
+@media(max-width:650px){
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand{max-width:145px!important}
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo{max-height:42px!important}
+  body.aesthetic-snapshot-active .aesthetic-mobile-menu-brand .aesthetic-brand-logo{max-width:155px!important;max-height:50px!important}
+}
+
+
+/* Production price component restored for the Laser landing page. */
+body.aesthetic-route-laser-behandlungen .aesthetic-laser-prices{margin-top:22px;border-top:1px solid var(--line,rgba(23,18,14,.14))}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group{border-bottom:1px solid var(--line,rgba(23,18,14,.14))}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:18px 4px;font:400 22px/1.15 var(--serif,"Times New Roman",serif)}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group>summary::-webkit-details-marker{display:none}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group>summary:after{content:"+";color:var(--gold,#c0924f);font-size:22px;margin-left:auto}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group[open]>summary:after{content:"−"}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-group>summary span{font:600 9px/1.2 var(--sans,system-ui,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#70665c);margin-left:auto}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-rows{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line,rgba(23,18,14,.14));border:1px solid var(--line,rgba(23,18,14,.14));margin-bottom:18px}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--cream,#fbf7f0);padding:13px 15px;font-size:11px;line-height:1.4}
+body.aesthetic-route-laser-behandlungen .aesthetic-price-row strong{white-space:nowrap;color:var(--gold,#c0924f);font-size:12px}
+body.aesthetic-route-laser-behandlungen .aesthetic-consult-fee{display:flex;justify-content:space-between;gap:16px;padding:16px 4px 2px;font-size:11px}
+body.aesthetic-route-laser-behandlungen .aesthetic-consult-fee strong{color:var(--gold,#c0924f)}
+body.aesthetic-route-home .aesthetic-contact-form .aesthetic-hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+body.aesthetic-route-home .aesthetic-form-status{grid-column:1/-1;padding:12px 14px;border:1px solid rgba(255,255,255,.22);margin-bottom:12px;font-size:12px;line-height:1.45;color:#fff}
+@media(max-width:650px){
+ body.aesthetic-route-laser-behandlungen .price-shell{padding:18px!important}
+ body.aesthetic-route-laser-behandlungen .aesthetic-price-rows{grid-template-columns:1fr}
+ body.aesthetic-route-laser-behandlungen .aesthetic-price-group>summary{padding:15px 2px;font-size:19px}
+ body.aesthetic-route-laser-behandlungen .aesthetic-price-row{padding:12px 10px;font-size:10px}
+ body.aesthetic-route-laser-behandlungen .aesthetic-price-row strong{font-size:11px}
 }
