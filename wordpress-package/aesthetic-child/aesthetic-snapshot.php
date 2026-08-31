@@ -27,20 +27,20 @@ $hero_src = aesthetic_snapshot_first_image_src($parts['body']);
 <?php endif; ?>
 <?php wp_head(); ?>
 <?php echo $parts['head']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted migration snapshot, admin-only import. ?>
-<style id="aesthetic-mobile-shell-v114">
+<style id="aesthetic-mobile-shell-v115">
 /* Universal mobile navigation for every approved snapshot. */
 .aesthetic-mobile-menu-toggle,
 .aesthetic-mobile-menu{display:none}
 
-/* Official icon + wordmark lockup. 6.png is the gold symbol, so pair it with
- * the brand name instead of stretching the symbol until it looks blurry. */
+/* Desktop brand: official symbol + restrained wordmark, no box. */
 body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand,
 body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand{
-  display:flex!important;align-items:center!important;gap:10px!important;width:auto!important;max-width:220px!important;
-  overflow:visible!important;text-decoration:none!important
+  display:flex!important;align-items:center!important;gap:9px!important;width:auto!important;max-width:210px!important;
+  overflow:visible!important;text-decoration:none!important;background:transparent!important;border:0!important;box-shadow:none!important;
+  padding:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important
 }
 body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo{
-  display:block!important;width:auto!important;height:54px!important;max-width:86px!important;object-fit:contain!important;
+  display:block!important;width:auto!important;height:42px!important;max-width:66px!important;object-fit:contain!important;
   object-position:left center!important;flex:0 0 auto!important
 }
 body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand:after,
@@ -48,12 +48,11 @@ body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand:afte
   content:"A+ Esthetic";display:block;color:#fff;font:400 20px/1 "Bodoni 72","Didot","Iowan Old Style","Times New Roman",serif;
   letter-spacing:.01em;white-space:nowrap;text-shadow:0 1px 16px rgba(0,0,0,.28)
 }
-.aesthetic-mobile-menu-brand{display:flex!important;align-items:center!important;gap:12px!important;text-decoration:none!important}
-.aesthetic-mobile-menu-brand .aesthetic-brand-logo{
-  display:block!important;width:auto!important;height:58px!important;max-width:94px!important;object-fit:contain!important;object-position:left center!important
-}
+
+.aesthetic-mobile-menu-brand{display:flex!important;align-items:center!important;text-decoration:none!important;background:transparent!important}
+.aesthetic-mobile-menu-brand .aesthetic-brand-logo{display:none!important}
 .aesthetic-mobile-menu-brand:after{
-  content:"A+ Esthetic";display:block;color:#fff;font:400 24px/1 "Bodoni 72","Didot","Iowan Old Style","Times New Roman",serif;white-space:nowrap
+  content:"A+ Esthetic";display:block;color:#fff;font:400 25px/1 "Bodoni 72","Didot","Iowan Old Style","Times New Roman",serif;white-space:nowrap
 }
 
 @media (max-width:1000px){
@@ -91,28 +90,28 @@ body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand:afte
   .aesthetic-mobile-menu-links a:nth-child(even){padding-left:16px}
   .aesthetic-mobile-book{display:flex!important;justify-content:center;align-items:center;margin-top:24px;padding:16px 20px;background:#c0924f!important;color:#fff!important;text-decoration:none!important;font:700 10px/1 Inter,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase}
   .aesthetic-mobile-menu-meta{margin-top:auto;padding-top:28px;font:400 10px/1.65 Inter,system-ui,sans-serif;color:rgba(255,255,255,.5)}
+
+  /* Mobile/tablet header: clean text wordmark only. The supplied 6.png is a
+   * standalone symbol and becomes visually noisy at this width. */
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand{
+    display:block!important;max-width:none!important;width:auto!important;background:transparent!important;padding:0!important;
+    border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important
+  }
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo{display:none!important}
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand:after,
+  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand:after{
+    content:"A+ Esthetic";font-size:21px!important;line-height:1!important;letter-spacing:.01em!important;color:#fff!important;
+    text-shadow:0 1px 14px rgba(0,0,0,.32)!important
+  }
 }
+
 @media (max-width:650px){
   body.aesthetic-snapshot-active .aesthetic-snapshot-root .header-cta{display:none!important}
   .aesthetic-mobile-menu-toggle{top:max(12px,env(safe-area-inset-top));right:12px;width:44px;height:44px}
   body.admin-bar .aesthetic-mobile-menu-toggle{top:calc(44px + env(safe-area-inset-top))}
   .aesthetic-mobile-menu-links{grid-template-columns:1fr}
   .aesthetic-mobile-menu-links a:nth-child(n){border-right:0;padding-left:4px;padding-right:4px;min-height:52px}
-
-  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand,
-  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand{
-    gap:7px!important;max-width:170px!important;padding:4px 8px 4px 4px!important;background:rgba(18,13,10,.28)!important;
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
-  }
-  body.aesthetic-snapshot-active .aesthetic-snapshot-root header .aesthetic-brand-logo{
-    height:40px!important;max-width:62px!important;transform:scale(1.18);transform-origin:left center
-  }
-  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.brand:after,
-  body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand:after{
-    font-size:17px;letter-spacing:0
-  }
-  .aesthetic-mobile-menu-brand .aesthetic-brand-logo{height:50px!important;max-width:78px!important}
-  .aesthetic-mobile-menu-brand:after{font-size:22px}
 
   /* Home: do not stretch the 1672x941 embedded hero raster across a ~980px portrait canvas. */
   body.aesthetic-route-home .aesthetic-snapshot-root .hero{min-height:auto!important;display:flex!important;flex-direction:column!important;background:#17120e!important;overflow:hidden!important}
@@ -142,7 +141,7 @@ body.aesthetic-snapshot-active .aesthetic-snapshot-root header a.site-brand:afte
 <button class="aesthetic-mobile-menu-toggle" type="button" aria-label="Menü öffnen" aria-controls="aesthetic-mobile-menu" aria-expanded="false"><span></span></button>
 <nav class="aesthetic-mobile-menu" id="aesthetic-mobile-menu" aria-label="Mobile Hauptnavigation" aria-hidden="true">
   <div class="aesthetic-mobile-menu-inner">
-    <a class="aesthetic-mobile-menu-brand" href="/" aria-label="A+ Esthetic Startseite"><img class="aesthetic-brand-logo" src="https://a-esthetic.de/wp-content/uploads/6.png" alt="" decoding="async"></a>
+    <a class="aesthetic-mobile-menu-brand" href="/" aria-label="A+ Esthetic Startseite">A+ Esthetic</a>
     <div class="aesthetic-mobile-menu-links">
       <a href="/behandlungen/">Behandlungen</a>
       <a href="/botox-behandlungen/">Botox</a>
