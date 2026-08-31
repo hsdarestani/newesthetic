@@ -6,7 +6,7 @@ function aesthetic_is_snapshot_page() {
 }
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.9');
+    wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.13');
 }, 100);
 
 /**
@@ -109,11 +109,223 @@ function aesthetic_snapshot_optimize_images($html) {
 }
 
 function aesthetic_snapshot_first_image_src($html) {
-    if (preg_match('#<img\b[^>]*\bsrc=["\']([^"\']+)["\']#i', (string) $html, $match)) {
+    $html = (string) $html;
+
+    // Prefer the actual <picture><source> selected for a hero image. The old
+    // implementation preloaded the fallback <img src>, which could trigger a
+    // second unnecessary request on pages such as Laser.
+    if (preg_match("#<picture\\b[^>]*>.*?<source\\b[^>]*\\bsrcset=[\"']([^\"']+)[\"'][^>]*>.*?<img\\b[^>]*class=[\"'][^\"']*hero-media[^\"']*[\"']#is", $html, $match)) {
+        $srcset = trim($match[1]);
+        $first = preg_split('/\\s*,\\s*/', $srcset)[0] ?? '';
+        $url = preg_split('/\\s+/', trim($first))[0] ?? '';
+        if ($url !== '') { return $url; }
+    }
+
+    if (preg_match("#<img\\b[^>]*class=[\"'][^\"']*hero-media[^\"']*[\"'][^>]*\\bsrc=[\"']([^\"']+)[\"']#i", $html, $match) ||
+        preg_match("#<img\\b[^>]*\\bsrc=[\"']([^\"']+)[\"'][^>]*class=[\"'][^\"']*hero-media[^\"']*[\"']#i", $html, $match)) {
+        return $match[1];
+    }
+
+    if (preg_match("#<img\\b(?![^>]*aesthetic-brand-logo)[^>]*\\bsrc=[\"']([^\"']+)[\"']#i", $html, $match)) {
         return $match[1];
     }
     return '';
 }
+
+function aesthetic_snapshot_brand_logo_markup() {
+    $url = 'https://a-esthetic.de/wp-content/uploads/6.png';
+    return '<img class="aesthetic-brand-logo" src="' . esc_url($url) . '" alt="A+ Esthetic" decoding="async">';
+}
+
+/**
+ * Use the official production logo in every snapshot header. Source pages use
+ * either `.brand` or `.site-brand`; replace only brand anchors inside <header>
+ * so editorial/footer copy remains untouched.
+ */
+function aesthetic_snapshot_apply_brand_logo($html) {
+    $logo = aesthetic_snapshot_brand_logo_markup();
+    return preg_replace_callback('#<header\\b[^>]*>.*?</header>#is', function ($match) use ($logo) {
+        return preg_replace(
+            "#(<a\\b[^>]*class=[\"'][^\"']*(?:site-brand|brand)[^\"']*[\"'][^>]*>).*?(</a>)#is",
+            '$1' . $logo . '$2',
+            $match[0],
+            1
+        );
+    }, (string) $html);
+}
+
+/**
+ * Production-only interaction/data bridge.
+ * The approved Laser landing snapshot intentionally shipped a visual price
+ * placeholder with a note that WordPress would reconnect the production price
+ * component. Render the migrated price data server-side so the page remains
+ * useful even before JavaScript runs; the selector below updates it in-place.
+ */
+function aesthetic_laser_price_catalog() {
+    return array(
+        'damen' => array(
+            array('group' => 'Gesicht', 'name' => 'Augenbrauenkontur / Stirn', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Oberlippe', 'price' => 49),
+            array('group' => 'Gesicht', 'name' => 'Oberlippe, Kinn', 'price' => 69),
+            array('group' => 'Gesicht', 'name' => 'Kinn', 'price' => 49),
+            array('group' => 'Gesicht', 'name' => 'Koteletten', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Gesicht teilweise', 'price' => 99),
+            array('group' => 'Gesicht', 'name' => 'Hals', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Gesicht, Hals', 'price' => 109),
+            array('group' => 'Körper', 'name' => 'Achseln', 'price' => 59),
+            array('group' => 'Körper', 'name' => 'Brustwarzen', 'price' => 49),
+            array('group' => 'Körper', 'name' => 'Dekolleté', 'price' => 109),
+            array('group' => 'Körper', 'name' => 'Bauch komplett', 'price' => 129),
+            array('group' => 'Körper', 'name' => 'Medianlinie', 'price' => 59),
+            array('group' => 'Körper', 'name' => 'Oberarme', 'price' => 119),
+            array('group' => 'Körper', 'name' => 'Unterarme', 'price' => 119),
+            array('group' => 'Körper', 'name' => 'Hände', 'price' => 59),
+            array('group' => 'Körper', 'name' => 'Rücken komplett', 'price' => 179),
+            array('group' => 'Körper', 'name' => 'Unterer Rücken / Steißbein', 'price' => 89),
+            array('group' => 'Intim & Beine', 'name' => 'Bikinizone', 'price' => 69),
+            array('group' => 'Intim & Beine', 'name' => 'Bikini-Intimzone', 'price' => 119),
+            array('group' => 'Intim & Beine', 'name' => 'Gesäß inkl. Pofalte', 'price' => 149),
+            array('group' => 'Intim & Beine', 'name' => 'Po', 'price' => 119),
+            array('group' => 'Intim & Beine', 'name' => 'Pofalte', 'price' => 79),
+            array('group' => 'Intim & Beine', 'name' => 'Oberschenkel', 'price' => 159),
+            array('group' => 'Intim & Beine', 'name' => 'Unterschenkel', 'price' => 149),
+            array('group' => 'Intim & Beine', 'name' => 'Füße', 'price' => 59),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 1 · Achseln + Bikinizone', 'price' => 109),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 2 · Achseln + Bikini-Intimzone', 'price' => 149),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 3 · Bikini-Intimzone + Pofalte', 'price' => 159),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 4 · Arme komplett + Hände', 'price' => 149),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 5 · Beine komplett + Füße', 'price' => 229),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 6 · Unterschenkel + Achseln oder Bikinizone', 'price' => 169),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 7 · Unterschenkel + Achseln + Bikinizone', 'price' => 189),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 8 · Beine komplett + Bikinizone', 'price' => 269),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 9 · Beine komplett + Achseln + Bikinizone', 'price' => 289),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 10 · Beine komplett + Achseln + Bikini-Intimzone', 'price' => 389),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 11 · Ganzkörper ohne Gesicht / Intimzone', 'price' => 599),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 12 · Oberkörper ohne Gesicht', 'price' => 399),
+            array('group' => 'Pakete', 'name' => 'Damenpaket 13 · Unterkörper ohne Intimzone', 'price' => 399),
+        ),
+        'herren' => array(
+            array('group' => 'Gesicht', 'name' => 'Augenbrauen / Stirn', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Koteletten', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Wangenkontur', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Hals', 'price' => 59),
+            array('group' => 'Gesicht', 'name' => 'Bart, Hals', 'price' => 109),
+            array('group' => 'Körper', 'name' => 'Nacken', 'price' => 59),
+            array('group' => 'Körper', 'name' => 'Schultern', 'price' => 109),
+            array('group' => 'Körper', 'name' => 'Achseln', 'price' => 79),
+            array('group' => 'Körper', 'name' => 'Oberarme', 'price' => 119),
+            array('group' => 'Körper', 'name' => 'Unterarme', 'price' => 119),
+            array('group' => 'Körper', 'name' => 'Hände', 'price' => 59),
+            array('group' => 'Körper', 'name' => 'Brust', 'price' => 69),
+            array('group' => 'Körper', 'name' => 'Bauch komplett', 'price' => 129),
+            array('group' => 'Körper', 'name' => 'Rücken komplett', 'price' => 179),
+            array('group' => 'Körper', 'name' => 'Oberer Rücken', 'price' => 159),
+            array('group' => 'Intim & Beine', 'name' => 'Gesäß inkl. Pofalte', 'price' => 169),
+            array('group' => 'Intim & Beine', 'name' => 'Po', 'price' => 129),
+            array('group' => 'Intim & Beine', 'name' => 'Pofalte', 'price' => 79),
+            array('group' => 'Intim & Beine', 'name' => 'Intimbereich', 'price' => 199),
+            array('group' => 'Intim & Beine', 'name' => 'Oberschenkel', 'price' => 169),
+            array('group' => 'Intim & Beine', 'name' => 'Unterschenkel', 'price' => 159),
+            array('group' => 'Intim & Beine', 'name' => 'Füße', 'price' => 59),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 1 · Brust + Bauch', 'price' => 179),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 2 · Rücken + Schultern + Nacken', 'price' => 199),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 3 · Rücken + Schultern + Nacken + Oberarme', 'price' => 259),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 4 · Rücken + Schultern + Nacken + Brust + Bauch', 'price' => 289),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 5 · Rücken + Schultern + Nacken + Brust + Bauch + Oberarme', 'price' => 339),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 6 · Arme komplett + Hände', 'price' => 169),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 7 · Beine komplett + Füße', 'price' => 249),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 8 · Ganzkörper ohne Gesicht / Intimzone', 'price' => 599),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 9 · Oberkörper ohne Gesicht', 'price' => 399),
+            array('group' => 'Pakete', 'name' => 'Herrenpaket 10 · Unterkörper ohne Intimzone', 'price' => 399),
+        ),
+    );
+}
+
+function aesthetic_laser_price_markup($gender = 'damen') {
+    $catalog = aesthetic_laser_price_catalog();
+    $items = isset($catalog[$gender]) ? $catalog[$gender] : $catalog['damen'];
+    $groups = array();
+    foreach ($items as $item) {
+        $groups[$item['group']][] = $item;
+    }
+
+    $html = '<div class="aesthetic-laser-prices" data-gender="' . esc_attr($gender) . '" data-discount="0">';
+    $first = true;
+    foreach ($groups as $group => $group_items) {
+        $html .= '<details class="aesthetic-price-group"' . ($first ? ' open' : '') . '>';
+        $html .= '<summary>' . esc_html($group) . '<span>' . count($group_items) . ' Positionen</span></summary>';
+        $html .= '<div class="aesthetic-price-rows">';
+        foreach ($group_items as $item) {
+            $html .= '<div class="aesthetic-price-row" data-base="' . esc_attr((string) $item['price']) . '">';
+            $html .= '<span>' . esc_html($item['name']) . '</span>';
+            $html .= '<strong>' . esc_html(number_format_i18n($item['price'], 2)) . ' €</strong>';
+            $html .= '</div>';
+        }
+        $html .= '</div></details>';
+        $first = false;
+    }
+    $html .= '<div class="aesthetic-consult-fee"><span>Beratungsgebühr</span><strong>30,00 €</strong></div>';
+    $html .= '</div>';
+    return $html;
+}
+
+function aesthetic_snapshot_production_enhancements($html, $post_id) {
+    $permalink = get_permalink($post_id);
+    $path = trim((string) wp_parse_url($permalink, PHP_URL_PATH), '/');
+
+    if ($path === 'laser-behandlungen') {
+        $replacement = aesthetic_laser_price_markup('damen');
+        $html = preg_replace('#<div class="price-placeholder">.*?<p class="price-note">.*?</p>#is',
+            $replacement . '<p class="price-note">Der angezeigte Betrag gilt jeweils pro Behandlung. Mehrfachpreise sind Preise pro Sitzung. Die Beratungsgebühr beträgt 30,00 €. Alle Preise dienen der Orientierung und können abhängig von Befund, Aufwand und Behandlungsumfang variieren.</p>',
+            $html,
+            1
+        );
+    }
+
+    if ($path === '') {
+        $action = esc_url(admin_url('admin-post.php'));
+        $nonce = wp_nonce_field('aesthetic_contact_submit', 'aesthetic_nonce', true, false);
+        $hidden = '<input type="hidden" name="action" value="aesthetic_contact_submit">' . $nonce . '<input class="aesthetic-hp" type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true">';
+        $html = preg_replace('#<form class="form"\s+onsubmit="event\.preventDefault\(\)"\s+aria-label="Kontaktformular">#i', '<form class="form aesthetic-contact-form" action="' . $action . '" method="post" aria-label="Kontaktformular">' . $hidden, $html, 1);
+        $html = preg_replace('#<label class="consent"><input type="checkbox">#i', '<label class="consent"><input type="checkbox" name="consent" value="1" required>', $html, 1);
+    }
+
+    return $html;
+}
+
+function aesthetic_contact_submit_handler() {
+    if (!isset($_POST['aesthetic_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['aesthetic_nonce'])), 'aesthetic_contact_submit')) {
+        wp_die('Ungültige Anfrage.', 'A+ Esthetic', array('response' => 403));
+    }
+
+    if (!empty($_POST['website'])) {
+        wp_safe_redirect(home_url('/?contact=sent#kontakt'));
+        exit;
+    }
+
+    $first = isset($_POST['vorname']) ? sanitize_text_field(wp_unslash($_POST['vorname'])) : '';
+    $last = isset($_POST['nachname']) ? sanitize_text_field(wp_unslash($_POST['nachname'])) : '';
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    $phone = isset($_POST['telefon']) ? sanitize_text_field(wp_unslash($_POST['telefon'])) : '';
+    $consent = !empty($_POST['consent']);
+
+    if (!$email || !is_email($email) || !$consent) {
+        wp_safe_redirect(home_url('/?contact=invalid#kontakt'));
+        exit;
+    }
+
+    $subject = 'Kontaktanfrage über a-esthetic.de';
+    $message = "Neue Kontaktanfrage über a-esthetic.de\n\n";
+    $message .= "Vorname: {$first}\nNachname: {$last}\nE-Mail: {$email}\nTelefon: {$phone}\n";
+    $message .= "Rückruf/Kontaktaufnahme: zugestimmt\n";
+    $headers = array('Reply-To: ' . trim($first . ' ' . $last) . ' <' . $email . '>');
+
+    $sent = wp_mail('Info@a-esthetic.de', $subject, $message, $headers);
+    wp_safe_redirect(home_url('/?contact=' . ($sent ? 'sent' : 'error') . '#kontakt'));
+    exit;
+}
+add_action('admin_post_nopriv_aesthetic_contact_submit', 'aesthetic_contact_submit_handler');
+add_action('admin_post_aesthetic_contact_submit', 'aesthetic_contact_submit_handler');
 
 function aesthetic_snapshot_extract($html) {
     $out = array('head' => '', 'body' => '');
@@ -134,7 +346,9 @@ function aesthetic_snapshot_extract($html) {
 
     $out['head'] = aesthetic_snapshot_rewrite_assets($out['head']);
     $out['body'] = aesthetic_snapshot_rewrite_assets($out['body']);
+    $out['body'] = aesthetic_snapshot_apply_brand_logo($out['body']);
     $out['body'] = aesthetic_snapshot_optimize_images($out['body']);
+    $out['body'] = aesthetic_snapshot_production_enhancements($out['body'], get_queried_object_id());
     return $out;
 }
 
@@ -284,3 +498,52 @@ add_action('wp_footer', function () {
     </script>
     <?php
 }, 999);
+
+/** Production interaction layer for migrated snapshots. */
+add_action('wp_footer', function () {
+    if (!aesthetic_is_snapshot_page()) { return; }
+    $path = trim((string) wp_parse_url(get_permalink(get_queried_object_id()), PHP_URL_PATH), '/');
+
+    if ($path === 'laser-behandlungen') {
+        $catalog = aesthetic_laser_price_catalog();
+        ?>
+        <script id="aesthetic-laser-price-js">
+        (function(){
+          var shell=document.querySelector('.aesthetic-laser-prices');
+          if(!shell)return;
+          var groups=document.querySelectorAll('#preise .seg');
+          if(groups.length<2)return;
+          var catalog=<?php echo wp_json_encode($catalog); ?>;
+          var gender='damen', discount=0;
+          function money(v){return new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v)+' €'}
+          function render(){
+            var items=catalog[gender]||catalog.damen, grouped={};
+            items.forEach(function(item){(grouped[item.group]||(grouped[item.group]=[])).push(item)});
+            var html='', first=true;
+            Object.keys(grouped).forEach(function(name){
+              html+='<details class="aesthetic-price-group"'+(first?' open':'')+'><summary>'+name+'<span>'+grouped[name].length+' Positionen</span></summary><div class="aesthetic-price-rows">';
+              grouped[name].forEach(function(item){var value=item.price*(1-discount/100);html+='<div class="aesthetic-price-row"><span>'+item.name+'</span><strong>'+money(value)+'</strong></div>'});
+              html+='</div></details>';first=false;
+            });
+            html+='<div class="aesthetic-consult-fee"><span>Beratungsgebühr</span><strong>30,00 €</strong></div>';
+            shell.innerHTML=html;shell.dataset.gender=gender;shell.dataset.discount=String(discount);
+          }
+          groups[0].addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;gender=e.target.textContent.trim().toLowerCase().indexOf('herr')===0?'herren':'damen';render()});
+          groups[1].addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;var t=e.target.textContent;discount=t.indexOf('4×')!==-1?4:t.indexOf('6×')!==-1?8:t.indexOf('8×')!==-1?10:0;render()});
+        }());
+        </script>
+        <?php
+    }
+
+    if ($path === '') {
+        $status = isset($_GET['contact']) ? sanitize_key(wp_unslash($_GET['contact'])) : '';
+        if ($status) {
+            $message = $status === 'sent' ? 'Vielen Dank. Ihre Anfrage wurde gesendet.' : ($status === 'invalid' ? 'Bitte geben Sie eine gültige E-Mail-Adresse ein und bestätigen Sie die Kontaktaufnahme.' : 'Die Nachricht konnte nicht gesendet werden. Bitte kontaktieren Sie uns telefonisch oder per E-Mail.');
+            ?>
+            <script id="aesthetic-contact-status-js">
+            (function(){var form=document.querySelector('.aesthetic-contact-form');if(!form)return;var n=document.createElement('div');n.className='aesthetic-form-status';n.textContent=<?php echo wp_json_encode($message); ?>;form.prepend(n)}());
+            </script>
+            <?php
+        }
+    }
+}, 1001);
