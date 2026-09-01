@@ -56,6 +56,8 @@
     "/skinbooster/gesicht-frankfurt/"
   ],
   "redirects": {
-    "/laserbehandlungen/": "/laser-behandlungen/"
+    "/laserbehandlungen/": "/laser-behandlungen/",
+    "/impressum-2/": "/impressum/",
+    "/category/unkategorisiert/": "/behandlungen/"
   }
 }

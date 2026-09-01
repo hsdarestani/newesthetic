@@ -5,6 +5,79 @@ function aesthetic_is_snapshot_page() {
     return is_singular('page') && (bool) get_post_meta(get_queried_object_id(), '_aesthetic_snapshot_html', true);
 }
 
+
+/* GSC SEO route targets — 2026-09-01 */
+function aesthetic_gsc_seo_target() {
+    if (!is_singular('page')) { return null; }
+
+    $post_id = get_queried_object_id();
+    $permalink = get_permalink($post_id);
+    $path = trim((string) wp_parse_url($permalink, PHP_URL_PATH), '/');
+    $route = $path === '' ? '/' : '/' . $path . '/';
+
+    $targets = array(
+        '/' => array(
+            'title' => 'A+ Esthetic Frankfurt | Ästhetische Medizin, Botox & Laser',
+            'description' => 'Ästhetische Medizin in Frankfurt: Botox, Hyaluron, PRP, Skinbooster, Infusionen, Laser und mehr. Ärztliche Beratung bei A+ Esthetic.',
+        ),
+        '/botox-behandlungen/' => array(
+            'title' => 'Botox Frankfurt | Faltenbehandlung ab 119 € | A+ Esthetic',
+            'description' => 'Botox in Frankfurt ab 119 €: Stirnfalten, Zornesfalte, Krähenfüße, Masseter und weitere Bereiche. Ärztliche Beratung bei A+ Esthetic.',
+        ),
+        '/botox-behandlungen/masseter-botox-frankfurt/' => array(
+            'title' => 'Masseter Botox Frankfurt | Kieferkontur ab 299 € | A+ Esthetic',
+            'description' => 'Masseter Botox in Frankfurt ab 299 €: ärztliche Beurteilung des Kaumuskels, Kieferkontur, Ablauf, Risiken und Kosten bei A+ Esthetic.',
+        ),
+        '/prp-behandlung/' => array(
+            'title' => 'PRP Frankfurt | Eigenbluttherapie für Haut & Haare | A+ Esthetic',
+            'description' => 'PRP-Behandlung in Frankfurt für Haut und Haare. Eigenbluttherapie mit plättchenreichem Plasma, individuell ärztlich geplant bei A+ Esthetic.',
+        ),
+        '/hyaluronsaure-behandlungen/' => array(
+            'title' => 'Hyaluron Frankfurt | Lippen, Filler & Faltenbehandlung | A+ Esthetic',
+            'description' => 'Hyaluron in Frankfurt für Lippen, Konturen und Faltenbehandlung. Individuelle ärztliche Beratung und transparente Behandlungsplanung bei A+ Esthetic.',
+        ),
+        '/infusionstherapien/' => array(
+            'title' => 'Vitamininfusion Frankfurt | Infusionstherapie | A+ Esthetic',
+            'description' => 'Vitamininfusionen und Infusionstherapie in Frankfurt: Vitamin C, B-Komplex, Glutathion, NAD+ und weitere Optionen nach ärztlicher Beratung bei A+ Esthetic.',
+        ),
+        '/skinbooster/' => array(
+            'title' => 'Skinbooster Frankfurt | Feuchtigkeit & Glow | A+ Esthetic',
+            'description' => 'Neauvia Skinbooster in Frankfurt für intensive Hydration, verbesserte Hautqualität und einen frischen natürlichen Glow. Preisorientierung ab 250 €.',
+        ),
+        '/injektions-lipolyse/' => array(
+            'title' => 'Fett-weg-Spritze Frankfurt | Injektionslipolyse | A+ Esthetic',
+            'description' => 'Injektionslipolyse in Frankfurt zur gezielten Behandlung kleiner Fettdepots, zum Beispiel am Doppelkinn, Bauch, Hüfte, Oberarmen oder Oberschenkeln.',
+        ),
+    );
+
+    return isset($targets[$route]) ? $targets[$route] : null;
+}
+
+function aesthetic_gsc_seo_title($title) {
+    $target = aesthetic_gsc_seo_target();
+    return $target && !empty($target['title']) ? $target['title'] : $title;
+}
+add_filter('pre_get_document_title', 'aesthetic_gsc_seo_title', 999);
+add_filter('wpseo_title', 'aesthetic_gsc_seo_title', 999);
+add_filter('rank_math/frontend/title', 'aesthetic_gsc_seo_title', 999);
+
+function aesthetic_gsc_seo_description($description) {
+    $target = aesthetic_gsc_seo_target();
+    return $target && !empty($target['description']) ? $target['description'] : $description;
+}
+add_filter('wpseo_metadesc', 'aesthetic_gsc_seo_description', 999);
+add_filter('rank_math/frontend/description', 'aesthetic_gsc_seo_description', 999);
+
+add_action('wp_head', function () {
+    $target = aesthetic_gsc_seo_target();
+    if (!$target || empty($target['description'])) { return; }
+
+    // Yoast and Rank Math receive the description through their native filters
+    // above. Only provide a fallback when neither plugin is active.
+    if (defined('WPSEO_VERSION') || defined('RANK_MATH_VERSION')) { return; }
+    echo "\n<meta name=\"description\" content=\"" . esc_attr($target['description']) . "\">\n";
+}, 2);
+
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('aesthetic-child', get_stylesheet_uri(), array(), '1.0.13');
 }, 100);
