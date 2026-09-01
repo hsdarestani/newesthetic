@@ -1,0 +1,70 @@
+name: Apply GSC SEO improvements 2026-09-01
+
+on:
+  push:
+    paths:
+      - 'tools/apply_gsc_seo_2026_09_01.py'
+      - '.github/workflows/apply-gsc-seo-2026-09-01.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply targeted SEO improvements
+        run: python3 tools/apply_gsc_seo_2026_09_01.py
+
+      - name: Validate changed HTML and PHP
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          targets = [
+              'index.html',
+              'botox-behandlungen/index.html',
+              'botox-behandlungen/masseter-botox-frankfurt/index.html',
+              'prp-behandlung/index.html',
+              'hyaluronsaure-behandlungen/index.html',
+              'infusionstherapien/index.html',
+              'skinbooster/index.html',
+              'injektions-lipolyse/index.html',
+          ]
+          for target in targets:
+              text = Path(target).read_text(encoding='utf-8')
+              assert '<meta name="robots" content="noindex,nofollow">' in text, target
+              assert '<link rel="canonical" href="https://a-esthetic.de/' in text or target == 'index.html', target
+              assert text.lower().count('<h1') == 1, (target, text.lower().count('<h1'))
+          print('HTML guards OK')
+          PY
+          php -l wordpress-package/aesthetic-child/functions.php
+          python3 -m json.tool wordpress-package/route-manifest.json >/dev/null
+          python3 -m json.tool wordpress-package/aesthetic-migrator/route-manifest.json >/dev/null
+
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            index.html \
+            botox-behandlungen/index.html \
+            botox-behandlungen/masseter-botox-frankfurt/index.html \
+            prp-behandlung/index.html \
+            hyaluronsaure-behandlungen/index.html \
+            infusionstherapien/index.html \
+            skinbooster/index.html \
+            injektions-lipolyse/index.html \
+            _redirects \
+            wordpress-package/aesthetic-child/functions.php \
+            wordpress-package/aesthetic-migrator/route-manifest.json \
+            wordpress-package/route-manifest.json \
+            GSC-SEO-IMPROVEMENTS-2026-09-01.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "SEO: apply Search Console improvements"
+          git push
