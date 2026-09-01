@@ -13,10 +13,11 @@ Move the approved `newesthetic.pages.dev` presentation into the existing WordPre
 - It stores the previous page template before activation.
 - Rollback removes the snapshot and restores the previous page template.
 - Default mode is DRY RUN.
+- GSC-driven title/meta improvements are applied at render time on selected routes; stored SEO-plugin fields remain untouched.
 
 ## Components
-- `aesthetic-child/` — WoodMart child theme containing the snapshot page template.
-- `aesthetic-migrator/` — admin-only migration plugin for dry-run/apply/rollback.
+- `aesthetic-child/` — WoodMart child theme containing the snapshot page template and the production SEO bridge for selected GSC target routes.
+- `aesthetic-migrator/` — admin-only migration plugin for dry-run/apply/rollback and legacy redirects.
 - `route-manifest.json` — approved route list.
 - GitHub Actions workflow `build-wordpress-package.yml` — builds installable ZIP files and bundles the current staging assets into the child theme.
 
@@ -35,9 +36,11 @@ Move the approved `newesthetic.pages.dev` presentation into the existing WordPre
 
 ## Important production-cutover checks
 - Production must be `index,follow` (the static staging is intentionally `noindex,nofollow`).
-- Existing SEO title/meta/schema managed by the WordPress SEO plugin should remain authoritative.
-- Export and preserve all existing WordPress redirects before cutover.
+- On the selected GSC target routes, the child theme supplies the reviewed title/meta description through WordPress core plus Yoast/RankMath-compatible filters; stored SEO-plugin metadata is not deleted or rewritten.
+- Export and preserve all unrelated existing WordPress redirects before cutover.
 - Preserve `/laserbehandlungen/` → `/laser-behandlungen/` as 301.
+- Preserve `/impressum-2/` → `/impressum/` as 301.
+- Redirect the empty `/category/unkategorisiert/` archive to `/behandlungen/`.
 - Test contact forms and any plugin-generated forms separately because the visual snapshot layer does not alter their underlying plugin configuration.
 
 ## Rollback
